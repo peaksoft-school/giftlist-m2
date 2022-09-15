@@ -1,6 +1,6 @@
 package kg.giftlist.giftlistm2.security;
 
-import com.peaksoft.spring_boot.security.jwt.JwtTokenFilter;
+import kg.giftlist.giftlistm2.security.jwt.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
         securedEnabled = true,
-        jsr250Enabled = true
-)
+        jsr250Enabled = true)
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -60,6 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest()
                 .authenticated()
+                .and()
+                .oauth2Login()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
