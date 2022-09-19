@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,18 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/public")
 @RequiredArgsConstructor
 @EnableOAuth2Client
-public class SecurityController {
+public class AuthController {
 
     private final UserServiceImpl userService;
+
     private final UserRepository repository;
+
     private final JwtTokenUtil jwtTokenUtil;
+
     private final LoginMapper loginMapper;
+
     private final AuthenticationManager authenticationManager;
-    
-    private OAuth2ClientContext oAuth2ClientContext;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {

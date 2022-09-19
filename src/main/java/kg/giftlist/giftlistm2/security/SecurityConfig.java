@@ -25,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userService;
+
     private final JwtTokenFilter jwtTokenFilter;
 
     @Autowired
@@ -53,14 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/jwt/registration").permitAll()
-                .antMatchers("/api/jwt/**").permitAll()
-                .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .oauth2Login()
+                .antMatchers("/api/public").permitAll()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

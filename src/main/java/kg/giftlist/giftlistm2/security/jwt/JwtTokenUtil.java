@@ -14,16 +14,18 @@ import java.util.function.Function;
 
 @Service
 public class JwtTokenUtil {
-    @Value("giftlist")
+
+    @Value("${jwt.secret}")
     private String jwtSecret;
-    private final static Long JWT_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000L;
+
+    private final static Long expirationDateInMonth = 30 * 24 * 60 * 60 * 1000L;
 
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationDateInMonth))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
