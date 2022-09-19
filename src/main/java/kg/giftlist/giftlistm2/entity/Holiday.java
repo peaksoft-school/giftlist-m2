@@ -16,12 +16,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Holiday {
+
     @Id
     @GeneratedValue(generator = "holiday_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "holiday_gen", sequenceName = "holiday_seq", allocationSize = 1)
+
     private Long id;
+
     private String name;
+
     private LocalDate localDate;
+
     private String image;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -33,4 +38,5 @@ public class Holiday {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 }

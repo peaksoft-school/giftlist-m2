@@ -17,15 +17,22 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WishList {
+
     @Id
     @GeneratedValue(generator = "wish_list_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "wish_list_gen", sequenceName = "wish_list_seq", allocationSize = 1)
+
     private Long id;
+
     private String giftName;
+
     private String link;
+
     private LocalDate holidayDate;
+
     @Size(max = 10000)
     private String description;
+
     private String image;
 
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
@@ -37,4 +44,5 @@ public class WishList {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 }

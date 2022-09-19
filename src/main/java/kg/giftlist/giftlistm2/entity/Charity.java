@@ -17,14 +17,20 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Charity {
+
     @Id
     @GeneratedValue(generator = "charity_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "charity_gen", sequenceName = "charity_seq", allocationSize = 1)
+
     private Long id;
+
     private String giftName;
+
     private Condition condition;
+
     @Size(max = 10000)
     private String description;
+
     private String image;
 
     @ManyToOne
@@ -34,6 +40,5 @@ public class Charity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
 
 }

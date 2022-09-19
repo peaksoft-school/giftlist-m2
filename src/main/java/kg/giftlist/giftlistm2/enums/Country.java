@@ -6,5 +6,5 @@ public enum Country {
     RUSSIA,
     KAZAKHSTAN,
     UZBEKISTAN,
-    TAJIKISTAN
+
 }
