@@ -4,4 +4,5 @@ public enum Clothes {
     MEN,
     WOMEN,
     BABY
+
 }

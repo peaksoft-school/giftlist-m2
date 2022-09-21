@@ -1,6 +1,5 @@
 package kg.giftlist.giftlistm2.entity;
 
-
 import kg.giftlist.giftlistm2.enums.Condition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +16,6 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Charity {
-
     @Id
     @GeneratedValue(generator = "charity_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "charity_gen", sequenceName = "charity_seq", allocationSize = 1)
@@ -26,6 +24,7 @@ public class Charity {
 
     private String giftName;
 
+    @Enumerated(EnumType.STRING)
     private Condition condition;
 
     @Size(max = 10000)

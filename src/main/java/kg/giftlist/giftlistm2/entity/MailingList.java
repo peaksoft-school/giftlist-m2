@@ -16,7 +16,6 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MailingList {
-
     @Id
     @GeneratedValue(generator = "mailing_list_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "mailing_list_gen", sequenceName = "mailing_list_seq", allocationSize = 1)

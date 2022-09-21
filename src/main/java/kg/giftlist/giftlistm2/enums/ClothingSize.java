@@ -9,4 +9,5 @@ public enum ClothingSize {
     XXL,
     XL,
     XXXL
+
 }

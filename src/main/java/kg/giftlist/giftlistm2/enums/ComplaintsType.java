@@ -8,4 +8,5 @@ public enum ComplaintsType {
     CALLS_FOR_VIOLENCE_DANGEROUS_ACTIONS,
     SCENES_OF_A_PORNOGRAPHIC_NATURE,
     OTHER
+
 }

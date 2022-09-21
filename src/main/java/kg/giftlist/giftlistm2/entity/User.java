@@ -21,7 +21,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(generator = "user_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "user_gen", sequenceName = "user_seq", allocationSize = 1)
@@ -45,7 +44,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "clothing_size")
-
     private ClothingSize clothingSize;
 
     @Enumerated(EnumType.STRING)

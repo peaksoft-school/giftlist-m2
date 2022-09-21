@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Holiday {
-
     @Id
     @GeneratedValue(generator = "holiday_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "holiday_gen", sequenceName = "holiday_seq", allocationSize = 1)
