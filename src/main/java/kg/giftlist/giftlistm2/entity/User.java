@@ -67,7 +67,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Charity> charities;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private List<Booking> bookings;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
