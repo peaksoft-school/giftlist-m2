@@ -1,74 +1,79 @@
 package kg.giftlist.giftlistm2.entity;
 
+import kg.giftlist.giftlistm2.enums.ClothingSize;
+import kg.giftlist.giftlistm2.enums.Role;
+import kg.giftlist.giftlistm2.enums.ShoeSize;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class User implements UserDetails {
+public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "user_gen", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "user_gen", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Email
     private String email;
+
     private String password;
 
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
-    private Role roles;
+    @Column(name = "clothing_size")
+    private ClothingSize clothingSize;
 
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-//    @JoinTable(name = "users_roles",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id"))
-//    private List<Role> roles;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "shoe_size")
+    private ShoeSize shoeSize;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(roles.getAuthority()));
-        return grantedAuthorities;
-    }
+    @Size(max = 10000)
+    private String hobbies;
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+    @Size(max = 10000)
+    @Column(name = "important_to_know")
+    private String importantToKnow;
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    private List<WishList> wishLists;
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Charity> charities;
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private List<Booking> bookings;
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Holiday> holidays;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Complaints> complaints;
+
 }
