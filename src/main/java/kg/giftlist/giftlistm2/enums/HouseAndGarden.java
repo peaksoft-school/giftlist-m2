@@ -2,7 +2,7 @@ package kg.giftlist.giftlistm2.enums;
 
 public enum HouseAndGarden {
     FURNITURE,
-    UTENSIL,
+    DISHES,
     FOODSTUFFS,
     HOUSEHOLD_GOODS,
     SEEDS,

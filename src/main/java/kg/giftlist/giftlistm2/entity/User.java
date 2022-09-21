@@ -24,12 +24,13 @@ public class User {
     @Id
     @GeneratedValue(generator = "user_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "user_gen", sequenceName = "user_seq", allocationSize = 1)
-
     private Long id;
 
-    private String name;
+    @Column(name = "first_name")
+    private String firstName;
 
-    private String surname;
+    @Column(name = "last_name")
+    private String lastName;
 
     @Email
     private String email;
@@ -50,6 +51,7 @@ public class User {
     @Column(name = "shoe_size")
     private ShoeSize shoeSize;
 
+    @Size(max = 10000)
     private String hobbies;
 
     @Size(max = 10000)
@@ -65,7 +67,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Charity> charities;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "blockedBy")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Booking> bookings;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

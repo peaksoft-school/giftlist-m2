@@ -18,7 +18,6 @@ public class Complaints {
     @Id
     @GeneratedValue(generator = "complaints_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "complaints_gen", sequenceName = "complaints_seq", allocationSize = 1)
-
     private Long id;
 
     @Enumerated(EnumType.STRING)
