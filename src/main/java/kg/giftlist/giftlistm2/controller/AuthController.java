@@ -7,7 +7,7 @@ import kg.giftlist.giftlistm2.dto.ValidationType;
 import kg.giftlist.giftlistm2.entity.User;
 import kg.giftlist.giftlistm2.repository.UserRepository;
 import kg.giftlist.giftlistm2.security.jwt.JwtTokenUtil;
-import kg.giftlist.giftlistm2.service.UserServiceImpl;
+import kg.giftlist.giftlistm2.service.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserServiceImpl userService;
+    private final UserDetailServiceImpl userService;
     private final UserRepository repository;
     private final JwtTokenUtil jwtTokenUtil;
     private final LoginMapper loginMapper;
