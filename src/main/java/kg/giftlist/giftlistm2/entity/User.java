@@ -15,12 +15,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.enabled;
 
 @Entity
 @Table(name = "users")
