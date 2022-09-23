@@ -37,6 +37,8 @@ public class User {
 
     private String password;
 
+    private String resetToken;
+
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
