@@ -1,6 +1,6 @@
-package kg.giftlist.giftlistm2.security;
+package kg.giftlist.giftlistm2.config;
 
-import kg.giftlist.giftlistm2.security.jwt.JwtTokenFilter;
+import kg.giftlist.giftlistm2.config.jwt.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

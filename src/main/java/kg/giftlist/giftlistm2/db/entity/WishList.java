@@ -1,4 +1,4 @@
-package kg.giftlist.giftlistm2.entity;
+package kg.giftlist.giftlistm2.db.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

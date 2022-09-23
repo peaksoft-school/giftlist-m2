@@ -1,6 +1,6 @@
-package kg.giftlist.giftlistm2.service;
+package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.repository.UserRepository;
+import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

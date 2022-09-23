@@ -1,6 +1,5 @@
-package kg.giftlist.giftlistm2.dto;
+package kg.giftlist.giftlistm2.controller.payload;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

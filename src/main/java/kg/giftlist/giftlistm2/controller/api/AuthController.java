@@ -1,12 +1,12 @@
-package kg.giftlist.giftlistm2.controller;
+package kg.giftlist.giftlistm2.controller.api;
 
-import kg.giftlist.giftlistm2.dto.LoginMapper;
-import kg.giftlist.giftlistm2.dto.LoginRequest;
-import kg.giftlist.giftlistm2.dto.LoginResponse;
-import kg.giftlist.giftlistm2.dto.ValidationType;
-import kg.giftlist.giftlistm2.entity.User;
-import kg.giftlist.giftlistm2.repository.UserRepository;
-import kg.giftlist.giftlistm2.security.jwt.JwtTokenUtil;
+import kg.giftlist.giftlistm2.mapper.LoginMapper;
+import kg.giftlist.giftlistm2.controller.payload.LoginRequest;
+import kg.giftlist.giftlistm2.controller.payload.LoginResponse;
+import kg.giftlist.giftlistm2.validation.ValidationType;
+import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.db.repository.UserRepository;
+import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

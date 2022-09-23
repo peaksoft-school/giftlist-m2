@@ -1,4 +1,4 @@
-package kg.giftlist.giftlistm2.security.jwt;
+package kg.giftlist.giftlistm2.config.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

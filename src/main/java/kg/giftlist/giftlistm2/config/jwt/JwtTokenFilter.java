@@ -1,6 +1,6 @@
-package kg.giftlist.giftlistm2.security.jwt;
+package kg.giftlist.giftlistm2.config.jwt;
 
-import kg.giftlist.giftlistm2.service.UserDetailServiceImpl;
+import kg.giftlist.giftlistm2.db.service.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
