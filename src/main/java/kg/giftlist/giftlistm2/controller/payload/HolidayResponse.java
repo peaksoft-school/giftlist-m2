@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class HolidayResponse {
-    
+
     private Long id;
     private String name;
     @JsonFormat(pattern = "yyyy.MM.dd")
