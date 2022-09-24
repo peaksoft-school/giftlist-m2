@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.HolidayRequest;
 import kg.giftlist.giftlistm2.controller.payload.HolidayResponse;
+import kg.giftlist.giftlistm2.controller.payload.HolidayResponseView;
 import kg.giftlist.giftlistm2.db.service.HolidayService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,8 +47,11 @@ public class HolidayController {
     }
 
     @Operation(summary = "Get all holidays", description = "User can get all holidays")
-    @GetMapping
+    @GetMapping("getAll")
     public List<HolidayResponse> getHolidays() {
         return service.getHolidays();
     }
+
+
+
 }
