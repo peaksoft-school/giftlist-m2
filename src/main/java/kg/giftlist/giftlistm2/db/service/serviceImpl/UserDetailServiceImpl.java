@@ -1,4 +1,4 @@
-package kg.giftlist.giftlistm2.db.service;
+package kg.giftlist.giftlistm2.db.service.serviceImpl;
 
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

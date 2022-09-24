@@ -1,17 +1,16 @@
-package kg.giftlist.giftlistm2.service.serviceImpl;
+package kg.giftlist.giftlistm2.db.service.serviceImpl;
 
-import kg.giftlist.giftlistm2.entity.User;
-import kg.giftlist.giftlistm2.repository.UserRepository;
-import kg.giftlist.giftlistm2.service.UserService;
+import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.db.repository.UserRepository;
+import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-@Service("userService")
+@Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Optional<User> findUserByEmail(String email) {
