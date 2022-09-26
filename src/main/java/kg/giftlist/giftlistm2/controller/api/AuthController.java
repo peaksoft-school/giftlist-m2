@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/public")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Auth API",description = "User can registration and login")
+@Tag(name = "Auth API",description = "Any user can do registration and login")
 public class AuthController {
 
     private final UserRepository repository;
@@ -35,7 +35,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    @Operation(summary = "login",description = "user can login")
+    @Operation(summary = "Login",description = "User can do login")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
         try {
             UsernamePasswordAuthenticationToken token =
