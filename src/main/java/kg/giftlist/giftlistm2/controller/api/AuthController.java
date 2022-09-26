@@ -44,7 +44,7 @@ public class AuthController {
     private final EmailServiceImpl emailServiceImpl;
 
     @PostMapping("/login")
-    @Operation(summary = "login",description = "user login.")
+    @Operation(summary = "login",description = "user can login")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
         try {
             UsernamePasswordAuthenticationToken token =
