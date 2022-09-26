@@ -1,5 +1,7 @@
 package kg.giftlist.giftlistm2.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.db.Mail;
 import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
 import kg.giftlist.giftlistm2.db.service.EmailServiceImpl;
@@ -20,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ import java.util.Map;
 @RequestMapping("/api/public")
 @CrossOrigin
 @RequiredArgsConstructor
+@Tag(name = "Auth API",description = "user with role Admin,User can registration and login.")
 @Slf4j
 public class AuthController {
 
@@ -44,6 +46,7 @@ public class AuthController {
     private final EmailServiceImpl emailServiceImpl;
 
     @PostMapping("/login")
+    @Operation(summary = "login",description = "user login.")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
         try {
             UsernamePasswordAuthenticationToken token =
