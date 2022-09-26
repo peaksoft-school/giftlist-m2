@@ -2,6 +2,9 @@ package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
+import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
+import kg.giftlist.giftlistm2.db.service.UserService;
 import kg.giftlist.giftlistm2.mapper.LoginMapper;
 import kg.giftlist.giftlistm2.controller.payload.LoginRequest;
 import kg.giftlist.giftlistm2.controller.payload.LoginResponse;
@@ -28,6 +31,7 @@ public class AuthController {
     private final JwtTokenUtil jwtTokenUtil;
     private final LoginMapper loginMapper;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     @Operation(summary = "Login", description = "Only registered users can login")
     @PostMapping("signin")
@@ -48,4 +52,10 @@ public class AuthController {
     public SignupResponse register(@RequestBody SignupRequest request) {
         return userService.register(request);
     }
+
+
+
+
 }
+
+
