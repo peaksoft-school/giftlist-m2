@@ -15,42 +15,35 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/holiday")
 @CrossOrigin
-@Tag(name = "Holiday API", description = "User with role can create, update or delete holidays")
 public class HolidayController {
 
     private final HolidayService service;
 
-    @Operation(summary = "Create holiday", description = "User can create a holiday")
     @PostMapping
     public HolidayResponse create(@RequestBody HolidayRequest request) {
         return service.create(request);
     }
 
-    @Operation(summary = "Update holiday", description = "User can update a holiday")
     @PutMapping("/{id}")
     public HolidayResponse update(@PathVariable Long id, @RequestBody HolidayRequest request) {
         return service.update(id, request);
     }
 
-    @Operation(summary = "Get holiday", description = "User can get holiday")
     @GetMapping("/{id}")
     public HolidayResponse findById(@PathVariable Long id) {
         return service.findById(id);
     }
 
-    @Operation(summary = "Delete holiday", description = "User can delete holiday")
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
         return service.deleteById(id);
     }
 
-    @Operation(summary = "Get all holidays", description = "User can get all holidays")
     @GetMapping("getAll")
     public List<HolidayResponse> getHolidays() {
         return service.getHolidays();
     }
 
-    @Operation(summary = "Search and pagination",description = "User can search by name holidays  and get all holidays ,pagination ")
     @GetMapping
     public HolidayResponseView getAll(@RequestParam (name = "text",required = false) String text ,
                                       @RequestParam int page,
