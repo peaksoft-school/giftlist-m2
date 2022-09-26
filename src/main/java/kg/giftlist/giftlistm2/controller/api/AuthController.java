@@ -16,7 +16,6 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,8 +32,7 @@ import java.util.Map;
 @RequestMapping("/api/public")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Auth API",description = "user with role Admin,User can registration and login.")
-@Slf4j
+@Tag(name = "Auth API",description = "User can registration and login")
 public class AuthController {
 
     private final UserRepository repository;
@@ -46,7 +44,7 @@ public class AuthController {
     private final EmailServiceImpl emailServiceImpl;
 
     @PostMapping("/login")
-    @Operation(summary = "login",description = "user login.")
+    @Operation(summary = "login",description = "user can login")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
         try {
             UsernamePasswordAuthenticationToken token =
