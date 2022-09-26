@@ -17,17 +17,28 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
+@RequestMapping("/api/public")
+@CrossOrigin
 @RequiredArgsConstructor
+@Tag(name = "Auth API",description = "User can registration and login")
 public class AuthController {
 
     private final UserRepository repository;
     private final JwtTokenUtil jwtTokenUtil;
     private final LoginMapper loginMapper;
     private final AuthenticationManager authenticationManager;
+    private final UserServiceImpl userServiceImpl;
+    private final ResetPasswordTokenServiceImpl passwordResetTokenServiceImpl;
+    private final EmailServiceImpl emailServiceImpl;
 
-    @Operation(summary = "Login", description = "User can do login")
-    @PostMapping("login")
+    @PostMapping("/login")
+    @Operation(summary = "login",description = "user can login")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
         try {
             UsernamePasswordAuthenticationToken token =
