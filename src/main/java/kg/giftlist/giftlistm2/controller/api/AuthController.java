@@ -2,6 +2,8 @@ package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.db.Mail;
 import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
 import kg.giftlist.giftlistm2.db.service.EmailServiceImpl;
@@ -29,10 +31,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/public")
+@CrossOrigin
 @RequiredArgsConstructor
-@RequestMapping("api/public")
-@CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "Auth API", description = "Any user can do registration and login")
+@Tag(name = "Auth API",description = "user with role Admin,User can registration and login.")
 public class AuthController {
 
     private final UserRepository repository;
@@ -43,8 +45,8 @@ public class AuthController {
     private final ResetPasswordTokenServiceImpl passwordResetTokenServiceImpl;
     private final EmailServiceImpl emailServiceImpl;
 
-    @Operation(summary = "Login", description = "User can do login")
-    @PostMapping("login")
+    @PostMapping("/login")
+    @Operation(summary = "login",description = "user login.")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
         try {
             UsernamePasswordAuthenticationToken token =
