@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.giftlist.giftlistm2.enums.ClothingSize;
 import kg.giftlist.giftlistm2.enums.Role;
 import kg.giftlist.giftlistm2.enums.ShoeSize;
@@ -7,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -71,6 +74,8 @@ public class User implements UserDetails {
     private List<WishList> wishLists;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Charity> charities;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")

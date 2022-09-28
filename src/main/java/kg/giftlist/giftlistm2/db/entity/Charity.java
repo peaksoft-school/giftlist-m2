@@ -1,13 +1,18 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.giftlist.giftlistm2.enums.Condition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "charity")
@@ -33,10 +38,14 @@ public class Charity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    private LocalDate createdDate;
 
 }

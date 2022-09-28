@@ -19,4 +19,10 @@ public class CharityRequest {
 
     private String description;
 
+    private Long userId;
+
+    private String firstName;
+
+    private String lastName;
+
 }

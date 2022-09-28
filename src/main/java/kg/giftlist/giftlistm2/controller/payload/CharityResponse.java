@@ -26,6 +26,6 @@ public class CharityResponse {
 
     private String description;
 
-    private LocalDate addedDate;
+    private LocalDate createdDate;
 
 }
