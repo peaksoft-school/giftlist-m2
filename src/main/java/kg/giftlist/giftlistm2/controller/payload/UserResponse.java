@@ -1,9 +1,10 @@
 package kg.giftlist.giftlistm2.controller.payload;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-
-@Data
+@Getter
+@Setter
 public class UserResponse {
     private String firstName;
     private String lastName;

@@ -6,7 +6,7 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import kg.giftlist.giftlistm2.enums.Role;
-import kg.giftlist.giftlistm2.mapper.UserMapper;
+import kg.giftlist.giftlistm2.mapper.LoginMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final LoginMapper.UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
     @Override
     public UserResponse register(UserRequest userRequest) {
