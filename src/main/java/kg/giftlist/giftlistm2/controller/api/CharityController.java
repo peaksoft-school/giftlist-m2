@@ -14,6 +14,7 @@ import java.util.List;
 @CrossOrigin
 @RequiredArgsConstructor
 public class CharityController {
+
     private final CharityService charityService;
 
     @GetMapping("/{id}")

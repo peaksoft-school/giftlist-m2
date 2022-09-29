@@ -75,7 +75,6 @@ public class User implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Charity> charities;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
