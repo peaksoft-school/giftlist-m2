@@ -13,7 +13,7 @@ public class HolidayResponse {
 
     private String name;
 
-    @JsonFormat(pattern = "dd.MM.yyyy")
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate localDate;
 
     private String image;
