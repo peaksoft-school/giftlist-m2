@@ -15,8 +15,6 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class EmailServiceImpl {
 
-    private final JavaMailSender mailSender;
-
     public void sendEmail(Mail mail,String url){
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
