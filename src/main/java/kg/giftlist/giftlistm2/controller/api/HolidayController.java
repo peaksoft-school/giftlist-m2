@@ -14,11 +14,13 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/holiday")
+@Tag(name = "Holiday API", description = "User with role \"User\"  can create, update or delete holidays")
 @CrossOrigin
 public class HolidayController {
 
     private final HolidayService service;
 
+    @Operation(summary = "Create holiday", description = "User can create a holiday")
     @PostMapping
     public HolidayResponse create(@RequestBody HolidayRequest request) {
         return service.create(request);
@@ -28,26 +30,24 @@ public class HolidayController {
     public HolidayResponse update(@PathVariable Long id, @RequestBody HolidayRequest request) {
         return service.update(id, request);
     }
-
+    
+    @Operation(summary = "Update holiday", description = "User can update a holiday")
     @GetMapping("/{id}")
     public HolidayResponse findById(@PathVariable Long id) {
         return service.findById(id);
     }
 
+    @Operation(summary = "Get holiday", description = "User can get holiday")
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
         return service.deleteById(id);
     }
 
-    @GetMapping("getAll")
+    @Operation(summary = "Delete holiday", description = "User can delete holiday")
+    @GetMapping
     public List<HolidayResponse> getHolidays() {
         return service.getHolidays();
     }
 
-    @GetMapping
-    public HolidayResponseView getAll(@RequestParam (name = "text",required = false) String text ,
-                                      @RequestParam int page,
-                                      @RequestParam int size){
-        return service.getAllStudentPagination(text, page, size);
-    }
+  
 }
