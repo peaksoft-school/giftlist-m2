@@ -4,9 +4,9 @@ import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import kg.giftlist.giftlistm2.db.Mail;
 import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
 import kg.giftlist.giftlistm2.db.entity.User;
-import kg.giftlist.giftlistm2.db.service.EmailService;
-import kg.giftlist.giftlistm2.db.service.ResetPasswordTokenService;
-import kg.giftlist.giftlistm2.db.service.UserService;
+import kg.giftlist.giftlistm2.db.service.EmailServiceImpl;
+import kg.giftlist.giftlistm2.db.service.ResetPasswordTokenServiceImpl;
+import kg.giftlist.giftlistm2.db.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +26,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ForgotPasswordController {
 
-    private final UserService userService;
-    private final ResetPasswordTokenService passwordResetTokenService;
-    private final EmailService emailService;
+    private final UserServiceImpl userServiceImpl;
+    private final ResetPasswordTokenServiceImpl passwordResetTokenServiceImpl;
+    private final EmailServiceImpl emailServiceImpl;
     private final JwtTokenUtil jwtTokenUtil;
-
 
     @PostMapping
     public ResponseEntity processForgotPassword(@RequestParam("email") String email,
                                                 HttpServletRequest request) {
-        User user = userService.findUserByEmail(email);
+        User user = userServiceImpl.findUserByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("User with email " + email + "not found");
         }
@@ -43,7 +42,7 @@ public class ForgotPasswordController {
         resetToken.setUser(user);
         resetToken.setToken(jwtTokenUtil.generateToken(user));
         resetToken.setExpirationTime(LocalDateTime.now().plusMinutes(30));
-        resetToken = passwordResetTokenService.save(resetToken);
+        resetToken = passwordResetTokenServiceImpl.save(resetToken);
         Mail mail = new Mail();
         mail.setFrom("arzimatovanurperi@gmail.com");
         mail.setTo(user.getEmail());
@@ -57,8 +56,8 @@ public class ForgotPasswordController {
         String URL= url + "/reset-password?token=" + resetToken.getToken();
         mail.setModel(mailModel);
 
-        emailService.sendEmail(mail, URL);
+        emailServiceImpl.sendEmail(mail, URL);
         return new ResponseEntity(HttpStatus.OK);
-
     }
+
 }

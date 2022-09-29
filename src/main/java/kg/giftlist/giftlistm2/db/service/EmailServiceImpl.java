@@ -1,7 +1,7 @@
-package kg.giftlist.giftlistm2.db.service.serviceImpl;
+package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.db.Mail;
-import kg.giftlist.giftlistm2.db.service.EmailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -12,15 +12,11 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @Service
-public class EmailServiceImpl implements EmailService {
+@RequiredArgsConstructor
+public class EmailServiceImpl {
 
     private final JavaMailSender mailSender;
-    @Autowired
-    public EmailServiceImpl(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
 
-    @Override
     public void sendEmail(Mail mail,String url){
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

@@ -23,12 +23,5 @@ public class GiftlistM2Application {
     public String greetingPage() {
         return "<h1>Welcome to Giftlist-M2 Application!!!<h1/>";
     }
-    @Bean
-    public JavaMailSender javaMailSender() throws IOException {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setUsername("UTF-8");
-        return  mailSender;
-    }
-
 
 }

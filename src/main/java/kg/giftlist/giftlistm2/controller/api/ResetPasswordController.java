@@ -2,8 +2,8 @@ package kg.giftlist.giftlistm2.controller.api;
 
 import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
 import kg.giftlist.giftlistm2.db.entity.User;
-import kg.giftlist.giftlistm2.db.service.ResetPasswordTokenService;
-import kg.giftlist.giftlistm2.db.service.UserService;
+import kg.giftlist.giftlistm2.db.service.ResetPasswordTokenServiceImpl;
+import kg.giftlist.giftlistm2.db.service.UserServiceImpl;
 import kg.giftlist.giftlistm2.exception.TokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +16,12 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Slf4j
 public class ResetPasswordController {
-    private final UserService userService;
-    private final ResetPasswordTokenService passwordResetTokenService;
+    private final UserServiceImpl userServiceImpl;
+    private final ResetPasswordTokenServiceImpl passwordResetTokenServiceImpl;
 
     @GetMapping
     public ResetPasswordToken get(@RequestParam String token){
-        ResetPasswordToken resetToken=passwordResetTokenService.findByToken(token);
+        ResetPasswordToken resetToken=passwordResetTokenServiceImpl.findByToken(token);
         if (resetToken==null){
             System.out.println("token not found");
             throw new TokenException("token not found");
@@ -31,18 +31,19 @@ public class ResetPasswordController {
         }else {
             return resetToken;
         }
-
     }
+
     @PostMapping
     public User resetPassword(@RequestParam String token, @RequestParam String password, @RequestParam String confirmPassword){
-        ResetPasswordToken resetToken=passwordResetTokenService.findByToken(token);
+        ResetPasswordToken resetToken=passwordResetTokenServiceImpl.findByToken(token);
         User user=resetToken.getUser();
         if (password.equals(confirmPassword)) {
             user.setPassword(password);
         }else {
             log.error("passwords do not match");
         }
-        userService.updatePassword(user);
+        userServiceImpl.updatePassword(user);
         return user;
     }
+
 }
