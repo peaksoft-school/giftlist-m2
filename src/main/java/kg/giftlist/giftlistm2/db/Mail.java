@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.util.Map;
 @Getter@Setter
-@Data
 public class Mail {
     private  String from;
     private  String to;
