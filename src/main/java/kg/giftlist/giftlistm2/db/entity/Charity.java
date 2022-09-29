@@ -6,13 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "charity")
@@ -21,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Charity {
+
     @Id
     @GeneratedValue(generator = "charity_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "charity_gen", sequenceName = "charity_seq", allocationSize = 1)
@@ -39,7 +37,6 @@ public class Charity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne

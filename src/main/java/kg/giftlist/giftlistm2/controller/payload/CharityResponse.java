@@ -13,19 +13,12 @@ import java.time.LocalDate;
 public class CharityResponse {
 
     private Long id;
-
     private String giftName;
-
     private User user;
-
     private Condition condition;
-
     private Category category;
-
     private String image;
-
     private String description;
-
     private LocalDate createdDate;
 
 }

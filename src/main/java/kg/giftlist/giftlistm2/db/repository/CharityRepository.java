@@ -13,5 +13,4 @@ public interface CharityRepository extends JpaRepository<Charity, Long> {
     @Query("select ch from Charity ch join User u on ch.user.id=u.id where u.id=?1")
     List<Charity> getCharityByUserId(Long id);
 
-
 }

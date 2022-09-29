@@ -3,7 +3,6 @@ package kg.giftlist.giftlistm2.db.service.impl;
 import kg.giftlist.giftlistm2.controller.payload.CharityRequest;
 import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
 import kg.giftlist.giftlistm2.db.entity.Charity;
-import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.CharityRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.service.CharityService;
@@ -19,7 +18,6 @@ import java.util.List;
 public class CharityServiceImpl implements CharityService {
 
     private final CharityRepository charityRepository;
-
     private final UserRepository userRepository;
 
     @Override
@@ -35,15 +33,8 @@ public class CharityServiceImpl implements CharityService {
     @Override
     public CharityResponse createCharity(CharityRequest request) {
         Charity charity = new Charity();
-        charity.setGiftName(request.getGiftName());
-        User userId = userRepository.findById(request.getUserId()).get();
-        User userName = userRepository.findByFirstName(request.getFirstName());
-        User userLastName = userRepository.findByLastName(request.getLastName());
-        List<User> users = new ArrayList<>();
-        users.add(userId);
-        users.add(userName);
-        users.add(userLastName);
-        charity.setUser((User) users);
+        charity.setGiftName (request.getGiftName());
+        charity.setUser(charity.getUser());
         charity.setCondition(request.getCondition());
         charity.setCategory(request.getCategory());
         charity.setImage(request.getImage());
@@ -57,14 +48,6 @@ public class CharityServiceImpl implements CharityService {
     public CharityResponse updateCharity(Long id, CharityRequest request) {
         Charity charity = charityRepository.findById(id).get();
         charity.setGiftName(request.getGiftName());
-        User userId = userRepository.findById(request.getUserId()).get();
-        User userName = userRepository.findByFirstName(request.getFirstName());
-        User userLastName = userRepository.findByLastName(request.getLastName());
-        List<User> users = new ArrayList<>();
-        users.add(userId);
-        users.add(userName);
-        users.add(userLastName);
-        charity.setUser((User) users);
         charity.setCondition(request.getCondition());
         charity.setCategory(request.getCategory());
         charity.setImage(request.getImage());
@@ -89,6 +72,41 @@ public class CharityServiceImpl implements CharityService {
         return responses;
     }
 
+//    @Override
+//    public List<Charity> search(String name, Pageable pageable) {
+//        String text = name == null ? "" : name;
+//        List<Charity>
+//        return null;
+//    }
+//
+//    @Override
+//    public List<CharityResponse> pagination(String text, int page, int size) {
+//        return null;
+//    }
+
+//    @Override
+//    public List<User> search(String name, Pageable pageable, LocalDate fromDate, LocalDate toDate) {
+//        String text = name == null ? "" : name;
+//        List<User> responses = userRepository.searchAndPagination("STUDENT", text, pageable);
+//        List<User> users = new ArrayList<>();
+//        for (User user : responses) {
+//            if (!(user.getCreated().isAfter(toDate) || user.getCreated().isBefore(fromDate))) {
+//                users.add(user);
+//            }
+//        }return users;
+//    }
+//
+//    @Override
+//    public List<StudentResponse> pagination(String text, int page, int size,LocalDate startDate, LocalDate endDate) {
+//        List<StudentResponse> responses = new ArrayList<>();
+//        Pageable pageable = PageRequest.of(page - 1, size);
+//        List<User> users = search(text, pageable,startDate,endDate);
+//        for (User user : users) {
+//            responses.add(mapToStudentResponse(user));
+//        }
+//        return responses;
+//    }
+
     private CharityResponse mapToResponse(Charity charity) {
         if (charity == null) {
             return null;
@@ -104,4 +122,5 @@ public class CharityServiceImpl implements CharityService {
         charityResponse.setCreatedDate(LocalDate.now());
         return charityResponse;
     }
+
 }
