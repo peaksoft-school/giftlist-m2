@@ -1,8 +1,8 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import org.springframework.mail.SimpleMailMessage;
+import kg.giftlist.giftlistm2.db.Mail;
 
 public interface EmailService {
 
-    void sendEmail(SimpleMailMessage mailMessage);
+    void sendEmail(Mail mail, String url);
 }
