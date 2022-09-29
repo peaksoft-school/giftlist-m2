@@ -62,18 +62,6 @@ public class HolidayService {
         return holidayMapToResponse.view(repository.findAll());
     }
 
-    private List<Holiday>search(String name, Pageable pageable){
-        String text = name == null ? "" : name;
-        return repository.searchAndPagination(text.toUpperCase(),pageable);
-    }
-    public HolidayResponseView getAllStudentPagination( String text,int page, int size){
-        HolidayResponseView responseView = new HolidayResponseView();
-        Pageable pageable = PageRequest.of(page-1, size);
-        responseView.setResponses(holidayMapToResponse.view(search(text,pageable)));
-        return responseView;
-
-    }
-
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
