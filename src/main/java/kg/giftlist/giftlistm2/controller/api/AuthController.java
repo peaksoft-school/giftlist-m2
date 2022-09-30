@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.controller.api;
 
-import kg.giftlist.giftlistm2.controller.payload.UserRequest;
-import kg.giftlist.giftlistm2.controller.payload.UserResponse;
+import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
+import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import kg.giftlist.giftlistm2.mapper.LoginMapper;
 import kg.giftlist.giftlistm2.controller.payload.LoginRequest;
@@ -30,6 +30,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
 
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
         try {
@@ -42,10 +43,16 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginMapper.loginView("", ValidationType.LOGIN_FAILED, null));
         }
     }
+
+
     @PostMapping("/signup")
-    public UserResponse register(@RequestBody UserRequest userRequest){
-        return userService.register(userRequest);
+    public SignupResponse register(@RequestBody SignupRequest request){
+        return userService.register(request);
     }
+
+
+
+
 }
 
 

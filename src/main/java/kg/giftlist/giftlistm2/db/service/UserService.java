@@ -1,8 +1,12 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.UserRequest;
-import kg.giftlist.giftlistm2.controller.payload.UserResponse;
+import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
+import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
 
 public interface UserService{
-  UserResponse register(UserRequest userRequest);
+
+  SignupResponse register(SignupRequest signupRequest);
+
+
+
 }
