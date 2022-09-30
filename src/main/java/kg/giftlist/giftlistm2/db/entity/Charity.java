@@ -39,7 +39,7 @@ public class Charity {
     @JsonIgnore
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
 
