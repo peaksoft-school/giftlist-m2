@@ -1,7 +1,6 @@
 package kg.giftlist.giftlistm2.controller.api;
 
 import kg.giftlist.giftlistm2.controller.payload.*;
-import kg.giftlist.giftlistm2.db.entity.Category;
 import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.service.CategoryService;
 import kg.giftlist.giftlistm2.db.service.CharityService;
