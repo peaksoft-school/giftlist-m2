@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Map;
-@Getter@Setter
+@Getter
+@Setter
 public class Mail {
     private  String from;
     private  String to;

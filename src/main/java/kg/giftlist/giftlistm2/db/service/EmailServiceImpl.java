@@ -28,18 +28,11 @@ public class EmailServiceImpl {
         });
 
         try {
-
             Message message = new MimeMessage(session);
-            //от кого
             message.setFrom(new InternetAddress("arzimatovanurperi@gmail"));
-            //кому
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail.getTo()));
-            //Заголовок письма
             message.setSubject(message.getSubject());
-            //Содержимое
             message.setText(url);
-
-            //Отправляем сообщение
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
