@@ -46,12 +46,9 @@ public class HolidayController {
         return service.deleteById(id);
     }
 
-    @Operation(summary = "Get all holidays", description = "User can get all holidays")
-    @GetMapping("getAll")
+    @Operation(summary = "Get holiday", description = "User can get holiday")
+    @GetMapping
     public List<HolidayResponse> getHolidays() {
         return service.getHolidays();
     }
-
-
-
 }
