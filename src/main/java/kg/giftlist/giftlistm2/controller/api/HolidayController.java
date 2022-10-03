@@ -37,17 +37,15 @@ public class HolidayController {
         return service.findById(id);
     }
 
-    @Operation(summary = "Get holiday", description = "User can get holiday")
+    @Operation(summary = "Delete holiday", description = "User can delete holiday")
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
         return service.deleteById(id);
     }
 
-    @Operation(summary = "Delete holiday", description = "User can delete holiday")
+    @Operation(summary = "Get holiday", description = "User can get holiday")
     @GetMapping
     public List<HolidayResponse> getHolidays() {
         return service.getHolidays();
     }
-
-  
 }
