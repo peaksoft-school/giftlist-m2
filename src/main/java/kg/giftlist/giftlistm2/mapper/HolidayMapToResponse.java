@@ -10,7 +10,6 @@ import java.util.List;
 
 @Component
 public class HolidayMapToResponse {
-    private HolidayRepository repository;
 
     public HolidayResponse viewHoliday(Holiday holiday) {
         if (holiday == null) {
