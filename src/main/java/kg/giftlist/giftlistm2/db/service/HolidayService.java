@@ -41,7 +41,6 @@ public class HolidayService {
         return holidayMapToResponse.viewHoliday(holiday);
     }
 
-
     public HolidayResponse update(Long id, HolidayRequest holidayRequest) {
         Holiday holiday = repository.findById(id).get();
         holidayMapToRequest.update(holiday, holidayRequest);
