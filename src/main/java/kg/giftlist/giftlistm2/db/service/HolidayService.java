@@ -2,7 +2,6 @@ package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.HolidayRequest;
 import kg.giftlist.giftlistm2.controller.payload.HolidayResponse;
-import kg.giftlist.giftlistm2.controller.payload.HolidayResponseView;
 import kg.giftlist.giftlistm2.db.entity.Holiday;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
@@ -10,8 +9,6 @@ import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.mapper.HolidayMapToRequest;
 import kg.giftlist.giftlistm2.mapper.HolidayMapToResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
