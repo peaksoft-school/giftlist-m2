@@ -26,12 +26,13 @@ public class HolidayController {
         return service.create(request);
     }
 
+    @Operation(summary = "Update holiday", description = "User can update a holiday")
     @PutMapping("/{id}")
     public HolidayResponse update(@PathVariable Long id, @RequestBody HolidayRequest request) {
         return service.update(id, request);
     }
     
-    @Operation(summary = "Update holiday", description = "User can update a holiday")
+    @Operation(summary = "Get holiday", description = "User can get holiday")
     @GetMapping("/{id}")
     public HolidayResponse findById(@PathVariable Long id) {
         return service.findById(id);
@@ -43,7 +44,7 @@ public class HolidayController {
         return service.deleteById(id);
     }
 
-    @Operation(summary = "Get holiday", description = "User can get holiday")
+    @Operation(summary = "Get all holidays", description = "User can get all holidays")
     @GetMapping
     public List<HolidayResponse> getHolidays() {
         return service.getHolidays();
