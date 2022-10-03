@@ -29,6 +29,5 @@ public class HolidayMapToResponse {
             responses.add(viewHoliday(holiday));
         }
         return responses;
-
     }
 }
