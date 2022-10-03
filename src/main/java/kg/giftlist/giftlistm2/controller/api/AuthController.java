@@ -3,6 +3,8 @@ package kg.giftlist.giftlistm2.controller.api;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
 import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
 import kg.giftlist.giftlistm2.db.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.mapper.LoginMapper;
 import kg.giftlist.giftlistm2.controller.payload.LoginRequest;
 import kg.giftlist.giftlistm2.controller.payload.LoginResponse;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/public")
 @CrossOrigin
 @RequiredArgsConstructor
+@Tag(name = "Auth API",description = "Any user can do registration and login")
 public class AuthController {
 
     private final UserRepository repository;
@@ -32,6 +35,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
+    @Operation(summary = "Login",description = "User can do login")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
         try {
             UsernamePasswordAuthenticationToken token =
@@ -49,10 +53,3 @@ public class AuthController {
     public SignupResponse register(@RequestBody SignupRequest request){
         return userService.register(request);
     }
-
-
-
-
-}
-
-
