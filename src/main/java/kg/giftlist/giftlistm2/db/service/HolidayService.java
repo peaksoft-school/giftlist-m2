@@ -22,6 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class HolidayService {
+    
     private final HolidayRepository repository;
     private final UserRepository userRepository;
     private final HolidayMapToRequest holidayMapToRequest;
@@ -67,6 +68,4 @@ public class HolidayService {
         String login = authentication.getName();
         return userRepository.findByEmail(login).get();
     }
-
-
 }
