@@ -22,7 +22,8 @@ public class Holiday {
     private Long id;
 
     private String name;
-
+     
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate localDate;
 
     private String image;
