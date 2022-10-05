@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/public")
+@CrossOrigin
 @RequiredArgsConstructor
 @RequestMapping("api/public")
 @CrossOrigin(origins = "*", maxAge = 3600)
