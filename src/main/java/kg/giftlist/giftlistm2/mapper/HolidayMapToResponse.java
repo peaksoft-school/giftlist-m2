@@ -2,7 +2,6 @@ package kg.giftlist.giftlistm2.mapper;
 
 import kg.giftlist.giftlistm2.controller.payload.HolidayResponse;
 import kg.giftlist.giftlistm2.db.entity.Holiday;
-import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
