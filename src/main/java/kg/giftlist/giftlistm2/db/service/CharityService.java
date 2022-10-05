@@ -61,8 +61,9 @@ public class CharityService {
         return mapToResponse(charity);
     }
 
-    public void deleteCharity(Long id) {
+    public String deleteCharity(Long id) {
         charityRepository.deleteById(id);
+        return "Charity successfully deleted!";
     }
 
     public List<CharityResponse> getCharityByUserId(Long userId) {
