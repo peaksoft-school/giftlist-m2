@@ -16,5 +16,5 @@ public interface HolidayRepository extends JpaRepository<Holiday, Long> {
     List<Holiday> getAllUserHolidays(Long userId);
 
     @Query("select h from Holiday h where upper(h.name) like concat('%',:text,'%') ")
-    List<Holiday> searchAndPagination(@Param("text")String text, Pageable pageable);
+    List<Holiday> searchAndPagination(@Param("text") String text, Pageable pageable);
 }
