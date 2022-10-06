@@ -26,7 +26,7 @@ public class LoginMapper {
             authorities.add(role.getAuthority());
         }
         String join = String.join("", authorities);
-         loginResponse.setAuthorities(join);
+        loginResponse.setAuthorities(join);
     }
 
 }
