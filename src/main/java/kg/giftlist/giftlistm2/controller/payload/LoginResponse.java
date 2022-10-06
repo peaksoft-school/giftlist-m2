@@ -11,7 +11,7 @@ public class LoginResponse {
 
     private String jwtToken;
     private String message;
-    private Set<String> authorities;
+    private String authorities;
     private Long id;
     private String firstName;
     private String lastName;
