@@ -27,6 +27,7 @@ import java.util.Map;
 @RequestMapping("api/public")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Auth API", description = "Any user can do registration and login")
+@Slf4j
 public class AuthController {
 
     private final UserRepository repository;
@@ -52,6 +53,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
+    @Operation(summary = "process forgot password", description = "User The user can get a link to gmail to reset the password")
     public ResponseEntity processForgotPassword(@RequestParam("email") String email, HttpServletRequest request) {
         User user = userServiceImpl.findUserByEmail(email);
         if (user == null) {
@@ -80,6 +82,7 @@ public class AuthController {
     }
 
     @GetMapping
+    @Operation(summary = "process reset password",description = "The user can access to update the password")
     public ResetPasswordToken get(@RequestParam String token){
         ResetPasswordToken resetToken = passwordResetTokenServiceImpl.findByToken(token);
         if(resetToken == null){
@@ -94,6 +97,7 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
+    @Operation(summary = "process reset password",description = "The user can update password using token")
     public  User resetPassword(@RequestParam String token,@RequestParam String password,@RequestParam String confirmPassword){
         ResetPasswordToken resetToken = passwordResetTokenServiceImpl.findByToken(token);
         User user = resetToken.getUser();
