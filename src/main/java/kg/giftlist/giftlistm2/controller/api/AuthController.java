@@ -2,8 +2,6 @@ package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.db.Mail;
 import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
 import kg.giftlist.giftlistm2.db.service.EmailServiceImpl;
@@ -18,11 +16,13 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +35,7 @@ import java.util.Map;
 @RequestMapping("api/public")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Auth API", description = "Any user can do registration and login")
+@Slf4j
 public class AuthController {
 
     private final UserRepository repository;
@@ -60,6 +61,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
+    @Operation(summary = "process forgot password", description = "User The user can get a link to gmail to reset the password")
     public ResponseEntity processForgotPassword(@RequestParam("email") String email, HttpServletRequest request) {
         User user = userServiceImpl.findUserByEmail(email);
         if (user == null) {
@@ -88,6 +90,7 @@ public class AuthController {
     }
 
     @GetMapping
+    @Operation(summary = "process reset password",description = "The user can access to update the password")
     public ResetPasswordToken get(@RequestParam String token){
         ResetPasswordToken resetToken = passwordResetTokenServiceImpl.findByToken(token);
         if(resetToken == null){
@@ -102,6 +105,7 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
+    @Operation(summary = "process reset password",description = "The user can update password using token")
     public  User resetPassword(@RequestParam String token,@RequestParam String password,@RequestParam String confirmPassword){
         ResetPasswordToken resetToken = passwordResetTokenServiceImpl.findByToken(token);
         User user = resetToken.getUser();
