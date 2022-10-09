@@ -18,10 +18,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/public")
-@CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Auth API",description = "Any user can do registration and login")
+@RequestMapping("api/public")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "Auth API", description = "Any user can do registration and login")
 public class AuthController {
 
     private final UserRepository repository;
@@ -29,8 +29,8 @@ public class AuthController {
     private final LoginMapper loginMapper;
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping("/login")
-    @Operation(summary = "Login",description = "User can do login")
+    @Operation(summary = "Login", description = "User can do login")
+    @PostMapping("login")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
         try {
             UsernamePasswordAuthenticationToken token =
