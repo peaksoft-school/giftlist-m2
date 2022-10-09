@@ -45,4 +45,7 @@ public class Charity {
 
     private LocalDate createdDate;
 
+    @OneToOne(mappedBy = "charity", cascade = CascadeType.ALL)
+    private Booking booking;
+
 }
