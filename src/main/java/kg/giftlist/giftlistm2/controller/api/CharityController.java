@@ -41,7 +41,7 @@ public class CharityController {
     }
 
     @PostMapping("/{id}")
-    @Operation(summary = "charity booking", description = "User can book a charity")
+    @Operation(summary = "charity booking", description = "User can book a charity with")
     public Charity booking(@PathVariable Long id) {
         return charityService.book(id);
     }

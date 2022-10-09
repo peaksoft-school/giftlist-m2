@@ -12,6 +12,5 @@ public class CharityRequest {
     private String image;
     private String description;
     private Long categoryId;
-    private Long userId;
 
 }

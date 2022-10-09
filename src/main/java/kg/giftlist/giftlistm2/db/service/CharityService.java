@@ -5,12 +5,15 @@ import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
 import kg.giftlist.giftlistm2.db.entity.Booking;
 import kg.giftlist.giftlistm2.db.entity.Category;
 import kg.giftlist.giftlistm2.db.entity.Charity;
+import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.BookingRepository;
 import kg.giftlist.giftlistm2.db.repository.CategoryRepository;
 import kg.giftlist.giftlistm2.db.repository.CharityRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.enums.Condition;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,9 +32,10 @@ public class CharityService {
     public Charity book(Long id) {
         Charity charity = charityRepository.findById(id).get();
         Booking booking = new Booking();
+        User user = getAuthenticatedUser();
         booking.setId(booking.getId());
         booking.setCharity(charity);
-        booking.setUserId(charity.getUser());
+        booking.setUserId(user);
         bookingRepository.save(booking);
         return charity;
     }
@@ -45,10 +49,12 @@ public class CharityService {
     }
 
     public CharityResponse createCharity(CharityRequest request) {
+
         Charity charity = new Charity();
+        User user = getAuthenticatedUser();
         Category category = categoryRepository.findById(request.getCategoryId()).get();
         charity.setGiftName(request.getGiftName());
-        charity.setUser(userRepository.findById(request.getUserId()).get());
+        charity.setUser(user);
         charity.setCondition(Condition.valueOf(request.getCondition()));
         charity.setCategory(category);
         charity.setImage(request.getImage());
@@ -71,23 +77,8 @@ public class CharityService {
     }
 
     public String deleteCharity(Long id) {
-//        Booking booking1 = bookingRepository.findById(id).get();
-//        List<Booking> bookings = new ArrayList<>((Collection) booking1);
-//        for (Booking booking2 : bookings) {
-//            booking2.setCharity(null);
-//            bookingRepository.save(booking2);
-//        }
         charityRepository.deleteById(id);
         return "Charity successfully deleted!";
-    }
-
-    public List<CharityResponse> getCharityByUserId(Long userId) {
-        List<Charity> charities = charityRepository.getCharityByUserId(userId);
-        List<CharityResponse> responses = new ArrayList<>();
-        for (Charity charity : charities) {
-            responses.add(mapToResponse(charity));
-        }
-        return responses;
     }
 
     private CharityResponse mapToResponse(Charity charity) {
@@ -97,7 +88,6 @@ public class CharityService {
         CharityResponse charityResponse = new CharityResponse();
         charityResponse.setId(charity.getId());
         charityResponse.setGiftName(charity.getGiftName());
-        charityResponse.setUserId(charity.getUser().getId());
         charityResponse.setFirstName(charity.getUser().getFirstName());
         charityResponse.setLastName(charity.getUser().getLastName());
         charityResponse.setCondition(charity.getCondition());
@@ -106,6 +96,12 @@ public class CharityService {
         charityResponse.setDescription(charity.getDescription());
         charityResponse.setCreatedDate(LocalDate.now());
         return charityResponse;
+    }
+
+    private User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String login = authentication.getName();
+        return userRepository.findByEmail(login).get();
     }
 
 }
