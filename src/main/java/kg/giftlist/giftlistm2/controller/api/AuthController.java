@@ -13,12 +13,15 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,6 +57,18 @@ public class AuthController {
     }
 
 
+
+
+   @GetMapping("/oauth2")
+   @Operation(summary = "register with google",description = "user use email can register")
+    public SignupResponse signUpGoogle(Principal principal){
+       JSONObject jsonObject=new JSONObject(principal);
+       SignupRequest request=new SignupRequest();
+       request.setFirstName(jsonObject.getJSONObject("principal").getString("givenName"));
+       request.setLastName(jsonObject.getJSONObject("principal").getString("familyName"));
+       request.setEmail(jsonObject.getJSONObject("principal").getJSONObject("claims").getString("email"));
+       return userService.register(request);
+   }
 
 
 }
