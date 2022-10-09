@@ -24,7 +24,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public SignupResponse register(SignupRequest signupRequest) {
          User user =signUpMapper.toUser(signupRequest);
-        if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())){
+         if (signupRequest.getPassword()==null){
+             user.setPassword(passwordEncoder.encode(signupRequest.getFirstName()));
+         }
+       else if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())){
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         }else {
             log.error("password not match");
