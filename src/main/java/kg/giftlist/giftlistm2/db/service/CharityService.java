@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,7 +53,6 @@ public class CharityService {
     }
 
     public CharityResponse createCharity(CharityRequest request) {
-
         Charity charity = new Charity();
         User user = getAuthenticatedUser();
         Category category = categoryRepository.findById(request.getCategoryId()).get();
