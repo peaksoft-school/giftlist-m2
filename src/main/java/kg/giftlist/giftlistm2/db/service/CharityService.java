@@ -1,10 +1,12 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.CategoryRequest;
 import kg.giftlist.giftlistm2.controller.payload.CharityRequest;
 import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
+import kg.giftlist.giftlistm2.db.entity.Booking;
 import kg.giftlist.giftlistm2.db.entity.Category;
 import kg.giftlist.giftlistm2.db.entity.Charity;
+import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.db.repository.BookingRepository;
 import kg.giftlist.giftlistm2.db.repository.CategoryRepository;
 import kg.giftlist.giftlistm2.db.repository.CharityRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
@@ -12,8 +14,11 @@ import kg.giftlist.giftlistm2.enums.Condition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PreRemove;
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -23,22 +28,30 @@ public class CharityService {
     private final CharityRepository charityRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-    private final CategoryService categoryService;
+    private final BookingRepository bookingRepository;
+
+    public Charity book(Long id) {
+        Charity charity = charityRepository.findById(id).get();
+        Booking booking = new Booking();
+        booking.setId(booking.getId());
+        booking.setCharity(charity);
+        booking.setUserId(charity.getUser());
+        bookingRepository.save(booking);
+        return charity;
+    }
 
     public Charity getCharityById(Long id) {
         return charityRepository.findById(id).get();
     }
 
-
     public List<Charity> getAllCharities() {
         return charityRepository.findAll();
     }
 
-
     public CharityResponse createCharity(CharityRequest request) {
         Charity charity = new Charity();
         Category category = categoryRepository.findById(request.getCategoryId()).get();
-        charity.setGiftName (request.getGiftName());
+        charity.setGiftName(request.getGiftName());
         charity.setUser(userRepository.findById(request.getUserId()).get());
         charity.setCondition(Condition.valueOf(request.getCondition()));
         charity.setCategory(category);
@@ -61,7 +74,14 @@ public class CharityService {
         return mapToResponse(charity);
     }
 
+
     public String deleteCharity(Long id) {
+//        Booking booking1 = bookingRepository.findById(id).get();
+//        List<Booking> bookings = new ArrayList<>((Collection) booking1);
+//        for (Booking booking2 : bookings) {
+//            booking2.setCharity(null);
+//            bookingRepository.save(booking2);
+//        }
         charityRepository.deleteById(id);
         return "Charity successfully deleted!";
     }
@@ -82,7 +102,9 @@ public class CharityService {
         CharityResponse charityResponse = new CharityResponse();
         charityResponse.setId(charity.getId());
         charityResponse.setGiftName(charity.getGiftName());
-        charityResponse.setUser(charity.getUser());
+        charityResponse.setUserId(charity.getUser().getId());
+        charityResponse.setFirstName(charity.getUser().getFirstName());
+        charityResponse.setLastName(charity.getUser().getLastName());
         charityResponse.setCondition(charity.getCondition());
         charityResponse.setCategory(charity.getCategory());
         charityResponse.setImage(charity.getImage());

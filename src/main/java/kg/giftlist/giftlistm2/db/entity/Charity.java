@@ -45,5 +45,4 @@ public class Charity {
 
     private LocalDate createdDate;
 
-
 }

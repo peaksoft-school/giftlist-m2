@@ -40,6 +40,12 @@ public class CharityController {
         return charityService.createCharity(categoryCharity.getCharityRequest());
     }
 
+    @PostMapping("/{id}")
+    @Operation(summary = "charity booking", description = "User can book a charity")
+    public Charity booking(@PathVariable Long id) {
+        return charityService.book(id);
+    }
+
     @PutMapping("/{id}")
     @Operation(summary = "Update charity", description = "User can update a charity by id")
     public CharityResponse updateCharity(@PathVariable Long id,

@@ -14,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Booking {
+
     @Id
     @GeneratedValue(generator = "booking_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "booking_gen", sequenceName = "booking_seq", allocationSize = 1)
