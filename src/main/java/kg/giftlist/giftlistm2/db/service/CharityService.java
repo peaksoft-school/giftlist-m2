@@ -5,7 +5,6 @@ import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
 import kg.giftlist.giftlistm2.db.entity.Booking;
 import kg.giftlist.giftlistm2.db.entity.Category;
 import kg.giftlist.giftlistm2.db.entity.Charity;
-import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.BookingRepository;
 import kg.giftlist.giftlistm2.db.repository.CategoryRepository;
 import kg.giftlist.giftlistm2.db.repository.CharityRepository;
@@ -14,11 +13,8 @@ import kg.giftlist.giftlistm2.enums.Condition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.PreRemove;
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -73,7 +69,6 @@ public class CharityService {
         charityRepository.save(charity);
         return mapToResponse(charity);
     }
-
 
     public String deleteCharity(Long id) {
 //        Booking booking1 = bookingRepository.findById(id).get();
