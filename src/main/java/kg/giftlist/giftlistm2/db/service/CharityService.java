@@ -29,18 +29,13 @@ public class CharityService {
     private final BookingRepository bookingRepository;
 
     public Charity book(Long id) throws IllegalStateException {
-        Charity charity = null;
-        try {
-            charity = charityRepository.findById(id).get();
-            Booking booking = new Booking();
-            User user = getAuthenticatedUser();
-            booking.setId(booking.getId());
-            booking.setCharity(charity);
-            booking.setUserId(user);
-            bookingRepository.save(booking);
-        } catch (IllegalStateException e) {
-            System.out.println("This charity was booked");
-        }
+        Charity charity = charityRepository.findById(id).get();
+        Booking booking = new Booking();
+        User user = getAuthenticatedUser();
+        booking.setId(booking.getId());
+        booking.setCharity(charity);
+        booking.setUserId(user);
+        bookingRepository.save(booking);
         return charity;
     }
 
