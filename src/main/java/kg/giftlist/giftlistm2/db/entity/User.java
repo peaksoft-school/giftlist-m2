@@ -85,10 +85,10 @@ public class User implements UserDetails {
     private List<Complaints> complaints;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFrom")
-    private List<Invite> invites;
+    private List<Invite> userFrom;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTo")
-    private List<Invite> invite;
+    private List<Invite> userTo;
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(

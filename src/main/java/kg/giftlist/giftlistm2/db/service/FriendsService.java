@@ -6,6 +6,8 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -25,9 +27,18 @@ public class FriendsService {
 //        }
 //        friends.add(user);
 //    }
+
     public FriendsResponse add(FriendsRequest request){
+        User user =userRepository.findById(request.getUserId()).get();
+        Set<User> friend = new HashSet<>();
         User user1 =userRepository.findById(request.getFriendId()).get();
-        userRepository.save(user1);
+        if (user1==getAuthenticatedUser()){
+        friend.add(user1);
+        }else {
+            log.info("User with id - %d,not found", request.getFriendId());
+        }
+        user.setFriends(friend);
+        userRepository.save(user);
         return mapToFriendResponse(user1);
     }
 
@@ -48,6 +59,11 @@ public class FriendsService {
                 .charities(user.getCharities())
                 .holidays(user.getHolidays())
                 .build();
+    }
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String login = authentication.getName();
+        return userRepository.findByEmail(login).get();
     }
 
 }
