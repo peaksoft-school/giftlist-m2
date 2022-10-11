@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,15 +29,21 @@ public class CharityService {
     private final CategoryRepository categoryRepository;
     private final BookingRepository bookingRepository;
 
-    public Charity book(Long id) throws IllegalStateException {
+    public String book(Long id) throws RuntimeException {
         Charity charity = charityRepository.findById(id).get();
-        Booking booking = new Booking();
-        User user = getAuthenticatedUser();
-        booking.setId(booking.getId());
-        booking.setCharity(charity);
-        booking.setUserId(user);
-        bookingRepository.save(booking);
-        return charity;
+        Optional<Booking> booking = bookingRepository.findById(charity.getId());
+        boolean isBooked = booking.isEmpty();
+       if (isBooked) {
+           Booking booking1 = new Booking();
+           User user = getAuthenticatedUser();
+           booking1.setId(booking1.getId());
+           booking1.setCharity(charity);
+           booking1.setUserId(user);
+           bookingRepository.save(booking1);
+           return "You have successfully booked this charity";
+       } else {
+           throw new IllegalStateException("This charity is already booked");
+       }
     }
 
     public Charity getCharityById(Long id) {
@@ -89,6 +96,7 @@ public class CharityService {
         charityResponse.setFirstName(charity.getUser().getFirstName());
         charityResponse.setLastName(charity.getUser().getLastName());
         charityResponse.setCondition(charity.getCondition());
+
         charityResponse.setCategory(charity.getCategory());
         charityResponse.setImage(charity.getImage());
         charityResponse.setDescription(charity.getDescription());

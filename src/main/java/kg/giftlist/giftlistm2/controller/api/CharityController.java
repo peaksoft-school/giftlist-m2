@@ -42,8 +42,12 @@ public class CharityController {
 
     @Operation(summary = "charity booking", description = "Authenticated user can book a charity")
     @PostMapping("{id}")
-    public Charity booking(@PathVariable Long id) {
-        return charityService.book(id);
+    public void booking(@PathVariable Long id) {
+        try {
+            charityService.book(id);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Operation(summary = "Update charity", description = "User can update a charity by id")

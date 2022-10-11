@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -16,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category {
+
     @Id
     @GeneratedValue(generator = "category_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "category_gen", sequenceName = "category_seq", allocationSize = 1)
