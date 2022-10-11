@@ -5,13 +5,15 @@ import kg.giftlist.giftlistm2.db.entity.Charity;
         import kg.giftlist.giftlistm2.db.entity.WishList;
         import kg.giftlist.giftlistm2.enums.ClothingSize;
         import kg.giftlist.giftlistm2.enums.ShoeSize;
-        import lombok.Getter;
+import lombok.Builder;
+import lombok.Getter;
         import lombok.Setter;
 
         import java.time.LocalDate;
         import java.util.List;
 @Getter
 @Setter
+@Builder
 public class FriendsResponse {
 
     private  Long id;
@@ -23,9 +25,7 @@ public class FriendsResponse {
     private  String email;
     private ClothingSize clothingSize;
     private ShoeSize shoeSize;
-
     private  String hobbies;
-
     private  String importantToKnow;
     private List<WishList> wishLists;
     private List<Charity> charities;

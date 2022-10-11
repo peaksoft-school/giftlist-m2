@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.FriendsRequest;
+import kg.giftlist.giftlistm2.controller.payload.FriendsResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.Set;
 @Slf4j
 public class FriendsService {
     private final UserRepository userRepository;
-    Set<User> friends = new HashSet<>();
+
 
     //    public void addFriends(User user){
 //        if (friends ==null){
@@ -24,13 +25,29 @@ public class FriendsService {
 //        }
 //        friends.add(user);
 //    }
-    public  void add(FriendsRequest request){
-        Optional<User> user = userRepository.findById(request.getUser().getId());
-        Set<Optional<User>> friends = new HashSet<>();
-        friends.add(user);
+    public FriendsResponse add(Long userId){
+        User user1 =userRepository.findById(userId).get();
+        userRepository.save(user1);
+        return mapToFriendResponse(user1);
+    }
 
-
-
+    private FriendsResponse mapToFriendResponse(User user) {
+        return FriendsResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .dateOfBirth(user.getDateOfBirth())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .city(user.getCity())
+                .clothingSize(user.getClothingSize())
+                .shoeSize(user.getShoeSize())
+                .hobbies(user.getHobbies())
+                .importantToKnow(user.getImportantToKnow())
+                .wishLists(user.getWishLists())
+                .charities(user.getCharities())
+                .holidays(user.getHolidays())
+                .build();
     }
 
 }

@@ -59,6 +59,8 @@ public class User implements UserDetails {
     @Size(max = 10000)
     private String hobbies;
 
+    private String city;
+
     @Size(max = 10000)
     @Column(name = "important_to_know")
     private String importantToKnow;
