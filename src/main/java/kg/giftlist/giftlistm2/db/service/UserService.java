@@ -8,5 +8,4 @@ public interface UserService{
   SignupResponse register(SignupRequest signupRequest);
 
 
-
 }
