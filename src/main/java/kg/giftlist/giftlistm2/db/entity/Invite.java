@@ -2,23 +2,35 @@ package kg.giftlist.giftlistm2.db.entity;
 
 
 import kg.giftlist.giftlistm2.enums.InviteStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
+
 @Entity
-    class Invite {
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        private Long id;
+@Table(name = "invite")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Invite {
+    @Id
+    @GeneratedValue(generator = "invite_gen", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "invite_gen", sequenceName = "invite_seq", allocationSize = 1)
+    private Long id;
 
-        @Column(name = "user_from")
-        @ManyToOne
-        private User userFrom;
-        @Column(name = "user_to")
-        @ManyToOne
-        private User userTo;
+    @ManyToOne
+    private User userFrom;
 
-        @Enumerated(EnumType.ORDINAL)
-        private InviteStatus status;
-    }
+    @ManyToOne
+    private User userTo;
 
+    @Column(name = "invited_status")
+    @Enumerated(EnumType.ORDINAL)
+    private InviteStatus inviteStatus;
+
+
+}
