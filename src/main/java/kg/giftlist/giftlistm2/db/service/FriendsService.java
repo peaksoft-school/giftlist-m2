@@ -25,8 +25,8 @@ public class FriendsService {
 //        }
 //        friends.add(user);
 //    }
-    public FriendsResponse add(Long userId){
-        User user1 =userRepository.findById(userId).get();
+    public FriendsResponse add(FriendsRequest request){
+        User user1 =userRepository.findById(request.getFriendId()).get();
         userRepository.save(user1);
         return mapToFriendResponse(user1);
     }

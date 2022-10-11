@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FriendsRequest {
-    private User friend;
+    private Long friendId;
 
 }
