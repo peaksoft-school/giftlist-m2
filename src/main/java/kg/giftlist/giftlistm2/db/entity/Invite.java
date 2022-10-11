@@ -11,12 +11,14 @@ import javax.persistence.*;
         @GeneratedValue(strategy = GenerationType.AUTO)
         private Long id;
 
-        @Column
+        @Column(name = "user_from")
+        @ManyToOne
         private User userFrom;
-        @Column
+        @Column(name = "user_to")
+        @ManyToOne
         private User userTo;
 
         @Enumerated(EnumType.ORDINAL)
         private InviteStatus status;
     }
-}
+

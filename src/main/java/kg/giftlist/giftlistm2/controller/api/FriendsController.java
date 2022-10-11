@@ -4,7 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
         import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.FriendsRequest;
 import kg.giftlist.giftlistm2.controller.payload.FriendsResponse;
-        import lombok.RequiredArgsConstructor;
+import kg.giftlist.giftlistm2.db.service.FriendsService;
+import lombok.RequiredArgsConstructor;
         import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,11 +14,12 @@ import kg.giftlist.giftlistm2.controller.payload.FriendsResponse;
 @RequiredArgsConstructor
 @Tag(name = "Auth API",description = "Any user can do add user")
 public class FriendsController {
+    private final FriendsService friendsService;
 
     @PostMapping("/add")
     @Operation(summary = "add friends ", description = "we can add friends")
     public FriendsResponse addFriends(@RequestBody FriendsRequest friendId) {
-        return addFriends(friendId);
+        return friendsService.add(friendId);
     }
 
 }
