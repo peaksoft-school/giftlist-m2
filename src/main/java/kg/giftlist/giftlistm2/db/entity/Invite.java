@@ -12,9 +12,9 @@ import javax.persistence.*;
         private Long id;
 
         @Column
-        private User from;
+        private User userFrom;
         @Column
-        private User to;
+        private User userTo;
 
         @Enumerated(EnumType.ORDINAL)
         private InviteStatus status;

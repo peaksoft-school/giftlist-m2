@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -82,6 +83,21 @@ public class User implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Complaints> complaints;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFrom")
+    private List<Invite> invites;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTo")
+    private List<Invite> invite;
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "friends",
+            joinColumns = @JoinColumn(name = "user_one"),
+            inverseJoinColumns = @JoinColumn(name = "user_two")
+    )
+    private Set<User> friends;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
