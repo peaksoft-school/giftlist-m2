@@ -5,12 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginResponse {
+public class SignupResponse {
 
-    private String jwtToken;
-    private String message;
-    private String authorities;
-    private Long id;
+    private String firstName;
+    private String lastName;
     private String email;
 
 }
