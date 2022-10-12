@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.HolidayRequest;
 import kg.giftlist.giftlistm2.controller.payload.HolidayResponse;
@@ -17,6 +18,7 @@ import java.util.List;
 @PreAuthorize("hasAuthority('USER')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Holiday API", description = "User with role \"User\"  can create, update or delete holidays")
+@SecurityRequirement(name = "Authorization")
 public class HolidayController {
 
     private final HolidayService service;
