@@ -42,11 +42,11 @@ public class CharityController {
 
     @Operation(summary = "charity booking", description = "Authenticated user can book a charity")
     @PostMapping("{id}")
-    public void booking(@PathVariable Long id) {
+    public String booking(@PathVariable Long id) {
         try {
-            charityService.book(id);
+            return charityService.book(id);
         } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
     }
 
@@ -61,7 +61,11 @@ public class CharityController {
     @Operation(summary = "Delete charity", description = "User can delete a charity by id")
     @DeleteMapping("{id}")
     public String deleteCharity(@PathVariable Long id) {
-        return charityService.deleteCharity(id);
+        try {
+            return charityService.deleteCharity(id);
+        } catch (RuntimeException e) {
+            return e.getMessage();
+        }
     }
 
 }

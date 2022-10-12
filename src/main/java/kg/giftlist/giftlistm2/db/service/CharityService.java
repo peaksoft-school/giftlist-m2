@@ -46,6 +46,16 @@ public class CharityService {
        }
     }
 
+    public String deleteCharity(Long id) throws RuntimeException {
+        Charity charity = charityRepository.findById(id).get();
+        if (charity.getId()==null){
+            throw new IndexOutOfBoundsException("This charity was deleted");
+        } else {
+            charityRepository.deleteById(id);
+            return "Charity successfully deleted!";
+        }
+    }
+
     public Charity getCharityById(Long id) {
         return charityRepository.findById(id).get();
     }
@@ -81,11 +91,6 @@ public class CharityService {
         return mapToResponse(charity);
     }
 
-    public String deleteCharity(Long id) {
-        charityRepository.deleteById(id);
-        return "Charity successfully deleted!";
-    }
-
     private CharityResponse mapToResponse(Charity charity) {
         if (charity == null) {
             return null;
@@ -96,7 +101,6 @@ public class CharityService {
         charityResponse.setFirstName(charity.getUser().getFirstName());
         charityResponse.setLastName(charity.getUser().getLastName());
         charityResponse.setCondition(charity.getCondition());
-
         charityResponse.setCategory(charity.getCategory());
         charityResponse.setImage(charity.getImage());
         charityResponse.setDescription(charity.getDescription());
