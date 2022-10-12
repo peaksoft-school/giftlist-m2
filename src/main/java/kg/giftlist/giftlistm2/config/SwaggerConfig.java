@@ -23,7 +23,7 @@ public class SwaggerConfig {
         Info info = new Info();
         info
                 .title("Giftlist API")
-                .description("This project is developed by PEAKSOFT <br />" +
+                .description("This project is developed by Peaksoft Moscow students <br />" +
                         "Gift application - You choose what to give as a gift!")
                 .version("v1.0.0")
                 .contact(new Contact().name("Peaksoft")
