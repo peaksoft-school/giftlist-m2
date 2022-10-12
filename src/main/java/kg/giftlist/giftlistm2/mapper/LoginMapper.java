@@ -4,7 +4,6 @@ import kg.giftlist.giftlistm2.controller.payload.LoginResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.enums.Role;
 import org.springframework.stereotype.Component;
-
 import java.util.*;
 
 @Component
@@ -29,4 +28,7 @@ public class LoginMapper {
         loginResponse.setAuthorities(join);
     }
 
-}
+    }
+
+
+

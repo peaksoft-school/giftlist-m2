@@ -1,5 +1,8 @@
 package kg.giftlist.giftlistm2.controller.api;
 
+import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
+import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
+import kg.giftlist.giftlistm2.db.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.mapper.LoginMapper;
@@ -28,6 +31,8 @@ public class AuthController {
     private final JwtTokenUtil jwtTokenUtil;
     private final LoginMapper loginMapper;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+
 
     @Operation(summary = "Login", description = "User can do login")
     @PostMapping("login")
@@ -43,4 +48,9 @@ public class AuthController {
         }
     }
 
+
+    @PostMapping("/signup")
+    public SignupResponse register(@RequestBody SignupRequest request){
+        return userService.register(request);
+    }
 }
