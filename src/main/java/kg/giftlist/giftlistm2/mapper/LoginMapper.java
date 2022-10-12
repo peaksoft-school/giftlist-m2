@@ -15,6 +15,10 @@ public class LoginMapper {
         if (user != null) {
             setAuthority(loginResponse, Collections.singletonList(user.getRole()));
         }
+        loginResponse.setId(user.getId());
+        loginResponse.setFirstName(user.getFirstName());
+        loginResponse.setLastName(user.getLastName());
+        loginResponse.setEmail(user.getEmail());
         loginResponse.setJwtToken(token);
         loginResponse.setMessage(message);
         return loginResponse;
