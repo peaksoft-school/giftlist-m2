@@ -33,7 +33,6 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
 
-
     @Operation(summary = "Login", description = "User can do login")
     @PostMapping("login")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
@@ -48,9 +47,8 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/signup")
-    public SignupResponse register(@RequestBody SignupRequest request){
+    public SignupResponse register(@RequestBody SignupRequest request) {
         return userService.register(request);
     }
 }
