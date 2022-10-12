@@ -16,6 +16,8 @@ public class LoginMapper {
         }
         loginResponse.setJwtToken(token);
         loginResponse.setMessage(message);
+        loginResponse.setId(user.getId());
+        loginResponse.setEmail(user.getEmail());
         return loginResponse;
     }
 
