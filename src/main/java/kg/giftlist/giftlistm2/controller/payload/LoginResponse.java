@@ -3,8 +3,6 @@ package kg.giftlist.giftlistm2.controller.payload;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Setter
 @Getter
 public class LoginResponse {
