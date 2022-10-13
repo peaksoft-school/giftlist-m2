@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Auth API", description = "Any user can do authentication")
 public class AuthController {
+
     private final UserService userService;
 
     @Operation(summary = "Login", description = "Only registered users can login")
