@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
+@RequestMapping("/api/public")
+@CrossOrigin
 @RequiredArgsConstructor
-@RequestMapping("api/public")
-@CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "Auth API", description = "Any user can do authentication")
+@Tag(name = "Auth API",description = "Any user can do registration and login")
 public class AuthController {
 
     private final UserRepository repository;
@@ -36,8 +36,9 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
 
-    @Operation(summary = "Login", description = "Only registered users can login")
-    @PostMapping("signin")
+
+    @PostMapping("/login")
+    @Operation(summary = "Login",description = "User can do login")
     public ResponseEntity<LoginResponse> getLogin(@RequestBody LoginRequest request) {
         try {
             UsernamePasswordAuthenticationToken token =
