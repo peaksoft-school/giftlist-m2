@@ -12,5 +12,4 @@ public interface UserService{
 
   ResponseEntity <LoginResponse> login(LoginRequest loginRequest);
 
-
 }
