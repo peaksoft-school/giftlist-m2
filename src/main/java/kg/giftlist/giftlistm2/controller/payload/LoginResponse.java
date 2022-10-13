@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 public class LoginResponse {
 
     private Long id;
@@ -14,5 +15,16 @@ public class LoginResponse {
     private String authorities;
     private String jwtToken;
     private String message;
+
+    @Override
+    public String toString() {
+        return "id: " + id + "\n" +
+                "firstName: " + firstName + "\n" +
+                "lastName: " + lastName + "\n" +
+                "email: " + email + "\n" +
+                "authorities: " + authorities + "\n" +
+                "jwtToken: " + jwtToken + "\n" +
+                "message: " + message;
+    }
 
 }

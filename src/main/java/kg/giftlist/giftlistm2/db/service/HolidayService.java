@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class HolidayService {
-    
+
     private final HolidayRepository repository;
     private final UserRepository userRepository;
     private final HolidayMapToRequest holidayMapToRequest;
@@ -61,6 +61,7 @@ public class HolidayService {
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).get();
+        return userRepository.findByEmail(login);
     }
+
 }

@@ -14,10 +14,7 @@ import kg.giftlist.giftlistm2.mapper.UserSignUpMapper;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,15 +45,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<LoginResponse> login(LoginRequest loginRequest) {
-        try {
+    public String login(LoginRequest loginRequest) {
+        LoginResponse loginResponse = new LoginResponse();
+        User user;
+        User user2 = userRepository.findByEmail(loginRequest.getEmail());
+        if (user2 != null) {
             UsernamePasswordAuthenticationToken token =
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-            User user = userRepository.findByEmail(token.getName()).get();
-            return ResponseEntity.ok().body(loginMapper.loginView(jwtTokenUtil.generateToken(user), ValidationType.SUCCESSFUL, user));
-        } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginMapper.loginView("", ValidationType.LOGIN_FAILED, null));
+            user = userRepository.findByEmail(token.getName());
+            String token1 = (jwtTokenUtil.generateToken(user));
+            return loginMapper.loginView(token1, ValidationType.SUCCESSFUL, user);
+        } else {
+            log.error(ValidationType.LOGIN_FAILED);
+            loginResponse.setMessage(ValidationType.LOGIN_FAILED);
+            return loginResponse.getMessage();
         }
     }
 
