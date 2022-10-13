@@ -21,6 +21,10 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserSignUpMapper signUpMapper;
 
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email).get();
+    }
+
     @Override
     public SignupResponse register(SignupRequest signupRequest) {
          User user =signUpMapper.toUser(signupRequest);
@@ -35,6 +39,11 @@ public class UserServiceImpl implements UserService {
         user.setRole(Role.USER);
          userRepository.save(user);
         return signUpMapper.signupResponse(user);
+    }
+    public void updatePassword(User user) {
+        User user1 = userRepository.findById(user.getId()).get();
+        user1.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user1);
     }
     }
 
