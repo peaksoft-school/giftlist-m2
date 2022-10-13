@@ -28,15 +28,21 @@ public class FriendsService {
 //        friends.add(user);
 //    }
 
+//    public FriendsResponse requestToFriend(Long friendId){
+//        User user = getAuthenticatedUser();
+//        User friend = userRepository.findById(friendId).get();
+//        if (friend.getFriends().contains(user)){
+//            log.info("Request al ready sent");
+//        }
+//        friend.ad
+//    }
+
+
     public FriendsResponse add(FriendsRequest request){
-        User user =userRepository.findById(request.getUserId()).get();
+        User user = getAuthenticatedUser();
         Set<User> friend = new HashSet<>();
         User user1 =userRepository.findById(request.getFriendId()).get();
-        if (user1==getAuthenticatedUser()){
         friend.add(user1);
-        }else {
-            log.info("User with id - %d,not found", request.getFriendId());
-        }
         user.setFriends(friend);
         userRepository.save(user);
         return mapToFriendResponse(user1);
