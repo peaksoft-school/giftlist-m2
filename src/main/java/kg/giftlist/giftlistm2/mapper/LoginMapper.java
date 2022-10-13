@@ -16,8 +16,7 @@ public class LoginMapper {
         if (user != null) {
             try {
                 setAuthority(loginResponse, Collections.singletonList(user.getRole()));
-            }
-            catch (RuntimeException e) {
+            } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
             loginResponse.setId(user.getId());
@@ -38,8 +37,7 @@ public class LoginMapper {
         for (Role role : roles) {
             if (role != null) {
                 authorities.add(role.getAuthority());
-            }
-            else throw new RuntimeException("");
+            } else throw new RuntimeException("");
         }
         String join = String.join("", authorities);
         loginResponse.setAuthorities(join);
