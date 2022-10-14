@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service.impl;
 
+import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
-import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.service.UserService;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     private final UserSignUpMapper signUpMapper;
 
     @Override
-    public SignupResponse register(SignupRequest signupRequest) {
+    public AuthResponse register(SignupRequest signupRequest) {
          User user =signUpMapper.toUser(signupRequest);
         if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())){
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setRole(Role.USER);
          userRepository.save(user);
-        return signUpMapper.signupResponse(user);
+        return (signUpMapper.authResponse(user));
     }
     }
 
