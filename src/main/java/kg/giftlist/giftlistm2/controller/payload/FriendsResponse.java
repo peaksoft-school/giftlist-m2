@@ -27,6 +27,7 @@ public class FriendsResponse {
     private ShoeSize shoeSize;
     private  String hobbies;
     private  String importantToKnow;
+    private String message;
     private List<WishList> wishLists;
     private List<Charity> charities;
     private  List<Holiday> holidays;

@@ -28,24 +28,45 @@ public class FriendsService {
 //        friends.add(user);
 //    }
 
-//    public FriendsResponse requestToFriend(Long friendId){
-//        User user = getAuthenticatedUser();
-//        User friend = userRepository.findById(friendId).get();
-//        if (friend.getFriends().contains(user)){
-//            log.info("Request al ready sent");
-//        }
-//        friend.ad
-//    }
+
+//        @Transactional
+//        public SimpleResponse requestToFriend(Long friendId) {
+//            User user = getAuthenticatedUser();
+//            User friend = findByUserId(friendId);
+//            if (friend.equals(user)) {
+//                throw new UserForbiddenException("You can not request to you");
+//            }
+//            if (friend.getRequestToFriends().contains(user)) {
+//                log.error("Request already sent");
+//                throw new AlreadyExistException("Request already sent");
+//            }
+//            friend.addRequestToFriend(user);
 
 
-    public FriendsResponse add(FriendsRequest request){
+    public FriendsResponse requestToFriend(Long friendId){
         User user = getAuthenticatedUser();
+        User friend = userRepository.findById(friendId).get();
+      if(friend == user){
+          log.info("You can't send a request to yourself");
+      } else if (friend.getRequestToFriends().contains(user)) {
+          log.info("Request already sent");
+      } else if (friend.getFriends().contains(user)) {
+          log.info("This user is already in your friends");
+      }
+      else {
+          Set<User> list = new HashSet<>();
+          list.add(user);
+          log.info("Request to friend successfully send");
+
+      }
+      return mapToFriendResponse(user);
+    }
+
+    public FriendsResponse add(User user){
         Set<User> friend = new HashSet<>();
-        User user1 =userRepository.findById(request.getFriendId()).get();
-        friend.add(user1);
         user.setFriends(friend);
         userRepository.save(user);
-        return mapToFriendResponse(user1);
+        return mapToFriendResponse(user);
     }
 
     private FriendsResponse mapToFriendResponse(User user) {

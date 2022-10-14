@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.db.entity;
 
 import kg.giftlist.giftlistm2.enums.ClothingSize;
+import kg.giftlist.giftlistm2.enums.InviteStatus;
 import kg.giftlist.giftlistm2.enums.Role;
 import kg.giftlist.giftlistm2.enums.ShoeSize;
 import lombok.AllArgsConstructor;
@@ -13,12 +14,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -90,13 +89,25 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTo")
     private List<Invite> userTo;
 
+    @Transient
+    @Enumerated(EnumType.STRING)
+    private InviteStatus inviteStatus;
+
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
             name = "friends",
             joinColumns = @JoinColumn(name = "user_one"),
             inverseJoinColumns = @JoinColumn(name = "user_two")
     )
-    private Set<User> friends;
+    private Set<User> friends = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "request_to_friend",
+            joinColumns = @JoinColumn(name = "from_user"),
+            inverseJoinColumns = @JoinColumn(name = "to_user")
+    )
+    private Set<User> requestToFriends = new HashSet<>();
 
 
     @Override
