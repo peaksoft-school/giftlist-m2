@@ -21,12 +21,6 @@ public class FriendsService {
     private final UserRepository userRepository;
 
 
-    //    public void addFriends(User user){
-//        if (friends ==null){
-//            friends = new HashSet<>();
-//        }
-//        friends.add(user);
-//    }
 
 
 //        @Transactional
@@ -43,6 +37,7 @@ public class FriendsService {
 //            friend.addRequestToFriend(user);
 
 
+
     public FriendsResponse requestToFriend(Long friendId){
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).get();
@@ -54,20 +49,13 @@ public class FriendsService {
           log.info("This user is already in your friends");
       }
       else {
-          Set<User> list = new HashSet<>();
-          list.add(user);
+          friend.addRequestToFriend(user);
           log.info("Request to friend successfully send");
 
       }
       return mapToFriendResponse(user);
     }
 
-    public FriendsResponse add(User user){
-        Set<User> friend = new HashSet<>();
-        user.setFriends(friend);
-        userRepository.save(user);
-        return mapToFriendResponse(user);
-    }
 
     private FriendsResponse mapToFriendResponse(User user) {
         return FriendsResponse.builder()

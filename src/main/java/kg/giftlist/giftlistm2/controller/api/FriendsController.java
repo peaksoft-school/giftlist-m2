@@ -16,10 +16,10 @@ import lombok.RequiredArgsConstructor;
 public class FriendsController {
     private final FriendsService friendsService;
 
-    @PostMapping("/add")
+    @PostMapping("/{id}")
     @Operation(summary = "add friends ", description = "we can add friends")
-    public FriendsResponse addFriends(@RequestBody FriendsRequest friendId) {
-        return friendsService.add(friendId);
+    public FriendsResponse requestToFriend(@PathVariable Long id) {
+        return friendsService.requestToFriend(id);
     }
 
 }
