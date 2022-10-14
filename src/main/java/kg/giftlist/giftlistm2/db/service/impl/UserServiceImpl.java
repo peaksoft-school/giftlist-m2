@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
         LoginResponse loginResponse = new LoginResponse();
         User user;
         User user2 = userRepository.findByEmail(loginRequest.getEmail());
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         } else {
             log.error(ValidationType.LOGIN_FAILED);
             loginResponse.setMessage(ValidationType.LOGIN_FAILED);
-            return loginResponse.getMessage();
+            return loginResponse;
         }
     }
 

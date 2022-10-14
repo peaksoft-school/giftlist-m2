@@ -10,7 +10,7 @@ import java.util.*;
 @Component
 public class LoginMapper {
 
-    public String loginView(String token, String message, User user) {
+    public LoginResponse loginView(String token, String message, User user) {
         var loginResponse = new LoginResponse();
         if (user != null) {
             try {
@@ -25,7 +25,7 @@ public class LoginMapper {
             loginResponse.setJwtToken(token);
             loginResponse.setMessage(message);
         }
-        return loginResponse.toString();
+        return loginResponse;
     }
 
     public void setAuthority(LoginResponse loginResponse, List<Role> roles) {

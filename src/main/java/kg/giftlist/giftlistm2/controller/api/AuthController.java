@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.controller.api;
 
+import kg.giftlist.giftlistm2.controller.payload.LoginResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
 import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
 import kg.giftlist.giftlistm2.db.service.UserService;
@@ -23,11 +24,11 @@ public class AuthController {
 
     @Operation(summary = "Login", description = "Only registered users can login")
     @PostMapping("signin")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         try {
             return ResponseEntity.ok(userService.login(loginRequest));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User name or password is not correct");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
