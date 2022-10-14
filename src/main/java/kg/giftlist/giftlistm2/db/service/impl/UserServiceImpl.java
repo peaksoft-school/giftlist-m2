@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.service.impl;
 
+import kg.giftlist.giftlistm2.Exception.IncorrectUsersLoginException;
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import kg.giftlist.giftlistm2.controller.payload.LoginRequest;
 import kg.giftlist.giftlistm2.controller.payload.LoginResponse;
@@ -46,7 +47,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        LoginResponse loginResponse = new LoginResponse();
         User user;
         User user2 = userRepository.findByEmail(loginRequest.getEmail());
         if (user2 != null) {
@@ -57,10 +57,13 @@ public class UserServiceImpl implements UserService {
             String token1 = (jwtTokenUtil.generateToken(user));
             return loginMapper.loginView(token1, ValidationType.SUCCESSFUL, user);
         } else {
-            log.error(ValidationType.LOGIN_FAILED);
-            loginResponse.setMessage(ValidationType.LOGIN_FAILED);
-            return loginResponse;
+            return invalidLog();
         }
+    }
+
+    @Override
+    public LoginResponse invalidLog() throws RuntimeException {
+        throw new IncorrectUsersLoginException();
     }
 
 }

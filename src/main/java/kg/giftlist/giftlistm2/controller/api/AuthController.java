@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.controller.api;
 
+import kg.giftlist.giftlistm2.Exception.IncorrectUsersLoginException;
 import kg.giftlist.giftlistm2.controller.payload.LoginResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
 import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
@@ -8,8 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.LoginRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,18 +23,17 @@ public class AuthController {
 
     @Operation(summary = "Login", description = "Only registered users can login")
     @PostMapping("signin")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public  LoginResponse login(@RequestBody LoginRequest loginRequest) {
         try {
-            return ResponseEntity.ok(userService.login(loginRequest));
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return userService.login(loginRequest);
+        } catch (BadCredentialsException | IncorrectUsersLoginException e) {
+           return userService.invalidLog();
         }
     }
 
     @Operation(summary = "Registration", description = "Any user can register")
     @PostMapping("signup")
     public SignupResponse register(@RequestBody SignupRequest request) {
-
         return userService.register(request);
     }
 

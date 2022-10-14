@@ -11,4 +11,5 @@ public interface UserService{
 
   LoginResponse login(LoginRequest loginRequest);
 
+  LoginResponse invalidLog();
 }
