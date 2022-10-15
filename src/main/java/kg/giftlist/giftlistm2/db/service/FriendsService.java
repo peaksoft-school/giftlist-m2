@@ -6,8 +6,10 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jmx.export.notification.UnableToSendNotificationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -43,10 +45,13 @@ public class FriendsService {
         User friend = userRepository.findById(friendId).get();
       if(friend == user){
           log.info("You can't send a request to yourself");
+          throw new UsernameNotFoundException("You can't send a request to yourself");
       } else if (friend.getRequestToFriends().contains(user)) {
           log.info("Request already sent");
+          throw new UsernameNotFoundException("Request already sent");
       } else if (friend.getFriends().contains(user)) {
           log.info("This user is already in your friends");
+          throw  new RuntimeException("This user is already in your friends");
       }
       else {
           friend.addRequestToFriend(user);

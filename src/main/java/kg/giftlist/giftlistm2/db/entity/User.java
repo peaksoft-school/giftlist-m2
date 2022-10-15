@@ -11,12 +11,16 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -89,27 +93,27 @@ public class User implements UserDetails {
     private List<Invite> userTo;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Notification>notifications;
+    private List<Notification> notifications;
 
     @Transient
     @Enumerated(EnumType.STRING)
     private InviteStatus inviteStatus;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "friends",
             joinColumns = @JoinColumn(name = "user_one"),
             inverseJoinColumns = @JoinColumn(name = "user_two")
     )
-    private Set<User> friends = new HashSet<>();
+    private List<User> friends = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "request_to_friend",
             joinColumns = @JoinColumn(name = "from_user"),
             inverseJoinColumns = @JoinColumn(name = "to_user")
     )
-    private Set<User> requestToFriends = new HashSet<>();
+    private List<User> requestToFriends = new ArrayList<>();
 
 
     @Override
@@ -118,11 +122,25 @@ public class User implements UserDetails {
         grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthority()));
         return grantedAuthorities;
     }
-    public void addRequestToFriend(User user){
-        if (requestToFriends == null){
-            requestToFriends = new HashSet<>();
+
+    //    public void addRequestToFriend(User user){
+//        if (requestToFriends == null){
+//            requestToFriends = new HashSet<>();
+//        }
+//        requestToFriends.add(user);
+//    }
+    public void addRequestToFriend(User user) {
+        if (CollectionUtils.isEmpty(requestToFriends)) {
+            requestToFriends = new ArrayList<>();
         }
-        requestToFriends.add(user);
+        this.requestToFriends.add(user);
+    }
+
+    public void acceptToFriend(User user) {
+        if (CollectionUtils.isEmpty(friends)) {
+            friends = new ArrayList<>();
+        }
+        friends.add(user);
     }
 
     @Override
@@ -149,7 +167,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
 
 }

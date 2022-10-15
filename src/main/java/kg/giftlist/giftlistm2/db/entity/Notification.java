@@ -19,7 +19,7 @@ public class Notification {
     @GeneratedValue(generator = "notification_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1)
     private Long id;
-    private Long userId;
+    private Long receiverId;
     private LocalDate created;
     @ManyToOne
     private User user;
