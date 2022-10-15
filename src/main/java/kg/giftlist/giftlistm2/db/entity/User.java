@@ -40,6 +40,7 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
+    private String image;
     @Email
     private String email;
 

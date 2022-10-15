@@ -19,6 +19,7 @@ public class FriendsResponse {
     private  Long id;
     private String firstName;
     private  String lastName;
+    private String image;
     private LocalDate dateOfBirth;
     private  String phoneNumber;
     private  String city;
@@ -27,7 +28,6 @@ public class FriendsResponse {
     private ShoeSize shoeSize;
     private  String hobbies;
     private  String importantToKnow;
-    private String message;
     private List<WishList> wishLists;
     private List<Charity> charities;
     private  List<Holiday> holidays;
