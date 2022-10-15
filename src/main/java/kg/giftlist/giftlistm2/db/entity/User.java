@@ -110,8 +110,8 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "request_to_friend",
-            joinColumns = @JoinColumn(name = "from_user"),
-            inverseJoinColumns = @JoinColumn(name = "to_user")
+            joinColumns = @JoinColumn(name = "user_to"),
+            inverseJoinColumns = @JoinColumn(name = "user_from")
     )
     private List<User> requestToFriends = new ArrayList<>();
 
@@ -141,6 +141,9 @@ public class User implements UserDetails {
             friends = new ArrayList<>();
         }
         friends.add(user);
+    }
+    public void addNotification(Notification notification){
+        notifications.add(notification);
     }
 
     @Override

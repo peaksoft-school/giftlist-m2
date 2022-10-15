@@ -2,7 +2,9 @@ package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.FriendsRequest;
 import kg.giftlist.giftlistm2.controller.payload.FriendsResponse;
+import kg.giftlist.giftlistm2.db.entity.Notification;
 import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -21,6 +24,7 @@ import java.util.Set;
 @Slf4j
 public class FriendsService {
     private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
 
 
@@ -53,11 +57,15 @@ public class FriendsService {
           log.info("This user is already in your friends");
           throw  new RuntimeException("This user is already in your friends");
       }
-      else {
+
           friend.addRequestToFriend(user);
           log.info("Request to friend successfully send");
-
-      }
+        Notification notification = new Notification();
+        notification.setCreated(LocalDate.now());
+        notification.setUser(user);
+        notification.setReceiverId(friendId);
+        friend.addNotification(notification);
+        notificationRepository.saveAll(friend.getNotifications());
       return mapToFriendResponse(user);
     }
 
