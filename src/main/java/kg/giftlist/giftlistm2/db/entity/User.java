@@ -134,7 +134,7 @@ public class User implements UserDetails {
         if (CollectionUtils.isEmpty(requestToFriends)) {
             requestToFriends = new ArrayList<>();
         }
-        this.requestToFriends.add(user);
+        requestToFriends.add(user);
     }
 
     public void acceptToFriend(User user) {

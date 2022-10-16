@@ -19,11 +19,11 @@ public class FriendsResponse {
     private  Long id;
     private String firstName;
     private  String lastName;
+    private  String email;
     private String image;
     private LocalDate dateOfBirth;
     private  String phoneNumber;
     private  String city;
-    private  String email;
     private ClothingSize clothingSize;
     private ShoeSize shoeSize;
     private  String hobbies;

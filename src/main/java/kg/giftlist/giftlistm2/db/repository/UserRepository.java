@@ -15,4 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u join u.friends")
     List<User> getAllFriends();
 
+    @Query("select count()from User u join u.wishLists")
+    int getCountWishList(User user);
+
 }
