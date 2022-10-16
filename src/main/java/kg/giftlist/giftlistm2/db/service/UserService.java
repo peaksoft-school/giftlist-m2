@@ -11,7 +11,4 @@ public interface UserService{
 
   AuthResponse login(AuthRequest loginRequest);
 
-//  AuthResponse invalidLog();
-//
-//  AuthResponse emptyPassword();
 }
