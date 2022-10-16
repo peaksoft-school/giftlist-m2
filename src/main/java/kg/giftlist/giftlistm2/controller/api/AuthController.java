@@ -57,11 +57,8 @@ public class AuthController {
         return userService.register(request);
     }
 
-
-
-
-   @GetMapping("/oauth2")
-   @Operation(summary = "register with google",description = "user use email can register")
+    @Operation(summary = "register with google",description = "user use email can register")
+    @GetMapping("/oauth2")
     public SignupResponse signUpGoogle(Principal principal){
        JSONObject jsonObject=new JSONObject(principal);
        SignupRequest request=new SignupRequest();
@@ -70,8 +67,6 @@ public class AuthController {
        request.setEmail(jsonObject.getJSONObject("principal").getJSONObject("claims").getString("email"));
        return userService.register(request);
    }
-
-
 }
 
 
