@@ -6,8 +6,6 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.exception.MyException;
-import kg.giftlist.giftlistm2.firebase.FcmSettings;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -15,20 +13,38 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Builder
-@Transactional
 public class FriendsService {
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
-    private final FcmSettings fcmSettings;
+//   private final FCMInitializer fcmSettings;
 
 
+//public List<TeacherResponse> getAllTeachers() {
+//    List<User> users = userRepository.getAllByRoles("TEACHER");
+//    List<TeacherResponse> responses = new ArrayList<>();
+//    for (User us : users) {
+//        TeacherResponse resp = mapToTeacherResponse(us);
+//        responses.add(resp);
+//    }
+//    return responses;
+//}
+    public Response getAllFriends(){
+        User user = getAuthenticatedUser();
+        List<User>friends = user.getFriends();
+        List<Response>responses = new ArrayList<>();
+        for (User us : friends){
+            Response resp = FriendMapper.INSTANCE.response(us);
+            responses.add(resp);
+        }
+        return (Response) responses;
+    }
     public Response requestToFriend(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).get();
@@ -61,12 +77,12 @@ public class FriendsService {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).get();
         if (user.getFriends().contains(friend)) {
-            user.getFriends().remove(friend);
             friend.getFriends().remove(user);
-            log.info("Successfully deleted user with name : {}", friend.getFirstName());
+            user.getFriends().remove(friend);
+            log.info("Successfully deleted user with name ");
         } else {
-            log.error("You have not friend with id " + friend.getId());
-            throw new NotFoundException("You have not friend with id " + friend.getId());
+            log.error("You have not friend with id ");
+            throw new NotFoundException("You have not friend with id");
         }
 
     }
@@ -90,6 +106,7 @@ public class FriendsService {
             friend.acceptToFriend(user);
             user.getRequestToFriends().remove(friend);
             user.acceptToFriend(friend);
+            userRepository.save(friend);
         } else {
             throw new MyException("You are already friend");
         }

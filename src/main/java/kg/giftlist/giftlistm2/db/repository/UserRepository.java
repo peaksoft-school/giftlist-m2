@@ -12,10 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
-    @Query("select u from User u join u.friends")
-    List<User> getAllFriends();
 
-    @Query("select count()from User u join u.wishLists")
-    int getCountWishList(User user);
+
 
 }

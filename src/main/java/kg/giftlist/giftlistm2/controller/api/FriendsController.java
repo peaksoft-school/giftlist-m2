@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Auth API", description = "Any user can do add user")
 public class FriendsController {
     private final FriendsService friendsService;
-
+    @GetMapping()
+    public Response getAllFriends(){
+        return friendsService.getAllFriends();
+    }
     @PostMapping("request/{id}")
     @Operation(summary = "Request to friend ", description = "we can request to friends")
     public Response requestToFriend(@PathVariable Long id) {
