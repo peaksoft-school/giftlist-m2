@@ -1,13 +1,16 @@
 package kg.giftlist.giftlistm2.db.service.impl;
 
+import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
+import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
+import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
 import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import kg.giftlist.giftlistm2.enums.Role;
-import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import kg.giftlist.giftlistm2.exception.EmptyLoginException;
+import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import kg.giftlist.giftlistm2.mapper.LoginMapper;
 import kg.giftlist.giftlistm2.mapper.UserSignUpMapper;
 import kg.giftlist.giftlistm2.validation.ValidationType;
@@ -30,17 +33,8 @@ public class UserServiceImpl implements UserService {
     private final LoginMapper loginMapper;
     private final JwtTokenUtil jwtTokenUtil;
 
-    public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email).get();
-    }
-
     @Override
     public SignupResponse register(SignupRequest signupRequest) {
-         User user =signUpMapper.toUser(signupRequest);
-         if (signupRequest.getPassword()==null){
-             user.setPassword(passwordEncoder.encode(signupRequest.getFirstName()));
-         }
-       else if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())){
         User user = signUpMapper.toUser(signupRequest);
         if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
@@ -72,10 +66,12 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IncorrectLoginException(ValidationType.LOGIN_FAILED);
         }
-    public void updatePassword(User user) {
-        User user1 = userRepository.findById(user.getId()).get();
-        user1.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user1);
     }
-    }
+
+}
+
+
+
+
+
 
