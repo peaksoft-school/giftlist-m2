@@ -1,10 +1,11 @@
 package kg.giftlist.giftlistm2.controller.payload;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AuthResponse {
 
     private Long id;

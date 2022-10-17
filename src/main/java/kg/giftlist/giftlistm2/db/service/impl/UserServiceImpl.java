@@ -4,7 +4,6 @@ import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
 import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
-import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.service.UserService;
@@ -28,14 +27,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final UserSignUpMapper signUpMapper;
+    private final UserSignUpMapper userSignUpMapper;
     private final AuthenticationManager authenticationManager;
     private final LoginMapper loginMapper;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Override
-    public SignupResponse register(SignupRequest signupRequest) {
-        User user = signUpMapper.toUser(signupRequest);
+    public AuthResponse register(SignupRequest signupRequest) {
+        User user = mapToRequest(signupRequest);
         if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         } else {
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setRole(Role.USER);
         userRepository.save(user);
-        return signUpMapper.signupResponse(user);
+       return mapTo(user);
     }
 
     @Override
@@ -67,6 +66,29 @@ public class UserServiceImpl implements UserService {
             throw new IncorrectLoginException(ValidationType.LOGIN_FAILED);
         }
     }
+    public AuthResponse mapTo(User user){
+        String jwt = jwtTokenUtil.generateToken(user);
+        String msg = ValidationType.SUCCESSFUL;
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setId(user.getId());
+        authResponse.setFirstName(user.getFirstName());
+        authResponse.setLastName(user.getLastName());
+        authResponse.setEmail(user.getEmail());
+        authResponse.setAuthorities(String.valueOf(user.getAuthorities()));
+        authResponse.setJwtToken(jwt);
+        authResponse.setMessage(msg);
+        return authResponse;
+
+    }
+    public User mapToRequest(SignupRequest request){
+        User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        return user;
+    }
+
 
 }
 

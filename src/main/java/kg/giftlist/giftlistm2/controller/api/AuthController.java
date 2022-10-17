@@ -2,7 +2,6 @@ package kg.giftlist.giftlistm2.controller.api;
 
 import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
-import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,7 +26,7 @@ public class AuthController {
 
     @Operation(summary = "Registration", description = "Any user can register")
     @PostMapping("signup")
-    public SignupResponse register(@RequestBody SignupRequest request) {
+    public AuthResponse register(@RequestBody SignupRequest request) {
         return userService.register(request);
     }
 
