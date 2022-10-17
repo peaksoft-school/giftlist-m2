@@ -2,6 +2,7 @@ package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
 import kg.giftlist.giftlistm2.controller.payload.SignupResponse;
 import kg.giftlist.giftlistm2.db.service.UserService;
@@ -12,6 +13,9 @@ import kg.giftlist.giftlistm2.validation.ValidationType;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -30,12 +34,12 @@ import java.security.Principal;
 @Tag(name = "Auth API",description = "Any user can do registration and login")
 public class AuthController {
 
-    private final UserRepository repository;
-    private final JwtTokenUtil jwtTokenUtil;
-    private final LoginMapper loginMapper;
-    private final AuthenticationManager authenticationManager;
     private final UserService userService;
 
+    @Operation(summary = "Login", description = "Only registered users can login")
+    @PostMapping("signin")
+    public AuthResponse login(@RequestBody AuthRequest loginRequest) {
+            return userService.login(loginRequest);
 
     @PostMapping("/login")
     @Operation(summary = "Login",description = "User can do login")
@@ -57,6 +61,7 @@ public class AuthController {
         return userService.register(request);
     }
 
+
     @Operation(summary = "register with google",description = "user use email can register")
     @GetMapping("/oauth2")
     public SignupResponse signUpGoogle(Principal principal){
@@ -68,5 +73,3 @@ public class AuthController {
        return userService.register(request);
    }
 }
-
-

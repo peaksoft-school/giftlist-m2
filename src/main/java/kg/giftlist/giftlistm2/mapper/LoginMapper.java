@@ -1,36 +1,42 @@
 package kg.giftlist.giftlistm2.mapper;
 
-import kg.giftlist.giftlistm2.controller.payload.LoginResponse;
+import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.enums.Role;
 import org.springframework.stereotype.Component;
+
 import java.util.*;
 
 @Component
 public class LoginMapper {
 
-    public LoginResponse loginView(String token, String message, User user) {
-        var loginResponse = new LoginResponse();
+    public AuthResponse loginView(String token, String message, User user) {
+        var loginResponse = new AuthResponse();
         if (user != null) {
-            setAuthority(loginResponse, Collections.singletonList(user.getRole()));
+            try {
+                setAuthority(loginResponse, Collections.singletonList(user.getRole()));
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+            }
+            loginResponse.setId(user.getId());
+            loginResponse.setFirstName(user.getFirstName());
+            loginResponse.setLastName(user.getLastName());
+            loginResponse.setEmail(user.getEmail());
+            loginResponse.setJwtToken(token);
+            loginResponse.setMessage(message);
         }
-        loginResponse.setJwtToken(token);
-        loginResponse.setMessage(message);
-        loginResponse.setId(user.getId());
-        loginResponse.setEmail(user.getEmail());
         return loginResponse;
     }
 
-    public void setAuthority(LoginResponse loginResponse, List<Role> roles) {
+    public void setAuthority(AuthResponse loginResponse, List<Role> roles) {
         Set<String> authorities = new HashSet<>();
         for (Role role : roles) {
-            authorities.add(role.getAuthority());
+            if (role != null) {
+                authorities.add(role.getAuthority());
+            } else throw new RuntimeException("");
         }
         String join = String.join("", authorities);
         loginResponse.setAuthorities(join);
     }
 
-    }
-
-
-
+}
