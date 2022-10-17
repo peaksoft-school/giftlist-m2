@@ -34,7 +34,7 @@ public class AuthController {
         return userService.register(request);
     }
 
-    @GetMapping("/oauth2")
+    @GetMapping("oauth2")
     @Operation(summary = "register with google", description = "user use email can register")
     public SignupResponse signUpGoogle(Principal principal) {
         JSONObject jsonObject = new JSONObject(principal);
