@@ -1,6 +1,5 @@
 package kg.giftlist.giftlistm2.db;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
