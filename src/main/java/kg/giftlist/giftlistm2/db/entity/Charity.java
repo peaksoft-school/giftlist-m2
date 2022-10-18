@@ -43,7 +43,6 @@ public class Charity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 
     private LocalDate createdDate;

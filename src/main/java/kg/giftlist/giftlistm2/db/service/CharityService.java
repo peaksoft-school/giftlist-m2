@@ -2,14 +2,8 @@ package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.CharityRequest;
 import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
-import kg.giftlist.giftlistm2.db.entity.Booking;
-import kg.giftlist.giftlistm2.db.entity.Category;
-import kg.giftlist.giftlistm2.db.entity.Charity;
-import kg.giftlist.giftlistm2.db.entity.User;
-import kg.giftlist.giftlistm2.db.repository.BookingRepository;
-import kg.giftlist.giftlistm2.db.repository.CategoryRepository;
-import kg.giftlist.giftlistm2.db.repository.CharityRepository;
-import kg.giftlist.giftlistm2.db.repository.UserRepository;
+import kg.giftlist.giftlistm2.db.entity.*;
+import kg.giftlist.giftlistm2.db.repository.*;
 import kg.giftlist.giftlistm2.enums.Condition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -28,12 +22,13 @@ public class CharityService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final BookingRepository bookingRepository;
+    private final SubcategoryRepository subcategoryRepository;
 
     public String book(Long id) throws RuntimeException {
         Charity charity = charityRepository.findById(id).get();
         Optional<Booking> booking = bookingRepository.findById(charity.getId());
-        boolean isBooked = booking.isEmpty();
-       if (isBooked) {
+        boolean notBooked = booking.isEmpty();
+       if (notBooked) {
            Booking booking1 = new Booking();
            User user = getAuthenticatedUser();
            booking1.setId(booking1.getId());
@@ -98,6 +93,7 @@ public class CharityService {
         CharityResponse charityResponse = new CharityResponse();
         charityResponse.setId(charity.getId());
         charityResponse.setGiftName(charity.getGiftName());
+        charityResponse.setUserId(charity.getUser().getId());
         charityResponse.setFirstName(charity.getUser().getFirstName());
         charityResponse.setLastName(charity.getUser().getLastName());
         charityResponse.setCondition(charity.getCondition());
@@ -111,7 +107,7 @@ public class CharityService {
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).get();
+        return userRepository.findByEmail(login);
     }
 
 }

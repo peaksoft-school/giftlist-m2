@@ -37,9 +37,9 @@ public class CharityController {
 
     @Operation(summary = "Add charity", description = "Creating a charity")
     @PostMapping
-    public CharityResponse addCharity(@RequestBody CategoryCharity categoryCharity) {
-        categoryService.createCategory(categoryCharity.getCategoryRequest());
-        return charityService.createCharity(categoryCharity.getCharityRequest());
+    public CharityResponse addCharity(@RequestBody CharityRequest charityRequest) {
+//        categoryService.createCategory(categoryCharity.getCategoryRequest());
+        return charityService.createCharity(charityRequest);
     }
 
     @Operation(summary = "charity booking", description = "Booking a charity")
@@ -55,9 +55,9 @@ public class CharityController {
     @Operation(summary = "Update charity", description = "Charity updating by id")
     @PutMapping("{id}")
     public CharityResponse updateCharity(@PathVariable Long id,
-                                         @RequestBody CategoryCharity categoryCharity) {
-        categoryService.updateCategory(categoryCharity.getCharityRequest().getCategoryId(), categoryCharity.getCategoryRequest());
-        return charityService.updateCharity(id, categoryCharity.getCharityRequest());
+                                         @RequestBody CharityRequest charityRequest) {
+//        categoryService.updateCategory(categoryCharity.getCharityRequest().getCategoryId(), categoryCharity.getCategoryRequest());
+        return charityService.updateCharity(id, charityRequest);
     }
 
     @Operation(summary = "Delete charity", description = "Deleting a charity by id")
