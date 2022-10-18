@@ -6,6 +6,7 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.exception.MyException;
+import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -40,7 +41,7 @@ public class FriendsService {
         List<User>friends = user.getFriends();
         List<Response>responses = new ArrayList<>();
         for (User us : friends){
-            Response resp = FriendMapper.INSTANCE.response(us);
+            Response resp = FriendMapper.INSTANCE.response(us,ValidationType.SUCCESSFUL);
             responses.add(resp);
         }
         return (Response) responses;
@@ -50,28 +51,21 @@ public class FriendsService {
         User friend = userRepository.findById(friendId).get();
         if (friend == user) {
             log.info("You can't send a request to yourself");
-            throw new NotFoundException("You can't send a request to yourself");
+            throw new MyException("You can't send a request to yourself");
         } else if (friend.getRequestToFriends().contains(user)) {
             log.info("Request already sent");
             throw new MyException("Request already sent");
         } else if (friend.getFriends().contains(user)) {
             log.info("This user is already in your friends");
-            throw new RuntimeException("This user is already in your friends");
+            throw new MyException("This user is already in your friends");
         }
         friend.addRequestToFriend(user);
         log.info("Request to friend successfully send");
         friend.addNotification(sendNotification(user, friendId));
         notificationRepository.saveAll(friend.getNotifications());
-        return FriendMapper.INSTANCE.response(friend);
+        return FriendMapper.INSTANCE.response(friend,ValidationType.SUCCESSFUL);
     }
 
-    private Notification sendNotification(User user, Long friendId) {
-        Notification notification = new Notification();
-        notification.setCreated(LocalDate.now());
-        notification.setUser(user);
-        notification.setReceiverId(friendId);
-        return notification;
-    }
 
     public void deleteFriend(Long friendId) {
         User user = getAuthenticatedUser();
@@ -80,9 +74,11 @@ public class FriendsService {
             friend.getFriends().remove(user);
             user.getFriends().remove(friend);
             log.info("Successfully deleted user with name ");
+            throw new MyException("Successfully deleted user with email "+friend.getEmail());
+
         } else {
             log.error("You have not friend with id ");
-            throw new NotFoundException("You have not friend with id");
+            throw new MyException("You have not friend with id "+friend.getId());
         }
 
     }
@@ -93,10 +89,10 @@ public class FriendsService {
         if (friend.getRequestToFriends().contains(user)) {
             friend.getRequestToFriends().remove(user);
         } else {
-            throw new NotFoundException("No request to friend");
+            throw new MyException("No request to friend");
         }
         log.info("Request to friend successfully refused");
-        return FriendMapper.INSTANCE.response(friend);
+        return FriendMapper.INSTANCE.response(friend,ValidationType.SUCCESSFUL);
     }
 
     public Response acceptToFriend(Long friendId) {
@@ -111,14 +107,21 @@ public class FriendsService {
             throw new MyException("You are already friend");
         }
         log.info("Successfully accept to friend");
-        return FriendMapper.INSTANCE.response(friend);
+        return FriendMapper.INSTANCE.response(friend,ValidationType.SUCCESSFUL);
     }
 
+    private Notification sendNotification(User user, Long friendId) {
+        Notification notification = new Notification();
+        notification.setCreated(LocalDate.now());
+        notification.setUser(user);
+        notification.setReceiverId(friendId);
+        return notification;
+    }
 
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).get();
+        return userRepository.findByEmail(login);
     }
 }
 

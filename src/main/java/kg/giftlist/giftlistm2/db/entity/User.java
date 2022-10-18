@@ -101,12 +101,8 @@ public class User implements UserDetails {
     private InviteStatus inviteStatus;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "friends",
-            joinColumns = @JoinColumn(name = "user_one"),
-            inverseJoinColumns = @JoinColumn(name = "user_two")
-    )
-    private List<User> friends = new ArrayList<>();
+    @JoinTable(name = "friends")
+            private List<User> friends = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(

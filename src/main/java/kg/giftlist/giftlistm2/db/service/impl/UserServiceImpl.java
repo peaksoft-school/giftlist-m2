@@ -9,8 +9,8 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import kg.giftlist.giftlistm2.enums.Role;
-import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import kg.giftlist.giftlistm2.exception.EmptyLoginException;
+import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import kg.giftlist.giftlistm2.mapper.LoginMapper;
 import kg.giftlist.giftlistm2.mapper.UserSignUpMapper;
 import kg.giftlist.giftlistm2.validation.ValidationType;
@@ -33,13 +33,36 @@ public class UserServiceImpl implements UserService {
     private final LoginMapper loginMapper;
     private final JwtTokenUtil jwtTokenUtil;
 
-    @Override
-    public SignupResponse register(SignupRequest signupRequest) {
+
+    public SignupResponse registerr(SignupRequest signupRequest) {
         User user = signUpMapper.toUser(signupRequest);
         if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         } else {
             log.error("password not match");
+        }
+        user.setRole(Role.USER);
+        userRepository.save(user);
+        return signUpMapper.signupResponse(user);
+    }
+    @Override
+    public SignupResponse register(SignupRequest signupRequest) {
+        User user1 = new User();
+        User user = signUpMapper.toUser(signupRequest);
+        if (signupRequest.getFirstName().isEmpty() || signupRequest.getLastName().isEmpty()) {
+            throw new IncorrectLoginException(ValidationType.EMPTY_FIELD);
+        }
+        if (signupRequest.getEmail().isEmpty()) {
+            throw new IncorrectLoginException(ValidationType.EMPTY_EMAIL);
+        }
+        if (signupRequest.getPassword().isEmpty()) {
+            throw new IncorrectLoginException(ValidationType.EMPTY_PASSWORD);
+        }
+        if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
+            user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        } else {
+            log.error("password not match");
+            throw new EmptyLoginException(ValidationType.WRONG_PASSWORD);
         }
         user.setRole(Role.USER);
         userRepository.save(user);
