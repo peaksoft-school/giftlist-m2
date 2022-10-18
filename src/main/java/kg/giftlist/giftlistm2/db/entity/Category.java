@@ -31,4 +31,5 @@ public class Category {
     @OneToMany
     @JsonIgnore
     private List<Charity> charities;
+
 }
