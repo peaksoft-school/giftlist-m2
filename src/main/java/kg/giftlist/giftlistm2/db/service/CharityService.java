@@ -64,12 +64,28 @@ public class CharityService {
         Charity charity = new Charity();
         User user = getAuthenticatedUser();
         Category category = categoryRepository.findById(request.getCategoryId()).get();
-        charity.setGiftName(request.getGiftName());
+        if (request.getGiftName().isEmpty()) {
+            throw new EmptyValueException("Gift name must not be empty!");
+        } else {
+            charity.setGiftName(request.getGiftName());
+        }
         charity.setUser(user);
-        charity.setCondition(Condition.valueOf(request.getCondition()));
-        charity.setCategory(category);
+        if (request.getCondition().isEmpty()) {
+            throw new EmptyValueException("Please, choose a condition from list");
+        } else {
+            charity.setCondition(Condition.valueOf(request.getCondition()));
+        }
+        if (request.getCategoryId() == null) {
+            throw new EmptyValueException("Please, show a category of the gift");
+        } else {
+            charity.setCategory(category);
+        }
         charity.setImage(request.getImage());
-        charity.setDescription(request.getDescription());
+        if (request.getDescription().isEmpty()) {
+            throw new EmptyValueException("Please, at least describe your gift shortly");
+        } else {
+            charity.setDescription(request.getDescription());
+        }
         charity.setCreatedDate(LocalDate.now());
         charityRepository.save(charity);
         return mapToResponse(charity);
@@ -77,7 +93,7 @@ public class CharityService {
 
     public CharityResponse updateCharity(Long id, CharityRequest request) {
         Charity charity = charityRepository.findById(id).get();
-        if (charityRepository.findById(id).equals(id)) {
+        if (!categoryRepository.existsById(id)) {
             throw new EmptyValueException("There is no any charity you have requested!");
         } else {
             if (request.getGiftName().isEmpty()) {
@@ -96,7 +112,11 @@ public class CharityService {
                 charity.setCategory(categoryRepository.findById(request.getCategoryId()).get());
             }
             charity.setImage(request.getImage());
-            charity.setDescription(request.getDescription());
+            if (request.getDescription().isEmpty()) {
+                throw new EmptyValueException("Please, at least describe your gift shortly");
+            } else {
+                charity.setDescription(request.getDescription());
+            }
             charity.setCreatedDate(LocalDate.now());
             charityRepository.save(charity);
             return mapToResponse(charity);
