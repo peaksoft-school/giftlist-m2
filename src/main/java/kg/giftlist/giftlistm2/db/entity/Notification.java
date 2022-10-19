@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import kg.giftlist.giftlistm2.enums.NotificationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,8 @@ public class Notification {
     private Long id;
     private Long receiverId;
     private LocalDate created;
+    @Enumerated(EnumType.STRING)
+    private NotificationStatus notificationStatus;
     @ManyToOne
     private User user;
 

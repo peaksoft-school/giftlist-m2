@@ -11,6 +11,7 @@ import kg.giftlist.giftlistm2.db.entity.Notification;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
+import kg.giftlist.giftlistm2.enums.NotificationStatus;
 import kg.giftlist.giftlistm2.exception.MyException;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
@@ -102,6 +103,7 @@ FirebaseMessaging firebaseMessaging() throws IOException {
         }
         log.info("Request to friend successfully refused");
         return FriendMapper.INSTANCE.response(friend,ValidationType.SUCCESSFUL);
+
     }
 
     public Response acceptToFriend(Long friendId) {
@@ -124,6 +126,7 @@ FirebaseMessaging firebaseMessaging() throws IOException {
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
         notification.setReceiverId(friendId);
+        notification.setNotificationStatus(NotificationStatus.REQUEST_TO_FRIEND);
         return notification;
     }
 
