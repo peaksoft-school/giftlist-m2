@@ -1,5 +1,11 @@
 package kg.giftlist.giftlistm2.db.service;
 
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
 import kg.giftlist.giftlistm2.controller.payload.Response;
 import kg.giftlist.giftlistm2.db.entity.Notification;
 import kg.giftlist.giftlistm2.db.entity.User;
@@ -9,11 +15,13 @@ import kg.giftlist.giftlistm2.exception.MyException;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +32,19 @@ import java.util.List;
 public class FriendsService {
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
-//   private final FCMInitializer fcmSettings;
+    private final FirebaseMessaging firebaseMessaging;
 
 
-//public List<TeacherResponse> getAllTeachers() {
-//    List<User> users = userRepository.getAllByRoles("TEACHER");
-//    List<TeacherResponse> responses = new ArrayList<>();
-//    for (User us : users) {
-//        TeacherResponse resp = mapToTeacherResponse(us);
-//        responses.add(resp);
-//    }
-//    return responses;
-//}
+FirebaseMessaging firebaseMessaging() throws IOException {
+    GoogleCredentials googleCredentials = GoogleCredentials
+            .fromStream(new ClassPathResource("firebase-service-account.json").getInputStream());
+    FirebaseOptions firebaseOptions = FirebaseOptions
+            .builder()
+            .setCredentials(googleCredentials)
+            .build();
+    FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "my-app");
+    return FirebaseMessaging.getInstance(app);
+}
     public Response getAllFriends(){
         User user = getAuthenticatedUser();
         List<User>friends = user.getFriends();

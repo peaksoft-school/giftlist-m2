@@ -23,4 +23,5 @@ public class Notification {
     private LocalDate created;
     @ManyToOne
     private User user;
+
 }
