@@ -41,7 +41,7 @@ public class Charity {
     @JsonIgnore
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "category_id")
     private Category category;
 

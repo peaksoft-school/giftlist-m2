@@ -5,6 +5,7 @@ import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
 import kg.giftlist.giftlistm2.db.entity.*;
 import kg.giftlist.giftlistm2.db.repository.*;
 import kg.giftlist.giftlistm2.enums.Condition;
+import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,27 +29,27 @@ public class CharityService {
         Charity charity = charityRepository.findById(id).get();
         Optional<Booking> booking = bookingRepository.findById(charity.getId());
         boolean notBooked = booking.isEmpty();
-       if (notBooked) {
-           Booking booking1 = new Booking();
-           User user = getAuthenticatedUser();
-           booking1.setId(booking1.getId());
-           booking1.setCharity(charity);
-           booking1.setUserId(user);
-           bookingRepository.save(booking1);
-           return "You have successfully booked this charity";
-       } else {
-           throw new IllegalStateException("This charity is already booked");
-       }
+        if (notBooked) {
+            Booking booking1 = new Booking();
+            User user = getAuthenticatedUser();
+            booking1.setId(booking1.getId());
+            booking1.setCharity(charity);
+            booking1.setUserId(user);
+            bookingRepository.save(booking1);
+            return "You have successfully booked this charity";
+        } else {
+            throw new EmptyValueException("This charity is already booked");
+        }
     }
 
     public String deleteCharity(Long id) throws RuntimeException {
-        Charity charity = charityRepository.findById(id).get();
-        if (charity.getId()==null){
-            throw new IndexOutOfBoundsException("This charity was deleted");
+        if (charityRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("The charity with id " + id + " already deleted!");
         } else {
             charityRepository.deleteById(id);
             return "Charity successfully deleted!";
         }
+
     }
 
     public Charity getCharityById(Long id) {
@@ -76,14 +77,30 @@ public class CharityService {
 
     public CharityResponse updateCharity(Long id, CharityRequest request) {
         Charity charity = charityRepository.findById(id).get();
-        charity.setGiftName(request.getGiftName());
-        charity.setCondition(Condition.valueOf(request.getCondition()));
-        charity.setCategory(categoryRepository.findById(request.getCategoryId()).get());
-        charity.setImage(request.getImage());
-        charity.setDescription(request.getDescription());
-        charity.setCreatedDate(LocalDate.now());
-        charityRepository.save(charity);
-        return mapToResponse(charity);
+        if (charityRepository.findById(id).equals(id)) {
+            throw new EmptyValueException("There is no any charity you have requested!");
+        } else {
+            if (request.getGiftName().isEmpty()) {
+                throw new EmptyValueException("Gift name must not be empty!");
+            } else {
+                charity.setGiftName(request.getGiftName());
+            }
+            if (request.getCondition().isEmpty()) {
+                throw new EmptyValueException("Please, choose a condition from list");
+            } else {
+                charity.setCondition(Condition.valueOf(request.getCondition()));
+            }
+            if (request.getCategoryId() == null) {
+                throw new EmptyValueException("Please, show a category of the gift");
+            } else {
+                charity.setCategory(categoryRepository.findById(request.getCategoryId()).get());
+            }
+            charity.setImage(request.getImage());
+            charity.setDescription(request.getDescription());
+            charity.setCreatedDate(LocalDate.now());
+            charityRepository.save(charity);
+            return mapToResponse(charity);
+        }
     }
 
     private CharityResponse mapToResponse(Charity charity) {

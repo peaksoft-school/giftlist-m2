@@ -7,6 +7,7 @@ import kg.giftlist.giftlistm2.controller.payload.*;
 import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.service.CategoryService;
 import kg.giftlist.giftlistm2.db.service.CharityService;
+import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +46,7 @@ public class CharityController {
     @Operation(summary = "charity booking", description = "Booking a charity")
     @PostMapping("{id}")
     public String booking(@PathVariable Long id) {
-        try {
             return charityService.book(id);
-        } catch (RuntimeException e) {
-            return e.getMessage();
-        }
     }
 
     @Operation(summary = "Update charity", description = "Charity updating by id")
@@ -63,11 +60,7 @@ public class CharityController {
     @Operation(summary = "Delete charity", description = "Deleting a charity by id")
     @DeleteMapping("{id}")
     public String deleteCharity(@PathVariable Long id) {
-        try {
             return charityService.deleteCharity(id);
-        } catch (RuntimeException e) {
-            return e.getMessage();
-        }
     }
 
 }
