@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -49,5 +47,9 @@ public class Charity {
 
     @OneToOne(mappedBy = "charity", cascade = CascadeType.ALL)
     private Booking booking;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "subcategory_id")
+    private Subcategory subcategory;
 
 }

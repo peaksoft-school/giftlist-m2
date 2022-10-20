@@ -5,9 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.*;
 import kg.giftlist.giftlistm2.db.entity.Charity;
-import kg.giftlist.giftlistm2.db.service.CategoryService;
 import kg.giftlist.giftlistm2.db.service.CharityService;
-import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +20,6 @@ import java.util.List;
 public class CharityController {
 
     private final CharityService charityService;
-    private final CategoryService categoryService;
 
     @Operation(summary = "Get charity", description = "Getting a charity by id")
     @GetMapping("{id}")
@@ -39,28 +36,26 @@ public class CharityController {
     @Operation(summary = "Add charity", description = "Creating a charity")
     @PostMapping
     public CharityResponse addCharity(@RequestBody CharityRequest charityRequest) {
-//        categoryService.createCategory(categoryCharity.getCategoryRequest());
         return charityService.createCharity(charityRequest);
     }
 
     @Operation(summary = "charity booking", description = "Booking a charity")
     @PostMapping("{id}")
     public String booking(@PathVariable Long id) {
-            return charityService.book(id);
+        return charityService.book(id);
     }
 
     @Operation(summary = "Update charity", description = "Charity updating by id")
     @PutMapping("{id}")
     public CharityResponse updateCharity(@PathVariable Long id,
                                          @RequestBody CharityRequest charityRequest) {
-//        categoryService.updateCategory(categoryCharity.getCharityRequest().getCategoryId(), categoryCharity.getCategoryRequest());
         return charityService.updateCharity(id, charityRequest);
     }
 
     @Operation(summary = "Delete charity", description = "Deleting a charity by id")
     @DeleteMapping("{id}")
     public String deleteCharity(@PathVariable Long id) {
-            return charityService.deleteCharity(id);
+        return charityService.deleteCharity(id);
     }
 
 }

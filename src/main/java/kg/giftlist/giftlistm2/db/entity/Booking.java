@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,12 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User userId;
 
     @OneToOne
     @JoinColumn(name = "charity_id")
+    @JsonIgnore
     private Charity charity;
 
 }

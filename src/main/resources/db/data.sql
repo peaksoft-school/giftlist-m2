@@ -12,6 +12,7 @@ values (1, 'Electronic'),
 
 insert into subcategories(id, subcategory_name, category_id)
 values (1, 'Smartphone', 1),
+       (2, 'Telephone', 1),
        (3, 'Audio', 1),
        (4, 'Photo and Camera', 1),
        (5, 'Notebooks and computers', 2),
