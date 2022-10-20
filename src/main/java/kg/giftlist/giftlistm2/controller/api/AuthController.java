@@ -9,6 +9,7 @@ import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
 import kg.giftlist.giftlistm2.db.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.json.JSONObject;
 
 import java.security.Principal;
 
@@ -32,16 +33,16 @@ public class AuthController {
     public SignupResponse register(@RequestBody SignupRequest request) {
         return userService.register(request);
     }
-//
-//    @GetMapping("/oauth2")
-//    @Operation(summary = "register with google", description = "user use email can register")
-//    public SignupResponse signUpGoogle(Principal principal) {
-//        JSONObject jsonObject = new JSONObject(principal);
-//        SignupRequest request = new SignupRequest();
-//        request.setFirstName(jsonObject.getJSONObject("principal").getString("givenName"));
-//        request.setLastName(jsonObject.getJSONObject("principal").getString("familyName"));
-//        request.setEmail(jsonObject.getJSONObject("principal").getJSONObject("claims").getString("email"));
-//        return userService.register(request);
-//    }
+
+    @GetMapping("/oauth2")
+    @Operation(summary = "register with google", description = "user use email can register")
+    public SignupResponse signUpGoogle(Principal principal) {
+        JSONObject jsonObject = new JSONObject(principal);
+        SignupRequest request = new SignupRequest();
+        request.setFirstName(jsonObject.getJSONObject("principal").getString("givenName"));
+        request.setLastName(jsonObject.getJSONObject("principal").getString("familyName"));
+        request.setEmail(jsonObject.getJSONObject("principal").getJSONObject("claims").getString("email"));
+        return userService.register(request);
+    }
 
 }
