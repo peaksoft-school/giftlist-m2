@@ -31,10 +31,22 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final LoginMapper loginMapper;
     private final JwtTokenUtil jwtTokenUtil;
+//    public SignupResponse register(SignupRequest signupRequest) {
+//        User user =signUpMapper.toUser(signupRequest);
+//        if (signupRequest.getPassword()==null){
+//            user.setPassword(passwordEncoder.encode(signupRequest.getFirstName()));
+//        }
+//        else if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())){
+//            user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+//        }else {
+//            log.error("password not match");
+//        }
+//        user.setRole(Role.USER);
+//        userRepository.save(user);
+//        return signUpMapper.signupResponse(user);
+//    }
 
     public AuthResponse register(SignupRequest signupRequest) {
-        User user2 = new User();
-        userRepository.findByEmail(String.valueOf(user2));
         User user = mapToRegisterRequest(signupRequest);
         if (signupRequest.getFirstName().isEmpty() || signupRequest.getLastName().isEmpty()) {
             throw new EmptyLoginException(ValidationType.EMPTY_FIELD);
@@ -42,34 +54,29 @@ public class UserService {
         if (signupRequest.getEmail().isEmpty()) {
             throw new EmptyLoginException(ValidationType.EMPTY_EMAIL);
         }
-//        if (user2.getEmail()==user.getEmail()){
-//            throw new IncorrectLoginException(ValidationType.EXIST_EMAIL);
-//        }
-        if (signupRequest.getPassword().isEmpty()) {
-            throw new EmptyLoginException(ValidationType.EMPTY_PASSWORD);
-        }
         if (signupRequest.getPassword() == null) {
             user.setPassword(passwordEncoder.encode(signupRequest.getFirstName()));
         }
-        if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
+        else if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         } else {
             log.error("password not match");
-            throw new EmptyLoginException(ValidationType.EMPTY_PASSWORD);
+
         }
         user.setRole(Role.USER);
         userRepository.save(user);
-        User user1 = userRepository.findByEmail(signupRequest.getEmail());
-        if (user1 != null && passwordEncoder.matches(signupRequest.getPassword(), user1.getPassword())) {
-            UsernamePasswordAuthenticationToken token =
+                UsernamePasswordAuthenticationToken token =
                     new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword());
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword()));
             user = userRepository.findByEmail(token.getName());
             String token1 = (jwtTokenUtil.generateToken(user));
             return loginMapper.loginView(token1, ValidationType.SUCCESSFUL, user);
-        } else {
-            throw new IncorrectLoginException(ValidationType.LOGIN_FAILED);
-        }
+
+    }
+    public void updatePassword(User user) {
+        User user1 = userRepository.findById(user.getId()).get();
+        user1.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user1);
     }
 
     public AuthResponse login(AuthRequest loginRequest) {
@@ -93,7 +100,7 @@ public class UserService {
         }
     }
 
-    public AuthResponse signUpWithGoogle(Principal principal) {
+    public AuthResponse signupWithGoogle(Principal principal) {
         JSONObject jsonObject = new JSONObject(principal);
         SignupRequest request = new SignupRequest();
         request.setFirstName(jsonObject.getJSONObject("principal").getString("givenName"));
@@ -101,6 +108,13 @@ public class UserService {
         request.setEmail(jsonObject.getJSONObject("principal").getJSONObject("claims").getString("email"));
         return register(request);
     }
+//    public AuthResponse loginWithGoogle(Principal principal){
+//        JSONObject jsonObject = new JSONObject(principal);
+//        AuthRequest request = new AuthRequest();
+//        request.setEmail(jsonObject.getJSONObject("principal").getJSONObject("claims").getString("email"));
+//       return login(request);
+//
+//    }
 
     public User mapToRegisterRequest(SignupRequest signupRequest) {
         if (signupRequest == null) {

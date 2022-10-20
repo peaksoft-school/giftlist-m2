@@ -34,8 +34,13 @@ public class AuthController {
 
     @Operation(summary = "register with google", description = "user use email can register")
     @GetMapping("oauth2")
-    public AuthResponse signUpGoogle(Principal principal) {
-        return userService.signUpWithGoogle(principal);
+    public AuthResponse signupGoogle(Principal principal) {
+        return userService.signupWithGoogle(principal);
     }
+
+//    @GetMapping("login")
+//    public AuthResponse loginGoogle(Principal principal){
+//        return loginGoogle(principal);
+//    }
 
 }
