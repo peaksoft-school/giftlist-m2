@@ -10,7 +10,6 @@ import kg.giftlist.giftlistm2.enums.Role;
 import kg.giftlist.giftlistm2.exception.EmptyLoginException;
 import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import kg.giftlist.giftlistm2.mapper.LoginMapper;
-import kg.giftlist.giftlistm2.mapper.UserSignUpMapper;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ThemeResolver;
 
 import java.security.Principal;
 
@@ -30,61 +28,28 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final UserSignUpMapper signUpMapper;
     private final AuthenticationManager authenticationManager;
     private final LoginMapper loginMapper;
     private final JwtTokenUtil jwtTokenUtil;
 
-//    @Override
-//    public SignupResponse register(SignupRequest signupRequest) {
-//        User user = signUpMapper.toUser(signupRequest);
-//        if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
-//            user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-//        } else {
-//            log.error("password not match");
-//        }
-//        user.setRole(Role.USER);
-//        userRepository.save(user);
-//        return signUpMapper.signupResponse(user);
-//    }
-//public SignupResponse register(SignupRequest signupRequest) {
-//    User user =signUpMapper.toUser(signupRequest);
-//    if (signupRequest.getPassword()==null){
-//        user.setPassword(passwordEncoder.encode(signupRequest.getFirstName()));
-//    }
-//    else if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())){
-//        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-//    }else {
-//        log.error("password not match");
-//    }
-//    user.setRole(Role.USER);
-//    userRepository.save(user);
-//    return signUpMapper.signupResponse(user);
-//}
-//    public void updatePassword(User user) {
-//        User user1 = userRepository.findById(user.getId()).get();
-//        user1.setPassword(passwordEncoder.encode(user.getPassword()));
-//        userRepository.save(user1);
-//    }
-
-
     public AuthResponse register(SignupRequest signupRequest) {
         User user2 = new User();
+        userRepository.findByEmail(String.valueOf(user2));
         User user = mapToRegisterRequest(signupRequest);
-        if (signupRequest.getFirstName().isEmpty() || signupRequest.getLastName().isEmpty()){
+        if (signupRequest.getFirstName().isEmpty() || signupRequest.getLastName().isEmpty()) {
             throw new EmptyLoginException(ValidationType.EMPTY_FIELD);
         }
         if (signupRequest.getEmail().isEmpty()) {
-                throw new EmptyLoginException(ValidationType.EMPTY_EMAIL);
+            throw new EmptyLoginException(ValidationType.EMPTY_EMAIL);
         }
+//        if (user2.getEmail()==user.getEmail()){
+//            throw new IncorrectLoginException(ValidationType.EXIST_EMAIL);
+//        }
         if (signupRequest.getPassword().isEmpty()) {
             throw new EmptyLoginException(ValidationType.EMPTY_PASSWORD);
         }
         if (signupRequest.getPassword() == null) {
             user.setPassword(passwordEncoder.encode(signupRequest.getFirstName()));
-        }
-        if (user2.getEmail().equals(signupRequest.getEmail())){
-            throw new IncorrectLoginException(ValidationType.EXIST_EMAIL);
         }
         if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
@@ -106,14 +71,6 @@ public class UserService {
             throw new IncorrectLoginException(ValidationType.LOGIN_FAILED);
         }
     }
-
-    public void updatePassword(User user) {
-        User user1 = userRepository.findById(user.getId()).get();
-        user1.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user1);
-
-    }
-
 
     public AuthResponse login(AuthRequest loginRequest) {
         User user;
