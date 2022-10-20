@@ -9,8 +9,8 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import kg.giftlist.giftlistm2.enums.Role;
-import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import kg.giftlist.giftlistm2.exception.EmptyLoginException;
+import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import kg.giftlist.giftlistm2.mapper.LoginMapper;
 import kg.giftlist.giftlistm2.mapper.UserSignUpMapper;
 import kg.giftlist.giftlistm2.validation.ValidationType;
@@ -33,17 +33,39 @@ public class UserServiceImpl implements UserService {
     private final LoginMapper loginMapper;
     private final JwtTokenUtil jwtTokenUtil;
 
-    @Override
-    public SignupResponse register(SignupRequest signupRequest) {
-        User user = signUpMapper.toUser(signupRequest);
-        if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
-            user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-        } else {
-            log.error("password not match");
-        }
-        user.setRole(Role.USER);
-        userRepository.save(user);
-        return signUpMapper.signupResponse(user);
+//    @Override
+//    public SignupResponse register(SignupRequest signupRequest) {
+//        User user = signUpMapper.toUser(signupRequest);
+//        if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
+//            user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+//        } else {
+//            log.error("password not match");
+//        }
+//        user.setRole(Role.USER);
+//        userRepository.save(user);
+//        return signUpMapper.signupResponse(user);
+//    }
+
+@Override
+public SignupResponse register(SignupRequest signupRequest) {
+    User user =signUpMapper.toUser(signupRequest);
+    if (signupRequest.getPassword()==null){
+        user.setPassword(passwordEncoder.encode(signupRequest.getFirstName()));
+    }
+    else if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())){
+        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+    }else {
+        log.error("password not match");
+    }
+    user.setRole(Role.USER);
+    userRepository.save(user);
+    return signUpMapper.signupResponse(user);
+}
+    public void updatePassword(User user) {
+        User user1 = userRepository.findById(user.getId()).get();
+        user1.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user1);
+
     }
 
     @Override
