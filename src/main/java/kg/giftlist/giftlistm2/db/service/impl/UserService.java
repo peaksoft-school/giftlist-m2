@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,52 +32,38 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final LoginMapper loginMapper;
     private final JwtTokenUtil jwtTokenUtil;
-//    public SignupResponse register(SignupRequest signupRequest) {
-//        User user =signUpMapper.toUser(signupRequest);
-//        if (signupRequest.getPassword()==null){
-//            user.setPassword(passwordEncoder.encode(signupRequest.getFirstName()));
-//        }
-//        else if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())){
-//            user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-//        }else {
-//            log.error("password not match");
-//        }
-//        user.setRole(Role.USER);
-//        userRepository.save(user);
-//        return signUpMapper.signupResponse(user);
-//    }
 
     public AuthResponse register(SignupRequest signupRequest) {
+        User user2 = new User();
+        userRepository.findByEmail(user2.getEmail());
+        Optional<User> search = Optional.ofNullable(userRepository.findByEmail(signupRequest.getEmail()));
+        boolean notRegistered = search.isEmpty();
         User user = mapToRegisterRequest(signupRequest);
         if (signupRequest.getFirstName().isEmpty() || signupRequest.getLastName().isEmpty()) {
             throw new EmptyLoginException(ValidationType.EMPTY_FIELD);
+        }
+        if (!notRegistered) {
+            throw new IncorrectLoginException(ValidationType.EXIST_EMAIL);
         }
         if (signupRequest.getEmail().isEmpty()) {
             throw new EmptyLoginException(ValidationType.EMPTY_EMAIL);
         }
         if (signupRequest.getPassword() == null) {
             user.setPassword(passwordEncoder.encode(signupRequest.getFirstName()));
-        }
-        else if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
+        } else if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         } else {
             log.error("password not match");
-
+            throw new IncorrectLoginException("Passwords do not match");
         }
         user.setRole(Role.USER);
         userRepository.save(user);
-                UsernamePasswordAuthenticationToken token =
-                    new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword());
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword()));
-            user = userRepository.findByEmail(token.getName());
-            String token1 = (jwtTokenUtil.generateToken(user));
-            return loginMapper.loginView(token1, ValidationType.SUCCESSFUL, user);
-
-    }
-    public void updatePassword(User user) {
-        User user1 = userRepository.findById(user.getId()).get();
-        user1.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user1);
+        UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword());
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword()));
+        user = userRepository.findByEmail(token.getName());
+        String token1 = (jwtTokenUtil.generateToken(user));
+        return loginMapper.loginView(token1, ValidationType.SUCCESSFUL, user);
     }
 
     public AuthResponse login(AuthRequest loginRequest) {
@@ -87,6 +74,9 @@ public class UserService {
         }
         if (loginRequest.getPassword().isEmpty()) {
             throw new EmptyLoginException(ValidationType.EMPTY_PASSWORD);
+        }
+        if (userRepository.findByEmail(loginRequest.getEmail()) == null) {
+            throw new IncorrectLoginException(ValidationType.NOT_REGISTERED);
         }
         if (user2 != null && passwordEncoder.matches(loginRequest.getPassword(), user2.getPassword())) {
             UsernamePasswordAuthenticationToken token =
@@ -108,13 +98,6 @@ public class UserService {
         request.setEmail(jsonObject.getJSONObject("principal").getJSONObject("claims").getString("email"));
         return register(request);
     }
-//    public AuthResponse loginWithGoogle(Principal principal){
-//        JSONObject jsonObject = new JSONObject(principal);
-//        AuthRequest request = new AuthRequest();
-//        request.setEmail(jsonObject.getJSONObject("principal").getJSONObject("claims").getString("email"));
-//       return login(request);
-//
-//    }
 
     public User mapToRegisterRequest(SignupRequest signupRequest) {
         if (signupRequest == null) {
@@ -125,7 +108,6 @@ public class UserService {
         user.setLastName(signupRequest.getLastName());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(signupRequest.getConfirmPassword());
-
         return user;
     }
 

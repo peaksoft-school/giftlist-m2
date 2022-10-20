@@ -23,7 +23,7 @@ public class AuthController {
     @Operation(summary = "Login", description = "Only registered users can login")
     @PostMapping("signin")
     public AuthResponse login(@RequestBody AuthRequest loginRequest) {
-            return userService.login(loginRequest);
+        return userService.login(loginRequest);
     }
 
     @Operation(summary = "Registration", description = "Any user can register")
@@ -32,15 +32,10 @@ public class AuthController {
         return userService.register(request);
     }
 
-    @Operation(summary = "register with google", description = "user use email can register")
+    @Operation(summary = "Registration with google", description = "User can be registered with google")
     @GetMapping("oauth2")
     public AuthResponse signupGoogle(Principal principal) {
         return userService.signupWithGoogle(principal);
     }
-
-//    @GetMapping("login")
-//    public AuthResponse loginGoogle(Principal principal){
-//        return loginGoogle(principal);
-//    }
 
 }
