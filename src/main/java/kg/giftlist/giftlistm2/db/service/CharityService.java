@@ -7,6 +7,7 @@ import kg.giftlist.giftlistm2.db.repository.*;
 import kg.giftlist.giftlistm2.enums.Condition;
 import kg.giftlist.giftlistm2.exception.BadCredentialsException;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
+import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -28,21 +29,20 @@ public class CharityService {
     private final SubcategoryRepository subcategoryRepository;
 
     public String book(Long id) {
+        User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no charity with id " + id);
+        }
+        Charity charity = charityRepository.findById(id).get();
+        if (bookingRepository.findById(charity.getId()).isEmpty()) {
+            Booking booking1 = new Booking();
+            booking1.setId(booking1.getId());
+            booking1.setCharity(charity);
+            booking1.setUserId(user);
+            bookingRepository.save(booking1);
+            return "You have successfully booked this charity";
         } else {
-            Charity charity = charityRepository.findById(id).get();
-            if (bookingRepository.findById(charity.getId()).isEmpty()) {
-                Booking booking1 = new Booking();
-                User user = getAuthenticatedUser();
-                booking1.setId(booking1.getId());
-                booking1.setCharity(charity);
-                booking1.setUserId(user);
-                bookingRepository.save(booking1);
-                return "You have successfully booked this charity";
-            } else {
-                throw new BadCredentialsException("This charity is already booked");
-            }
+            throw new BadCredentialsException("This charity is already booked");
         }
     }
 
@@ -51,7 +51,7 @@ public class CharityService {
             throw new EmptyValueException("There is no any charity with id " + id);
         } else {
             charityRepository.deleteById(id);
-            return "Charity successfully deleted!";
+            return "Charity successfully was deleted!";
         }
     }
 
@@ -168,8 +168,8 @@ public class CharityService {
 
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String login = authentication.getName();
-        return userRepository.findByEmail(login);
+            String login = authentication.getName();
+            return userRepository.findByEmail(login);
     }
 
 }
