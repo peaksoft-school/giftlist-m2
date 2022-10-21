@@ -61,13 +61,10 @@ FirebaseMessaging firebaseMessaging() throws IOException {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).get();
         if (friend == user) {
-            log.info("You can't send a request to yourself");
             throw new MyException("You can't send a request to yourself");
         } else if (friend.getRequestToFriends().contains(user)) {
-            log.info("Request already sent");
             throw new MyException("Request already sent");
         } else if (friend.getFriends().contains(user)) {
-            log.info("This user is already in your friends");
             throw new MyException("This user is already in your friends");
         }
         friend.addRequestToFriend(user);
