@@ -46,6 +46,7 @@ FirebaseMessaging firebaseMessaging() throws IOException {
     FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "my-app");
     return FirebaseMessaging.getInstance(app);
 }
+
     public Response getAllFriends(){
         User user = getAuthenticatedUser();
         List<User>friends = user.getFriends();
