@@ -26,7 +26,7 @@ public class Booking {
     @JsonIgnore
     private User userId;
 
-    @OneToOne(cascade = CascadeType.DETACH)
+    @OneToOne
     @JoinColumn(name = "charity_id")
     @JsonIgnore
     private Charity charity;
