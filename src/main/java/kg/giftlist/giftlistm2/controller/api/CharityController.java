@@ -9,6 +9,7 @@ import kg.giftlist.giftlistm2.db.service.CharityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -23,13 +24,13 @@ public class CharityController {
 
     @Operation(summary = "Get charity", description = "Getting a charity by id")
     @GetMapping("{id}")
-    public Charity getCharityById(@PathVariable Long id) {
+    public CharityResponse getCharityById(@PathVariable Long id) {
         return charityService.getCharityById(id);
     }
 
     @Operation(summary = "Get charities", description = "Getting all charities")
     @GetMapping
-    public List<Charity> getAllCharities() {
+    public List<CharityResponse> getAllCharities() {
         return charityService.getAllCharities();
     }
 

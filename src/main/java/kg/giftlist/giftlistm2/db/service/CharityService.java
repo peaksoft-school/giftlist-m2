@@ -4,21 +4,18 @@ import kg.giftlist.giftlistm2.controller.payload.CharityRequest;
 import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
 import kg.giftlist.giftlistm2.db.entity.*;
 import kg.giftlist.giftlistm2.db.repository.*;
+import kg.giftlist.giftlistm2.enums.CharityStatus;
 import kg.giftlist.giftlistm2.enums.Condition;
 import kg.giftlist.giftlistm2.exception.BadCredentialsException;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
-import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,28 +48,42 @@ public class CharityService {
     }
 
     public String deleteCharity(Long id) {
+        User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any charity with id " + id);
-        } else {
-            charityRepository.deleteById(id);
+        }
+        Charity charity = charityRepository.findById(id).get();
+        if (user.getCharities().isEmpty()) {
+            throw new EmptyValueException("You have no any charity with id " + id);
+        }
+        if (user.getCharities().contains(charity)) {
+            charityRepository.deleteById(charity.getId());
             return "Charity successfully was deleted!";
+        } else {
+            throw new EmptyValueException("You have no any charity with id " + id);
         }
     }
 
-    public Charity getCharityById(Long id) {
+    public CharityResponse getCharityById(Long id) {
+        User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
-            throw new EmptyValueException("There is no any charity with id " + id);
+            throw  new EmptyValueException("There is no any charity with id " + id);
+        }
+        Charity charities = charityRepository.findById(id).get();
+        if (user.getCharities().contains(charities)) {
+            return mapToResponse(charities);
         } else {
-            return charityRepository.findById(id).get();
+            throw  new EmptyValueException("You have no any charity with id " + id);
         }
     }
 
-    public List<Charity> getAllCharities() {
-        if (charityRepository.findAll().isEmpty()) {
-            throw new EmptyValueException("There is no any charity");
-        } else {
-            return charityRepository.findAll();
+    public List<CharityResponse> getAllCharities() {
+        User user = getAuthenticatedUser();
+        if (user.getCharities().isEmpty()) {
+            throw new EmptyValueException("There is no any charities");
         }
+        List<Charity> charities = charityRepository.getCharityByUserId(user.getId());
+        return view(charities);
     }
 
     public CharityResponse createCharity(CharityRequest request) {
@@ -115,15 +126,21 @@ public class CharityService {
     public CharityResponse updateCharity(Long id, CharityRequest request) {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
-            throw new EmptyValueException("There is no any charity with id " + id);
-        } else {
-            Charity charity = charityRepository.findById(id).get();
+            throw  new EmptyValueException("There is no any charity with id " + id);
+        }
+        Charity charity = charityRepository.findById(id).get();
+        if (user.getCharities().contains(charity)) {
             Category category = categoryRepository.findById(request.getCategoryId()).get();
             Subcategory subcategory = subcategoryRepository.findById(request.getSubcategoryId()).get();
             if (request.getGiftName().isEmpty()) {
                 throw new EmptyValueException("Gift name must not be empty!");
             } else {
                 charity.setGiftName(request.getGiftName());
+            }
+            if (bookingRepository.findById(charity.getId()).isPresent()) {
+                charity.setCharityStatus(CharityStatus.BOOKED);
+            } else {
+                charity.setCharityStatus(CharityStatus.NOT_BOOKED);
             }
             if (request.getCondition().isEmpty()) {
                 throw new EmptyValueException("Please, choose a condition from list");
@@ -149,6 +166,8 @@ public class CharityService {
             charity.setCreatedDate(LocalDate.now());
             charityRepository.save(charity);
             return mapToResponse(charity);
+        } else {
+            throw new EmptyValueException("You have no any charity with id " + id);
         }
     }
 
@@ -162,6 +181,11 @@ public class CharityService {
         charityResponse.setUserId(charity.getUser().getId());
         charityResponse.setFirstName(charity.getUser().getFirstName());
         charityResponse.setLastName(charity.getUser().getLastName());
+        if (bookingRepository.findById(charity.getId()).isPresent()) {
+            charityResponse.setCharityStatus(CharityStatus.BOOKED);
+        } else {
+            charityResponse.setCharityStatus(CharityStatus.NOT_BOOKED);
+        }
         charityResponse.setCondition(charity.getCondition());
         charityResponse.setCategory(charity.getCategory().getCategoryName());
         charityResponse.setSubcategory(charity.getSubcategory().getSubcategoryName());
@@ -171,10 +195,18 @@ public class CharityService {
         return charityResponse;
     }
 
+    public List<CharityResponse> view(List<Charity> charities) {
+        List<CharityResponse> responses = new ArrayList<>();
+        for (Charity charity : charities) {
+            responses.add(mapToResponse(charity));
+        }
+        return responses;
+    }
+
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String login = authentication.getName();
-            return userRepository.findByEmail(login);
+        String login = authentication.getName();
+        return userRepository.findByEmail(login);
     }
 
 }

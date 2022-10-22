@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import kg.giftlist.giftlistm2.enums.CharityStatus;
 import kg.giftlist.giftlistm2.enums.Condition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,5 +52,8 @@ public class Charity {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "subcategory_id")
     private Subcategory subcategory;
+
+    @Enumerated(EnumType.STRING)
+    private CharityStatus charityStatus;
 
 }
