@@ -67,13 +67,13 @@ public class CharityService {
     public CharityResponse getCharityById(Long id) {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
-            throw  new EmptyValueException("There is no any charity with id " + id);
+            throw new EmptyValueException("There is no any charity with id " + id);
         }
         Charity charities = charityRepository.findById(id).get();
         if (user.getCharities().contains(charities)) {
             return mapToResponse(charities);
         } else {
-            throw  new EmptyValueException("You have no any charity with id " + id);
+            throw new EmptyValueException("You have no any charity with id " + id);
         }
     }
 
@@ -126,7 +126,7 @@ public class CharityService {
     public CharityResponse updateCharity(Long id, CharityRequest request) {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
-            throw  new EmptyValueException("There is no any charity with id " + id);
+            throw new EmptyValueException("There is no any charity with id " + id);
         }
         Charity charity = charityRepository.findById(id).get();
         if (user.getCharities().contains(charity)) {
