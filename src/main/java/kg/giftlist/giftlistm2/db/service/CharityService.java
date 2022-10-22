@@ -10,9 +10,13 @@ import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -72,8 +76,8 @@ public class CharityService {
     }
 
     public CharityResponse createCharity(CharityRequest request) {
-        Charity charity = new Charity();
         User user = getAuthenticatedUser();
+        Charity charity = new Charity();
         Category category = categoryRepository.findById(request.getCategoryId()).get();
         Subcategory subcategory = subcategoryRepository.findById(request.getSubcategoryId()).get();
         if (request.getGiftName().isEmpty()) {
@@ -109,6 +113,7 @@ public class CharityService {
     }
 
     public CharityResponse updateCharity(Long id, CharityRequest request) {
+        User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any charity with id " + id);
         } else {
