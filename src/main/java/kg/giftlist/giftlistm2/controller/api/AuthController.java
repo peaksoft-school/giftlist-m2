@@ -7,6 +7,7 @@ import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
 import kg.giftlist.giftlistm2.db.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -37,12 +38,6 @@ public class AuthController {
     @GetMapping("oauth2")
     public AuthResponse signupGoogle(Principal principal) {
         return userService.signupWithGoogle(principal);
-    }
-    @Operation(summary = "Registration with google", description = "User can be registered with google")
-    @GetMapping("test")
-    public void sdfs(Principal principal) {
-        System.out.println(principal);
-        System.out.println(principal.getName());
     }
 
 }

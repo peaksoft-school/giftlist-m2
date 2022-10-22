@@ -26,79 +26,73 @@ public class FriendsService {
     private final NotificationRepository notificationRepository;
 
 
-    public Response getAllFriends(){
+    public Response getAllFriends() {
         User user = getAuthenticatedUser();
-        List<User>friends = user.getFriends();
-        List<Response>responses = new ArrayList<>();
-        for (User us : friends){
-            Response resp = FriendMapper.INSTANCE.response(us,ValidationType.SUCCESSFUL);
+        List<User> friends = user.getFriends();
+        List<Response> responses = new ArrayList<>();
+        for (User us : friends) {
+            Response resp = FriendMapper.INSTANCE.response(us, ValidationType.SUCCESSFUL);
             responses.add(resp);
         }
         return (Response) responses;
     }
+
     public Response requestToFriend(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).get();
         if (friend == user) {
-            log.info("yourself");
-            throw new MyException("You can't send a request to yourself");
+            log.info("You can not send a request to yourself ");
+            throw new MyException("You can not send a request to yourself");
         } else if (friend.getRequestToFriends().contains(user)) {
-            log.info("sent");
+            log.info("Request already sent");
             throw new MyException("Request already sent");
         } else if (friend.getFriends().contains(user)) {
-            log.info("in your friends");
+            log.info("This user is already in your friends");
             throw new MyException("This user is already in your friends");
         }
-        friend.addRequestToFriend(user);
+        friend.sendRequestToFriend(user);
         log.info("Request to friend successfully send");
-        friend.addNotification(sendNotification(user, friendId));
-        notificationRepository.saveAll(friend.getNotifications());
-        return FriendMapper.INSTANCE.response(friend,ValidationType.SUCCESSFUL);
-    }
-
-
-    public void deleteFriend(Long friendId) {
-        User user = getAuthenticatedUser();
-        User friend = userRepository.findById(friendId).get();
-        if (user.getFriends().contains(friend)) {
-            friend.getFriends().remove(user);
-            user.getFriends().remove(friend);
-            log.info("Successfully deleted user with name ");
-            throw new MyException("Successfully deleted user with email "+friend.getEmail());
-
-        } else {
-            log.error("You have not friend with id ");
-            throw new MyException("You have not friend with id "+friend.getId());
-        }
-
-    }
-
-    public Response refuseRequestToFriend(Long friendId) {
-        User user = getAuthenticatedUser();
-        User friend = userRepository.findById(friendId).get();
-        if (friend.getRequestToFriends().contains(user)) {
-            friend.getRequestToFriends().remove(user);
-        } else {
-            throw new MyException("No request to friend");
-        }
-        log.info("Request to friend successfully refused");
-        return FriendMapper.INSTANCE.response(friend,ValidationType.SUCCESSFUL);
-
+        return FriendMapper.INSTANCE.response(friend, ValidationType.SUCCESSFUL);
     }
 
     public Response acceptToFriend(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).get();
         if (user.getRequestToFriends().contains(friend)) {
-            friend.acceptToFriend(user);
+            user.addUserToFriend(friend);
+            friend.addUserToFriend(user);
             user.getRequestToFriends().remove(friend);
-            user.acceptToFriend(friend);
             userRepository.save(friend);
         } else {
             throw new MyException("You are already friend");
         }
         log.info("Successfully accept to friend");
-        return FriendMapper.INSTANCE.response(friend,ValidationType.SUCCESSFUL);
+        return FriendMapper.INSTANCE.response(friend, ValidationType.SUCCESSFUL);
+    }
+
+    public String refuseRequestToFriend(Long friendId) {
+        User user = getAuthenticatedUser();
+        User friend = userRepository.findById(friendId).get();
+        if (friend.getRequestToFriends().contains(user)) {
+            friend.getRequestToFriends().remove(user);
+        } else {
+            throw new MyException("Тo friend requests found from user with id: "+friendId);
+        }
+        log.info("Request to friend successfully refused");
+        return "Request to friend successfully refused";
+    }
+
+    public String deleteFriend(Long friendId) {
+        User user = getAuthenticatedUser();
+        User friend = userRepository.findById(friendId).get();
+        if (user.getFriends().contains(friend)) {
+            user.getFriends().remove(friend);
+            return "Successfully deleted friend with email: "+friend.getEmail();
+        } else {
+            log.error("You have not friend with id: "+friendId);
+            throw new MyException("You have not friend with id: " + friend.getId());
+        }
+
     }
 
     private Notification sendNotification(User user, Long friendId) {
@@ -108,21 +102,17 @@ public class FriendsService {
         notification.setReceiverId(friendId);
         notification.setNotificationStatus(NotificationStatus.REQUEST_TO_FRIEND);
         return notification;
+
     }
 
-//    public User getAuthenticatedUser() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String login = authentication.getName();
-//        return userRepository.findByEmail(login);
-//    }
 
-    public User getAuthenticatedUser(){
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getName());
-            String login = authentication.getName();
-            return userRepository.findByEmail(login);
-        }
-
+        String login = authentication.getName();
+        return userRepository.findByEmail(login);
     }
+
+}
 
 

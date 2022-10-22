@@ -114,20 +114,14 @@ public class User implements UserDetails {
         return grantedAuthorities;
     }
 
-    //    public void addRequestToFriend(User user){
-//        if (requestToFriends == null){
-//            requestToFriends = new HashSet<>();
-//        }
-//        requestToFriends.add(user);
-//    }
-    public void addRequestToFriend(User user) {
+    public void sendRequestToFriend(User user) {
         if (CollectionUtils.isEmpty(requestToFriends)) {
             requestToFriends = new ArrayList<>();
         }
         requestToFriends.add(user);
     }
 
-    public void acceptToFriend(User user) {
+    public void addUserToFriend(User user) {
         if (CollectionUtils.isEmpty(friends)) {
             friends = new ArrayList<>();
         }

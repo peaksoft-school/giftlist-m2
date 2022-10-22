@@ -5,7 +5,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.Response;
 import kg.giftlist.giftlistm2.db.service.FriendsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("api/friends")
@@ -27,13 +30,13 @@ public class FriendsController {
     public Response acceptedToFriend(@PathVariable Long id){
         return friendsService.acceptToFriend(id);
     }
-    @PostMapping("refuse/{id}")
-    public Response refuseRequestToFriend(@PathVariable Long id){
+    @DeleteMapping("refuse/{id}")
+    public String refuseRequestToFriend(@PathVariable Long id){
         return friendsService.refuseRequestToFriend(id);
     }
     @DeleteMapping("delete/{friendId}")
-    public void deleteFriend(@PathVariable Long friendId){
-        friendsService.deleteFriend(friendId);
+    public String deleteFriend(@PathVariable Long friendId){
+        return friendsService.deleteFriend(friendId);
     }
 
 }
