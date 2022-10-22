@@ -87,12 +87,6 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Complaints> complaints;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFrom")
-    private List<Invite> userFrom;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTo")
-    private List<Invite> userTo;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Notification> notifications;
 

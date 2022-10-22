@@ -1,11 +1,5 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
 import kg.giftlist.giftlistm2.controller.payload.Response;
 import kg.giftlist.giftlistm2.db.entity.Notification;
 import kg.giftlist.giftlistm2.db.entity.User;
@@ -16,13 +10,10 @@ import kg.giftlist.giftlistm2.exception.MyException;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,19 +24,7 @@ import java.util.List;
 public class FriendsService {
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
-    private final FirebaseMessaging firebaseMessaging;
 
-
-FirebaseMessaging firebaseMessaging() throws IOException {
-    GoogleCredentials googleCredentials = GoogleCredentials
-            .fromStream(new ClassPathResource("firebase-service-account.json").getInputStream());
-    FirebaseOptions firebaseOptions = FirebaseOptions
-            .builder()
-            .setCredentials(googleCredentials)
-            .build();
-    FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "my-app");
-    return FirebaseMessaging.getInstance(app);
-}
 
     public Response getAllFriends(){
         User user = getAuthenticatedUser();
@@ -61,10 +40,13 @@ FirebaseMessaging firebaseMessaging() throws IOException {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).get();
         if (friend == user) {
+            log.info("yourself");
             throw new MyException("You can't send a request to yourself");
         } else if (friend.getRequestToFriends().contains(user)) {
+            log.info("sent");
             throw new MyException("Request already sent");
         } else if (friend.getFriends().contains(user)) {
+            log.info("in your friends");
             throw new MyException("This user is already in your friends");
         }
         friend.addRequestToFriend(user);
@@ -128,10 +110,19 @@ FirebaseMessaging firebaseMessaging() throws IOException {
         return notification;
     }
 
-    public User getAuthenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String login = authentication.getName();
-        return userRepository.findByEmail(login);
+//    public User getAuthenticatedUser() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String login = authentication.getName();
+//        return userRepository.findByEmail(login);
+//    }
+
+    public User getAuthenticatedUser(){
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
+            String login = authentication.getName();
+            return userRepository.findByEmail(login);
+        }
+
     }
-}
+
 

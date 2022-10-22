@@ -2,14 +2,6 @@ package kg.giftlist.giftlistm2.validation;
 
 public class ValidationType {
 
-    public static final String SUCCESSFUL = "successful";
-    public static final String LOGIN_FAILED = "username or password is not correct";
-    public static final String EMPTY_PASSWORD = "password can not be empty";
-    public static final String EMPTY_EMAIL = "email can not be empty";
-    public static final String WRONG_PASSWORD = "password doesn't match";
-    public static final String EMPTY_FIELD = "the field must not be empty";
-    public static final String EMAIL = "this email already exists";
-
 
     public static final String SUCCESSFUL = "Successful";
     public static final String LOGIN_FAILED = "Username or password is not correct";

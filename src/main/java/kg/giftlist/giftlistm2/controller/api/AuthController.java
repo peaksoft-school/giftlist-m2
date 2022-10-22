@@ -38,5 +38,11 @@ public class AuthController {
     public AuthResponse signupGoogle(Principal principal) {
         return userService.signupWithGoogle(principal);
     }
+    @Operation(summary = "Registration with google", description = "User can be registered with google")
+    @GetMapping("test")
+    public void sdfs(Principal principal) {
+        System.out.println(principal);
+        System.out.println(principal.getName());
+    }
 
 }
