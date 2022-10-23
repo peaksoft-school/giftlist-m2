@@ -30,9 +30,9 @@ public class FriendsController {
     public Response acceptedToFriend(@PathVariable Long id){
         return friendsService.acceptToFriend(id);
     }
-    @DeleteMapping("refuse/{id}")
-    public String refuseRequestToFriend(@PathVariable Long id){
-        return friendsService.refuseRequestToFriend(id);
+    @DeleteMapping("reject/{id}")
+    public String declineFriendRequest(@PathVariable Long id){
+        return friendsService.declineFriendRequest(id);
     }
     @DeleteMapping("delete/{friendId}")
     public String deleteFriend(@PathVariable Long friendId){

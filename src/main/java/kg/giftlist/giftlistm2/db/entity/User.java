@@ -1,7 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
 import kg.giftlist.giftlistm2.enums.ClothingSize;
-import kg.giftlist.giftlistm2.enums.InviteStatus;
 import kg.giftlist.giftlistm2.enums.Role;
 import kg.giftlist.giftlistm2.enums.ShoeSize;
 import lombok.AllArgsConstructor;
