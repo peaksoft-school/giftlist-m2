@@ -90,9 +90,6 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Notification> notifications;
 
-    @Transient
-    @Enumerated(EnumType.STRING)
-    private InviteStatus inviteStatus;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "friends")

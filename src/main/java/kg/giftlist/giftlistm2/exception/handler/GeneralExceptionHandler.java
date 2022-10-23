@@ -1,9 +1,8 @@
 package kg.giftlist.giftlistm2.exception.handler;
 
-import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
+import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.exception.*;
 import kg.giftlist.giftlistm2.exception.ExceptionResponse.ExceptionResponse;
-import kg.giftlist.giftlistm2.exception.EmptyLoginException;
-import kg.giftlist.giftlistm2.exception.MyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,5 +29,18 @@ public class GeneralExceptionHandler {
         return new ExceptionResponse(HttpStatus.FORBIDDEN, myException.getClass().getName()
                 ,myException.getMessage());
     }
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse userNotFoundException(UserNotFoundException userNotFoundException){
+        return new ExceptionResponse(HttpStatus.NOT_FOUND,userNotFoundException.getClass().getName(),
+        userNotFoundException.getMessage());
+    }
+    @ExceptionHandler(UserAllReadyExist.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse userAllReadyExist(UserAllReadyExist userAllReadyExist){
+        return new ExceptionResponse(HttpStatus.FORBIDDEN,userAllReadyExist.getClass().getName(),
+                userAllReadyExist.getMessage());
+    }
+
 
 }
