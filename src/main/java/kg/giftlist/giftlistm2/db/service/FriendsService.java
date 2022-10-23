@@ -28,21 +28,29 @@ public class FriendsService {
     private final NotificationRepository notificationRepository;
 
 
-    public Response getAllFriends() {
-        User user = getAuthenticatedUser();
-        List<User> friends = user.getFriends();
+    public Response view(List<User>userList) {
         List<Response> responses = new ArrayList<>();
-        for (User us : friends) {
-            Response resp = FriendMapper.INSTANCE.response(us, ValidationType.SUCCESSFUL);
+        for (User us : userList) {
+            Response resp = friendResponse(us);
             responses.add(resp);
         }
         return (Response) responses;
     }
+        public Response getAllFriends(){
+        User user = getAuthenticatedUser();
+            List<User> friends = userRepository.findAll();
+            if (user.getFriends().contains(friends)){
+                return view(friends);
+            }
+            else {
+                throw new UserNotFoundException("You have not friends");
+            }
+        }
 
     public Response requestToFriend(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UsernameNotFoundException("User not found with id: "+friendId));
+                () -> new UserNotFoundException("User not found with id: "+friendId));
         if (friend == user) {
             log.info("You can not send a request to yourself ");
             throw new UserExistException("You can not send a request to yourself");
@@ -66,14 +74,14 @@ public class FriendsService {
         if (user == friend){
             throw new UserExistException("You can't add yourself as a friend");
         }
-        if (user.getRequestToFriends().contains(friend)) {
+        if (!(user.getRequestToFriends().contains(friend))) {
+            throw new UserNotFoundException("not found");
+        }
+        else {
             user.addUserToFriend(friend);
             friend.addUserToFriend(user);
-            userRepository.save(friend);
             user.getRequestToFriends().remove(friend);
-        } else {
-            log.info("You are already friend");
-            throw new UserExistException("You are already friend");
+            userRepository.save(friend);
         }
         return FriendMapper.INSTANCE.response(friend, ValidationType.ACCEPTED);
     }
@@ -104,6 +112,9 @@ public class FriendsService {
         }
         if (user.getFriends().contains(friend)) {
             user.getFriends().remove(friend);
+            user.sendRequestToFriend(friend);
+            friend.getFriends().remove(user);
+            userRepository.save(user);
             return "Successfully deleted friend with email: " + friend.getEmail();
         } else {
             log.error("You have not friend with id: " + friendId);
@@ -121,6 +132,15 @@ public class FriendsService {
         return notification;
 
     }
+    public Response friendResponse(User user) {
+        Response response = new Response();
+            response.setId(user.getId());
+            response.setFirstName(user.getFirstName());
+            response.setLastName(user.getLastName());
+            response.setEmail(user.getEmail());
+            return response;
+        }
+
 
 
     public User getAuthenticatedUser() {

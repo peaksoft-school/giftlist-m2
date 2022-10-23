@@ -28,18 +28,19 @@ public class GeneralExceptionHandler {
         return new ExceptionResponse(HttpStatus.FORBIDDEN, myException.getClass().getName()
                 ,myException.getMessage());
     }
+
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionResponse userNotFoundException(UserNotFoundException userNotFoundException){
         return new ExceptionResponse(HttpStatus.NOT_FOUND,userNotFoundException.getClass().getName(),
         userNotFoundException.getMessage());
     }
+
     @ExceptionHandler(UserExistException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ExceptionResponse userAllReadyExist(UserExistException userExistException){
         return new ExceptionResponse(HttpStatus.FORBIDDEN,userExistException.getClass().getName(),
                 userExistException.getMessage());
     }
-
 
 }

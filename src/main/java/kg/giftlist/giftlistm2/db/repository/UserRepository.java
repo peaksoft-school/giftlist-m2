@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
+    @Query("select u from User u join u.friends f where f.id=?1 ")
+    List<User> getAllFriendBYUserId(Long id);
 
 
 
