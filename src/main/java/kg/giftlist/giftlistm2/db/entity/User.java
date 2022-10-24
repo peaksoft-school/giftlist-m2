@@ -1,8 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
-import kg.giftlist.giftlistm2.enums.ClothingSize;
 import kg.giftlist.giftlistm2.enums.Role;
-import kg.giftlist.giftlistm2.enums.ShoeSize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +38,11 @@ public class User implements UserDetails {
     @Email
     private String email;
 
+    @Column(name = "city")
+    private String city;
+
+    private String image;
+
     private String password;
 
     @Column(name = "date_of_birth")
@@ -47,14 +50,6 @@ public class User implements UserDetails {
 
     @Column(name = "phone_number")
     private String phoneNumber;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "clothing_size")
-    private ClothingSize clothingSize;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "shoe_size")
-    private ShoeSize shoeSize;
 
     @Size(max = 10000)
     private String hobbies;
@@ -65,6 +60,12 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<ClothingSize> clothingSize;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<ShoeSize> shoeSize;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
     private List<WishList> wishLists;

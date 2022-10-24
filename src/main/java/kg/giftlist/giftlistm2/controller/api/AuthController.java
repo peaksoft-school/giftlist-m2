@@ -52,4 +52,5 @@ public class AuthController {
     public SignupResponse register(@RequestBody SignupRequest request) {
         return userService.register(request);
     }
+
 }

@@ -1,0 +1,58 @@
+package kg.giftlist.giftlistm2.controller.api;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
+import kg.giftlist.giftlistm2.controller.payload.UserChangePasswordRequest;
+import kg.giftlist.giftlistm2.controller.payload.UserInfoRequest;
+import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
+import kg.giftlist.giftlistm2.db.service.impl.UserInfoServiceImpl;
+import kg.giftlist.giftlistm2.db.service.impl.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+
+@RestController
+@RequestMapping("api/users/profile")
+@RequiredArgsConstructor
+@CrossOrigin
+@PreAuthorize("hasAnyAuthority('USER')")
+@Tag(name = "User API", description = "Users with role  \"User\" can create, update profile")
+public class UserProfileController {
+
+    private final UserInfoServiceImpl userInfoService;
+    private final UserServiceImpl userService;
+
+    @Operation(summary = "Update user profile information ", description = "User can update profile information")
+    @PostMapping("/edit/{userInfoId}")
+    public UserInfoResponse updateUserProfile(@PathVariable Long userInfoId, @RequestBody UserInfoRequest userInfoRequest) {
+        return userInfoService.update(userInfoId, userInfoRequest);
+    }
+
+    @Operation(summary = "Get user profile ", description = "Find by id user profile")
+    @GetMapping("/me")
+    public UserInfoResponse getUserProfile() {
+        return userInfoService.findById();
+    }
+
+    @Operation(summary = "Change password ", description = "User can change password")
+    @PostMapping("/password")
+    public AuthResponse changePassword(@RequestBody UserChangePasswordRequest request) {
+        return userService.changeUserPassword(request);
+    }
+
+    @Operation(summary = "Logout", description = "User can logout")
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            request.getSession().invalidate();
+        }
+        return "redirect:/";
+    }
+
+}
