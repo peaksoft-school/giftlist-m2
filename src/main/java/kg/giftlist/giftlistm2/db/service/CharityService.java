@@ -41,6 +41,8 @@ public class CharityService {
             booking1.setCharity(charity);
             booking1.setUserId(user);
             bookingRepository.save(booking1);
+            charity.setCharityStatus(CharityStatus.BOOKED);
+            charityRepository.save(charity);
             return "You have successfully booked this charity";
         } else {
             throw new BadCredentialsException("This charity is already booked");
@@ -103,6 +105,7 @@ public class CharityService {
             charity.setCondition(Condition.valueOf(request.getCondition()));
         }
         if (request.getCategoryId() == null) {
+            log.info("Please, show a category of the gift");
             throw new EmptyValueException("Please, show a category of the gift");
         } else {
             charity.setCategory(category);
@@ -119,6 +122,7 @@ public class CharityService {
             charity.setDescription(request.getDescription());
         }
         charity.setCreatedDate(LocalDate.now());
+        charity.setCharityStatus(CharityStatus.NOT_BOOKED);
         charityRepository.save(charity);
         return mapToResponse(charity);
     }
@@ -136,11 +140,6 @@ public class CharityService {
                 throw new EmptyValueException("Gift name must not be empty!");
             } else {
                 charity.setGiftName(request.getGiftName());
-            }
-            if (bookingRepository.findById(charity.getId()).isPresent()) {
-                charity.setCharityStatus(CharityStatus.BOOKED);
-            } else {
-                charity.setCharityStatus(CharityStatus.NOT_BOOKED);
             }
             if (request.getCondition().isEmpty()) {
                 throw new EmptyValueException("Please, choose a condition from list");
@@ -164,6 +163,12 @@ public class CharityService {
                 charity.setDescription(request.getDescription());
             }
             charity.setCreatedDate(LocalDate.now());
+            if (bookingRepository.findById(charity.getId()).isPresent()) {
+                charity.setCharityStatus(CharityStatus.BOOKED);
+            }
+            if (bookingRepository.findById(charity.getId()).isEmpty()) {
+                charity.setCharityStatus(CharityStatus.NOT_BOOKED);
+            }
             charityRepository.save(charity);
             return mapToResponse(charity);
         } else {
@@ -181,11 +186,7 @@ public class CharityService {
         charityResponse.setUserId(charity.getUser().getId());
         charityResponse.setFirstName(charity.getUser().getFirstName());
         charityResponse.setLastName(charity.getUser().getLastName());
-        if (bookingRepository.findById(charity.getId()).isPresent()) {
-            charityResponse.setCharityStatus(CharityStatus.BOOKED);
-        } else {
-            charityResponse.setCharityStatus(CharityStatus.NOT_BOOKED);
-        }
+        charityResponse.setCharityStatus(charity.getCharityStatus());
         charityResponse.setCondition(charity.getCondition());
         charityResponse.setCategory(charity.getCategory().getCategoryName());
         charityResponse.setSubcategory(charity.getSubcategory().getSubcategoryName());
