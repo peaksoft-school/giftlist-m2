@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.giftlist.giftlistm2.enums.ClothingSize;
 import kg.giftlist.giftlistm2.enums.Role;
 import kg.giftlist.giftlistm2.enums.ShoeSize;
@@ -26,6 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(generator = "user_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "user_gen", sequenceName = "user_seq", allocationSize = 1, initialValue = 3)
@@ -70,6 +72,7 @@ public class User implements UserDetails {
     private List<WishList> wishLists;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<Charity> charities;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")

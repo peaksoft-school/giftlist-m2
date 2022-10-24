@@ -1,5 +1,7 @@
 package kg.giftlist.giftlistm2.exception.handler;
 
+import kg.giftlist.giftlistm2.exception.BadCredentialsException;
+import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import kg.giftlist.giftlistm2.exception.ExceptionResponse.ExceptionResponse;
 import kg.giftlist.giftlistm2.exception.EmptyLoginException;
@@ -13,13 +15,25 @@ public class GeneralExceptionHandler {
 
     @ExceptionHandler(EmptyLoginException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionResponse NotFoundHandle(EmptyLoginException e) {
+    public ExceptionResponse notFoundHandle(EmptyLoginException e) {
         return new ExceptionResponse(HttpStatus.NOT_FOUND, e.getClass().getName(), e.getMessage());
     }
 
     @ExceptionHandler(IncorrectLoginException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ExceptionResponse BadCredentialsHandle(IncorrectLoginException e) {
+    public ExceptionResponse incorrectLoginHandle(IncorrectLoginException e) {
+        return new ExceptionResponse(HttpStatus.FORBIDDEN, e.getClass().getName(), e.getMessage());
+    }
+
+    @ExceptionHandler(EmptyValueException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse emptyValueHandle(EmptyValueException e) {
+        return new ExceptionResponse(HttpStatus.NOT_FOUND, e.getClass().getName(), e.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse badCredentialHandle(BadCredentialsException e) {
         return new ExceptionResponse(HttpStatus.FORBIDDEN, e.getClass().getName(), e.getMessage());
     }
 

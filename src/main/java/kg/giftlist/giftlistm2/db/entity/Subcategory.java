@@ -10,23 +10,23 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "subcategories")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class Subcategory {
 
     @Id
-    @GeneratedValue(generator = "category_gen", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "category_gen", sequenceName = "category_seq", allocationSize = 1)
+    @GeneratedValue(generator = "subcategory_gen", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "subcategory_gen", sequenceName = "subcategory_seq", allocationSize = 1)
     private Long id;
 
-    private String categoryName;
+    private String subcategoryName;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    @ManyToOne
     @JsonIgnore
-    private List<Subcategory> subcategories;
+    private Category category;
 
     @OneToMany
     @JsonIgnore

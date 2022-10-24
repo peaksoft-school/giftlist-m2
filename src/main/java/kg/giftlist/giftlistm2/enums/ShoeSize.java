@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.enums;
 
 public enum ShoeSize {
+
     THIRTY_FIVE(35),
     THIRTY_SIX(36),
     THIRTY_SEVEN(37),
