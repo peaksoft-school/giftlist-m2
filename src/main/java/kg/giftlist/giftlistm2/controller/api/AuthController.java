@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
 import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
-import kg.giftlist.giftlistm2.db.service.impl.UserService;
+import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

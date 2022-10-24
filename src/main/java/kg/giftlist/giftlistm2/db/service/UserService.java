@@ -1,4 +1,4 @@
-package kg.giftlist.giftlistm2.db.service.impl;
+package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
@@ -76,9 +76,6 @@ public class UserService {
         if (loginRequest.getPassword().isEmpty()) {
             throw new EmptyLoginException(ValidationType.EMPTY_PASSWORD);
         }
-        if (userRepository.findByEmail(loginRequest.getEmail()) == null) {
-            throw new IncorrectLoginException(ValidationType.NOT_REGISTERED);
-        }
         if (user2 != null && passwordEncoder.matches(loginRequest.getPassword(), user2.getPassword())) {
             UsernamePasswordAuthenticationToken token =
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
@@ -87,7 +84,7 @@ public class UserService {
             String token1 = (jwtTokenUtil.generateToken(user));
             return loginMapper.loginView(token1, ValidationType.SUCCESSFUL, user);
         } else {
-            throw new IncorrectLoginException(ValidationType.LOGIN_FAILED);
+            throw new IncorrectLoginException(ValidationType.LOGIN_FAILED + " or " + ValidationType.NOT_REGISTERED);
         }
     }
 
