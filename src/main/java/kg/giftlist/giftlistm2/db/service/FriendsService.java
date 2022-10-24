@@ -1,8 +1,12 @@
 package kg.giftlist.giftlistm2.db.service;
 
+import kg.giftlist.giftlistm2.controller.payload.HolidayResponse;
 import kg.giftlist.giftlistm2.controller.payload.Response;
+import kg.giftlist.giftlistm2.controller.payload.ResponseFriend;
+import kg.giftlist.giftlistm2.db.entity.Holiday;
 import kg.giftlist.giftlistm2.db.entity.Notification;
 import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.enums.NotificationStatus;
@@ -25,27 +29,27 @@ import java.util.List;
 @Slf4j
 public class FriendsService {
     private final UserRepository userRepository;
-    private final NotificationRepository notificationRepository;
+    private final HolidayRepository holidayRepository;
 
+    public List<ResponseFriend>view(List<User>userList,int count) {
+        List<ResponseFriend> responses = new ArrayList<>();
 
-    public Response view(List<User>userList) {
-        List<Response> responses = new ArrayList<>();
         for (User us : userList) {
-            Response resp = friendResponse(us);
-            responses.add(resp);
+            responses.add(FriendMapper.INSTANCE.friendResonse(us,count));
         }
-        return (Response) responses;
+        return  responses;
     }
-        public Response getAllFriends(){
+    public List<ResponseFriend> getAllFriends(){
         User user = getAuthenticatedUser();
-            List<User> friends = userRepository.findAll();
-            if (user.getFriends().contains(friends)){
-                return view(friends);
-            }
-            else {
-                throw new UserNotFoundException("You have not friends");
-            }
-        }
+        return view(userRepository.getAllFriendByUserId(user.getId()),
+        66);
+    }
+    public List<ResponseFriend> getAllRequestToFriend(){
+        User user = getAuthenticatedUser();
+        return view(userRepository.getAllRequestToFriend(user.getId()),
+                holidayRepository.getAllUserHolidays(user.getId()).size());
+    }
+
 
     public Response requestToFriend(Long friendId) {
         User user = getAuthenticatedUser();
@@ -96,6 +100,7 @@ public class FriendsService {
         }
         if (user.getRequestToFriends().contains(friend)) {
             user.getRequestToFriends().remove(friend);
+            userRepository.save(user);
         } else {
             throw new UsernameNotFoundException("Тo friend requests found from user with id: " + friendId);
         }
@@ -122,25 +127,6 @@ public class FriendsService {
         }
 
     }
-
-    private Notification sendNotification(User user, Long friendId) {
-        Notification notification = new Notification();
-        notification.setCreated(LocalDate.now());
-        notification.setUser(user);
-        notification.setReceiverId(friendId);
-        notification.setNotificationStatus(NotificationStatus.REQUEST_TO_FRIEND);
-        return notification;
-
-    }
-    public Response friendResponse(User user) {
-        Response response = new Response();
-            response.setId(user.getId());
-            response.setFirstName(user.getFirstName());
-            response.setLastName(user.getLastName());
-            response.setEmail(user.getEmail());
-            return response;
-        }
-
 
 
     public User getAuthenticatedUser() {

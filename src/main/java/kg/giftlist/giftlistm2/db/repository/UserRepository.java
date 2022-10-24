@@ -6,14 +6,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
     @Query("select u from User u join u.friends f where f.id=?1 ")
-    List<User> getAllFriendBYUserId(Long id);
+    List<User> getAllFriendByUserId(Long id);
+    @Query("select u from User u join u.requestToFriends f where f.id=?1")
+    List<User> getAllRequestToFriend(Long id);
+    @Query("select count(f.id) from User u join u.wishLists f where f.id=?1")
+    int getCountWishListByUserId(Long id);
+    @Query("select count(f.id) from User u join u.wishLists f where f.id=?1")
+    int getCountHolidayByUserId(Long id);
 
 
 

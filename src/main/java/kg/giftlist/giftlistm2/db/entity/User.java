@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.giftlist.giftlistm2.enums.ClothingSize;
 import kg.giftlist.giftlistm2.enums.Role;
 import kg.giftlist.giftlistm2.enums.ShoeSize;
@@ -67,11 +68,11 @@ public class User implements UserDetails {
     @Size(max = 10000)
     @Column(name = "important_to_know")
     private String importantToKnow;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<WishList> wishLists;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
@@ -81,18 +82,16 @@ public class User implements UserDetails {
     private List<Booking> bookings;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<Holiday> holidays;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Complaints> complaints;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Notification> notifications;
-
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "friends")
-            private List<User> friends = new ArrayList<>();
+    @JsonIgnore
+    private List<User> friends = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
@@ -100,8 +99,8 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_to"),
             inverseJoinColumns = @JoinColumn(name = "user_from")
     )
+    @JsonIgnore
     private List<User> requestToFriends = new ArrayList<>();
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -122,9 +121,6 @@ public class User implements UserDetails {
             friends = new ArrayList<>();
         }
         friends.add(user);
-    }
-    public void addNotification(Notification notification){
-        notifications.add(notification);
     }
 
     @Override
