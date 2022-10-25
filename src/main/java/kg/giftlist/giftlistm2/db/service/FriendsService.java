@@ -1,15 +1,10 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.HolidayResponse;
-import kg.giftlist.giftlistm2.controller.payload.Response;
-import kg.giftlist.giftlistm2.controller.payload.ResponseFriend;
-import kg.giftlist.giftlistm2.db.entity.Holiday;
-import kg.giftlist.giftlistm2.db.entity.Notification;
+import kg.giftlist.giftlistm2.controller.payload.FriendProfileResponse;
+import kg.giftlist.giftlistm2.controller.payload.FriendResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
-import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
-import kg.giftlist.giftlistm2.enums.NotificationStatus;
 import kg.giftlist.giftlistm2.exception.UserExistException;
 import kg.giftlist.giftlistm2.exception.UserNotFoundException;
 import kg.giftlist.giftlistm2.validation.ValidationType;
@@ -17,10 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,30 +24,60 @@ public class FriendsService {
     private final UserRepository userRepository;
     private final HolidayRepository holidayRepository;
 
-    public List<ResponseFriend>view(List<User>userList,int count) {
-        List<ResponseFriend> responses = new ArrayList<>();
-
+    public List<FriendResponse> view(List<User> userList) {
+        List<FriendResponse> responses = new ArrayList<>();
         for (User us : userList) {
-            responses.add(FriendMapper.INSTANCE.friendResonse(us,count));
+            responses.add(FriendMapper.INSTANCE.response(us,ValidationType.SUCCESSFUL));
         }
-        return  responses;
+        return responses;
     }
-    public List<ResponseFriend> getAllFriends(){
+
+//    public List<FriendProfileResponse> viewProfile(List<User>userList) {
+//        List<FriendProfileResponse> responses = new ArrayList<>();
+//        for (User us : userList) {
+//            responses.add(FriendMapper.INSTANCE.friendResponse(us));
+//        }
+//        return responses;
+//    }
+
+    public List<FriendResponse> getAllFriends() {
         User user = getAuthenticatedUser();
-        return view(userRepository.getAllFriendByUserId(user.getId()),
-        66);
-    }
-    public List<ResponseFriend> getAllRequestToFriend(){
-        User user = getAuthenticatedUser();
-        return view(userRepository.getAllRequestToFriend(user.getId()),
-                holidayRepository.getAllUserHolidays(user.getId()).size());
+        if (user.getFriends() == null) {
+            throw new UserNotFoundException("Not found your friends");
+        }
+            return view(userRepository.getAllFriendByUserId(user.getId()));
+
     }
 
 
-    public Response requestToFriend(Long friendId) {
+    public List<FriendResponse> getAllRequestToFriend() {
+        User user = getAuthenticatedUser();
+        if (user.getFriends() == null) {
+            throw new UserNotFoundException("Not found your request friend");
+        }
+        return view(userRepository.getAllRequestToFriend(user.getId()));
+    }
+
+    public FriendProfileResponse getFriendProfile(Long friendId){
+        User user = getAuthenticatedUser();
+        if (userRepository.findById(friendId)==null){
+            throw new UserNotFoundException("Not found your friends");
+        }
+        User friend = userRepository.findById(friendId).orElseThrow(
+                () -> new UserNotFoundException("User not found with id: " + friendId));
+        if (user.getFriends().contains(friend)){
+            return FriendMapper.INSTANCE.friendResponse(friend);
+        }
+        else {
+            throw new UserNotFoundException("Not found your friends");
+        }
+
+    }
+
+    public FriendResponse requestToFriend(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User not found with id: "+friendId));
+                () -> new UserNotFoundException("User not found with id: " + friendId));
         if (friend == user) {
             log.info("You can not send a request to yourself ");
             throw new UserExistException("You can not send a request to yourself");
@@ -71,17 +94,16 @@ public class FriendsService {
         return FriendMapper.INSTANCE.response(friend, ValidationType.REQUEST_SUCCESSFULLY_SENT);
     }
 
-    public Response acceptToFriend(Long friendId) {
+    public FriendResponse acceptToFriend(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User not found with id: "+friendId));
-        if (user == friend){
+                () -> new UserNotFoundException("User not found with id: " + friendId));
+        if (user == friend) {
             throw new UserExistException("You can't add yourself as a friend");
         }
         if (!(user.getRequestToFriends().contains(friend))) {
-            throw new UserNotFoundException("not found");
-        }
-        else {
+            throw new UserNotFoundException("Your al ready friends");
+        } else {
             user.addUserToFriend(friend);
             friend.addUserToFriend(user);
             user.getRequestToFriends().remove(friend);
@@ -93,41 +115,32 @@ public class FriendsService {
     public String declineFriendRequest(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User not found with id: "+friendId));
-        if (user == friend){
-            log.info("User not found");
-            throw new UsernameNotFoundException("User not found with id "+friendId);
-        }
-        if (user.getRequestToFriends().contains(friend)) {
+                () -> new UserNotFoundException("User not found with id: " + friendId));
+        if (!(user.getRequestToFriends().contains(friend))) {
+            log.error("Тo friend requests found from user with id: " + friendId);
+            throw new UserNotFoundException("Тo friend requests found from user with id: " + friendId);
+        } else {
             user.getRequestToFriends().remove(friend);
             userRepository.save(user);
-        } else {
-            throw new UsernameNotFoundException("Тo friend requests found from user with id: " + friendId);
+            return "Request to friend successfully refused whit email " + friend.getEmail();
         }
-        log.info("Request to friend successfully refused");
-        return "Request to friend successfully refused whit email "+friend.getEmail();
     }
 
     public String deleteFriend(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UsernameNotFoundException("User not found with id: "+friendId));
-        if (user == friend){
-            throw new UsernameNotFoundException("User not found with id "+friendId);
-        }
-        if (user.getFriends().contains(friend)) {
-            user.getFriends().remove(friend);
-            user.sendRequestToFriend(friend);
-            friend.getFriends().remove(user);
-            userRepository.save(user);
-            return "Successfully deleted friend with email: " + friend.getEmail();
-        } else {
+                () -> new UserNotFoundException("User not found with id: " + friendId));
+        if (!(user.getFriends().contains(friend))) {
             log.error("You have not friend with id: " + friendId);
-            throw new UsernameNotFoundException("You have not friend with id: " + friendId);
+            throw new UserNotFoundException("You have not friend with id: " + friendId);
+        } else {
+            user.getFriends().remove(friend);
+            friend.getFriends().remove(user);
+            user.sendRequestToFriend(friend);
+            userRepository.save(friend);
+            return "Successfully deleted friend with email: " + friend.getEmail();
         }
-
     }
-
 
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
