@@ -14,15 +14,17 @@ import java.util.List;
 @RequestMapping("api/friends")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Auth API", description = "Any user can do add user")
+@Tag(name = "User API", description = "The user can send a request, accept a request, unfriend, list all friends and all friend requests, and can see a friend's profile")
 public class FriendsController {
+
     private final FriendsService friendsService;
 
     @Operation(summary = "Get friend ", description = "User can see friend's profile")
     @GetMapping("/{friendId}")
-    public FriendProfileResponse getFriendProfile(@PathVariable Long friendId){
+    public FriendProfileResponse getFriendProfile(@PathVariable Long friendId) {
         return friendsService.getFriend(friendId);
     }
+
     @Operation(summary = "Get friends ", description = "Get all friends")
     @GetMapping()
     public List<FriendResponse> getAllFriends() {

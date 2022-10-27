@@ -96,11 +96,6 @@ public class User implements UserDetails {
     private List<User> friends = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinTable("request"
-//            name = "request_to_friend",
-//            joinColumns = @JoinColumn(name = "user_to"),
-//            inverseJoinColumns = @JoinColumn(name = "user_from")
-//    )
     @JsonIgnore
     private List<User> requestToFriends = new ArrayList<>();
 
@@ -149,6 +144,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
 }

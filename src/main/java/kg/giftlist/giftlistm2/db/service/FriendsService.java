@@ -7,6 +7,7 @@ import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.exception.UserExistException;
 import kg.giftlist.giftlistm2.exception.UserNotFoundException;
+import kg.giftlist.giftlistm2.mapper.FriendMapper;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class FriendsService {
+
     private final UserRepository userRepository;
     private final HolidayRepository holidayRepository;
 

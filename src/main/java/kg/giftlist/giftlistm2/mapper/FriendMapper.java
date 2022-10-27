@@ -1,4 +1,4 @@
-package kg.giftlist.giftlistm2.db.service;
+package kg.giftlist.giftlistm2.mapper;
 
 import kg.giftlist.giftlistm2.controller.payload.FriendProfileResponse;
 import kg.giftlist.giftlistm2.controller.payload.FriendResponse;
