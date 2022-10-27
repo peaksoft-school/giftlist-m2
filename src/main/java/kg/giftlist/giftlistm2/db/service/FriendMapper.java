@@ -9,8 +9,10 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface FriendMapper {
     FriendMapper INSTANCE = Mappers.getMapper(FriendMapper.class);
-   FriendProfileResponse friendResponse(User user);
-    FriendResponse response(User user, String message);
+
+    FriendProfileResponse friendResponse(User user);
+
+    FriendResponse response(User user, int wishListCount, String message);
 
 
 }
