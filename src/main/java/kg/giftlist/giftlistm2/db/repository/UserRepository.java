@@ -1,6 +1,8 @@
 package kg.giftlist.giftlistm2.db.repository;
 
+import kg.giftlist.giftlistm2.db.entity.Holiday;
 import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.db.entity.WishList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,12 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User getFriendById(Long id);
     @Query("select f from User u join u.requestToFriends f where u.id=?1")
     List<User> getAllRequestToFriend(Long id);
-
-//    @Query("select count(f) from User u join u.wishLists f where f.id=?1")
-//    int getCountWishListByUserId(Long id);
-//    @Query("select count(h) from User u join u.holidays h where u.id=?1")
-//    int getCountHolidayByUserId(Long id);
-
+    @Query("select h from User u join u.wishLists h where u.id=?1")
+    List<WishList> getAllUserWishList(Long userId);
 
 
 }

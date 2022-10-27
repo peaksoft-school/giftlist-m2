@@ -21,8 +21,6 @@ public class FriendsController {
     @Operation(summary = "Get friend ", description = "User can see friend's profile")
     @GetMapping("/{friendId}")
     public FriendProfileResponse getFriendProfile(@PathVariable Long friendId){
-        System.out.println("controller");
-        System.out.println(friendId);
         return friendsService.getFriend(friendId);
     }
     @Operation(summary = "Get friends ", description = "Get all friends")

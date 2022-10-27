@@ -12,7 +12,7 @@ public interface FriendMapper {
 
     FriendProfileResponse friendResponse(User user);
 
-    FriendResponse response(User user, int wishListCount, String message);
+    FriendResponse response(User user, int holidayCount,int wishListCount, String message);
 
 
 }
