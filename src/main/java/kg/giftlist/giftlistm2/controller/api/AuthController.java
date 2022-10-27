@@ -17,7 +17,6 @@ import java.security.Principal;
 @RequestMapping("api/public")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Auth API", description = "Any user can do authentication")
-//@Tag(name = "Auth API",description = "Any user can do registration and login")
 public class AuthController {
 
     private final UserService userService;

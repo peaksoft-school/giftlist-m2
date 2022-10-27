@@ -2,7 +2,6 @@ package kg.giftlist.giftlistm2.validation;
 
 public class ValidationType {
 
-
     public static final String SUCCESSFUL = "Successful";
     public static final String LOGIN_FAILED = "Username or password is not correct";
     public static final String EMPTY_PASSWORD = "Password can not be empty";

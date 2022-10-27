@@ -42,6 +42,7 @@ public class User implements UserDetails {
     private String lastName;
 
     private String image;
+
     @Email
     private String email;
 

@@ -14,5 +14,4 @@ public interface FriendMapper {
 
     FriendResponse response(User user, int holidayCount,int wishListCount, String message);
 
-
 }

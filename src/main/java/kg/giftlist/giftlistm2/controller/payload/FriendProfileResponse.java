@@ -33,4 +33,5 @@ public class FriendProfileResponse {
     private List<WishList> wishLists;
     private List<Charity> charities;
     private List<Holiday> holidays;
+
 }

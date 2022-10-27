@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-    @Query("select u from User u join u.friends f where u.id=?1 ")
+    @Query("select f from User u join u.friends f where u.id=?1 ")
     List<User> getAllFriendByUserId(Long id);
 
     @Query("select f from User u join u.friends f where  f.id=?1")

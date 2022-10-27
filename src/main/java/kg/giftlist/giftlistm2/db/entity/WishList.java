@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WishList {
+
     @Id
     @GeneratedValue(generator = "wish_list_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "wish_list_gen", sequenceName = "wish_list_seq", allocationSize = 1)
