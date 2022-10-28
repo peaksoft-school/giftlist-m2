@@ -1,7 +1,8 @@
-package kg.giftlist.giftlistm2.db.service.impl;
+package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.UserInfoRequest;
 import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
+
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.mapper.UserInfoEditMapper;
@@ -18,7 +19,7 @@ import org.webjars.NotFoundException;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class UserInfoServiceImpl {
+public class UserInfoService {
 
     private final UserInfoEditMapper userInfoEditMapper;
     private final UserInfoViewMapper userInfoViewMapper;
@@ -57,7 +58,7 @@ public class UserInfoServiceImpl {
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).orElseThrow(() -> new UsernameNotFoundException("Username not found "));
+        return userRepository.findByEmail(login);
     }
 
     public User findByUserInfoId(Long userInfoId) {

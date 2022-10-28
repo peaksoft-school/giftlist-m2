@@ -6,8 +6,8 @@ import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.UserChangePasswordRequest;
 import kg.giftlist.giftlistm2.controller.payload.UserInfoRequest;
 import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
-import kg.giftlist.giftlistm2.db.service.impl.UserInfoServiceImpl;
-import kg.giftlist.giftlistm2.db.service.impl.UserServiceImpl;
+import kg.giftlist.giftlistm2.db.service.UserInfoService;
+import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 @Tag(name = "User API", description = "Users with role  \"User\" can create, update profile")
 public class UserProfileController {
 
-    private final UserInfoServiceImpl userInfoService;
-    private final UserServiceImpl userService;
+    private final UserInfoService userInfoService;
+    private final UserService userService;
 
     @Operation(summary = "Update user profile information ", description = "User can update profile information")
     @PostMapping("/edit/{userInfoId}")
