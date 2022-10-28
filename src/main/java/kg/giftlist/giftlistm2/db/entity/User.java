@@ -100,7 +100,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<User> requestToFriends = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
     @JsonIgnore
     private List<Notification> notifications = new ArrayList<>();
 

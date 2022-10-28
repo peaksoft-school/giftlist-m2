@@ -15,10 +15,22 @@ import java.time.LocalDate;
 public class NotificationService {
 
     public Notification sendNotification(User user,Long friendId){
+
         Notification notification = new Notification();
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
         notification.setReceiverId(friendId);
+        notification.setNotificationStatus(NotificationStatus.REQUEST_TO_FRIEND);
+        return notification;
+
+    }
+
+    public Notification acceptSendNotification(User user,Long friendId){
+        Notification notification = new Notification();
+        notification.setCreated(LocalDate.now());
+        notification.setUser(user);
+        notification.setReceiverId(friendId);
+        notification.setNotificationStatus(NotificationStatus.ACCEPT_YOUR_REQUEST);
         return notification;
     }
 

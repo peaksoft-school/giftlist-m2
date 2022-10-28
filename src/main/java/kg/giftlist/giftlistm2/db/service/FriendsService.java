@@ -100,6 +100,8 @@ public class FriendsService {
             friend.addUserToFriend(user);
             user.getRequestToFriends().remove(friend);
             userRepository.save(friend);
+            friend.addNotification(notificationService.acceptSendNotification(user,friendId));
+            notificationRepository.saveAll(friend.getNotifications());
         }
         return FriendMapper.INSTANCE.response(friend, holidayRepository.getAllUserHolidays(friendId).size(),
                 userRepository.getAllUserWishList(friendId).size(), ValidationType.ACCEPTED);
