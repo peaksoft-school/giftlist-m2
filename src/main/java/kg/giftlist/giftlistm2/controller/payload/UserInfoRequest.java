@@ -22,4 +22,5 @@ public class UserInfoRequest {
     private List<ClothingSize> clothingSize;
     private String hobby;
     private List<ShoeSize> shoeSize;
+
 }

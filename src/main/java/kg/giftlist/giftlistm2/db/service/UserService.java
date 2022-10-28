@@ -123,7 +123,6 @@ public class UserService {
         } else {
             user.setPassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
             log.info("Password successfully changed");
-
             AuthResponse authResponse = new AuthResponse();
             authResponse.setId(user.getId());
             authResponse.setFirstName(user.getFirstName());
@@ -139,5 +138,6 @@ public class UserService {
         String login = authentication.getName();
         return userRepository.findByEmail(login);
     }
+
 }
 

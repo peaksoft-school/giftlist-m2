@@ -25,4 +25,5 @@ public class UserInfoResponse {
     private List<ShoeSize> shoeSize;
     private String hobby;
     private String importantNote;
+
 }
