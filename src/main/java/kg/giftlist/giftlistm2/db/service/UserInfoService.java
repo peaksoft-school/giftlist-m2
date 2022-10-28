@@ -5,13 +5,13 @@ import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
 
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
+import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import kg.giftlist.giftlistm2.mapper.UserInfoEditMapper;
 import kg.giftlist.giftlistm2.mapper.UserInfoViewMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -27,6 +27,9 @@ public class UserInfoService {
 
     @Transactional
     public UserInfoResponse update(Long userInfoId, UserInfoRequest userInfoRequest) {
+        if (userRepository.findById(userInfoId).isEmpty()){
+            throw new EmptyValueException("There is no any user with id " + userInfoId);
+        }
         User user = getAuthenticatedUser();
         String currentUserFirstName = user.getFirstName();
         String newUserFirstName = userInfoRequest.getFirstName();
