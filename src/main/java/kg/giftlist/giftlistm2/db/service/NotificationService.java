@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.NotificationResponse;
+import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.entity.Notification;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
@@ -61,6 +62,16 @@ public class NotificationService {
         notification.setUser(user);
         notification.setReceiverId(friendId);
         notification.setNotificationStatus(NotificationStatus.ACCEPT_YOUR_REQUEST);
+        return notification;
+    }
+
+    public Notification bookedCharity(User user, Long friendId, String giftName){
+        Notification notification = new Notification();
+        notification.setCreated(LocalDate.now());
+        notification.setUser(user);
+        notification.setReceiverId(friendId);
+        notification.setGiftName(giftName);
+        notification.setNotificationStatus(NotificationStatus.BOOKED);
         return notification;
     }
 

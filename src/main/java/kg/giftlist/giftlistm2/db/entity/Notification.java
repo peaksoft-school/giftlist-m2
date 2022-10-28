@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.giftlist.giftlistm2.enums.NotificationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,8 +25,16 @@ public class Notification {
     private LocalDate created;
     @Enumerated(EnumType.STRING)
     private NotificationStatus notificationStatus;
+
+    private String giftName;
     @ManyToOne
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "charity_id")
+    @JsonIgnore
+    private Charity charity;
 
-}
+    }
+
+
