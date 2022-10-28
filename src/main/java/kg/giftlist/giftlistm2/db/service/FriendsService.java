@@ -109,7 +109,7 @@ public class FriendsService {
         } else {
             user.getRequestToFriends().remove(friend);
             userRepository.save(user);
-            return "Request to friend successfully refused whit email " + friend.getEmail();
+            return "Friend request successfully denied";
         }
     }
 

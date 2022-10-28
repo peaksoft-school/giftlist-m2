@@ -55,7 +55,7 @@ public class FriendsController {
         return friendsService.declineFriendRequest(id);
     }
 
-    @Operation(summary = "Delete friend ", description = "User can remove user from friends")
+    @Operation(summary = "Delete friend ", description = "User can delete user from friends")
     @DeleteMapping("delete/{friendId}")
     public String deleteFriend(@PathVariable Long friendId) {
         return friendsService.deleteFriend(friendId);
