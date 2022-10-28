@@ -4,6 +4,7 @@ import kg.giftlist.giftlistm2.controller.payload.FriendProfileResponse;
 import kg.giftlist.giftlistm2.controller.payload.FriendResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
+import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.exception.UserExistException;
 import kg.giftlist.giftlistm2.exception.UserNotFoundException;
@@ -25,6 +26,8 @@ public class FriendsService {
 
     private final UserRepository userRepository;
     private final HolidayRepository holidayRepository;
+    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     public List<FriendResponse> getAllFriends() {
         User user = getAuthenticatedUser();
@@ -75,6 +78,9 @@ public class FriendsService {
         }
         friend.sendRequestToFriend(user);
         userRepository.save(friend);
+        friend.addNotification(notificationService.sendNotification(user,friendId));
+        notificationRepository.saveAll(friend.getNotifications());
+
         log.info("Request to friend successfully send");
         return FriendMapper.INSTANCE.response(friend, holidayRepository.getAllUserHolidays(friendId).size(),
                 userRepository.getAllUserWishList(friendId).size(), ValidationType.REQUEST_SUCCESSFULLY_SENT);

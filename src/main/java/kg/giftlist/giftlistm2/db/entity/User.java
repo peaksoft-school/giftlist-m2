@@ -100,6 +100,10 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<User> requestToFriends = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Notification> notifications = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>();
@@ -119,6 +123,9 @@ public class User implements UserDetails {
             friends = new ArrayList<>();
         }
         friends.add(user);
+    }
+    public void addNotification(Notification notification){
+        notifications.add(notification);
     }
 
     @Override
