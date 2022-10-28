@@ -1,0 +1,9 @@
+package kg.giftlist.giftlistm2.exception;
+
+public class UserExistException extends RuntimeException{
+
+    public UserExistException(String message) {
+        super(message);
+    }
+
+}

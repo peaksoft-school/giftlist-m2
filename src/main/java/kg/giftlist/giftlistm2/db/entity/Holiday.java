@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Holiday {
+
     @Id
     @GeneratedValue(generator = "holiday_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "holiday_gen", sequenceName = "holiday_seq", allocationSize = 1)
@@ -33,10 +35,12 @@ public class Holiday {
     @JoinTable(name = "wish_list_holiday",
             joinColumns = @JoinColumn(name = "holiday_id"),
             inverseJoinColumns = @JoinColumn(name = "wish_list_id"))
+    @JsonIgnore
     private List<WishList> wishLists;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
 }
