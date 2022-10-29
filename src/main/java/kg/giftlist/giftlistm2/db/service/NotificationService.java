@@ -30,13 +30,14 @@ public class NotificationService {
 
     public List<NotificationResponse> getAllNotification(){
         User user = getAuthenticatedUser();
-        if (user.getNotifications().isEmpty()){
+        List<Notification> notifications = notificationRepository.getNotificationByUserId(user.getId());
+        if (notifications.isEmpty()){
             log.error("Not found notification");
             throw new UserNotFoundException("Not found notification");
         }
-        return view(notificationRepository.getNotificationByUserId(user.getId()));
-
+        return view(notifications);
     }
+
     public List<NotificationResponse> view(List<Notification> notifications) {
         List<NotificationResponse> responses = new ArrayList<>();
         for (Notification notification : notifications) {
@@ -65,12 +66,12 @@ public class NotificationService {
         return notification;
     }
 
-    public Notification bookedCharity(User user, Long friendId, String giftName){
+    public Notification bookedCharity(User user, Long friendId, Charity charity){
         Notification notification = new Notification();
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
         notification.setReceiverId(friendId);
-        notification.setGiftName(giftName);
+        notification.setGiftName(charity.getGiftName());
         notification.setNotificationStatus(NotificationStatus.BOOKED);
         return notification;
     }

@@ -19,6 +19,7 @@ public class NotificationMapper {
         NotificationResponse notificationResponse = new NotificationResponse();
         notificationResponse.setFirstName(notification.getUser().getFirstName());
         notificationResponse.setLastName(notification.getUser().getLastName());
+        notificationResponse.setGiftName(notification.getGiftName());
         notificationResponse.setNotificationStatus(notification.getNotificationStatus());
         notificationResponse.setCreated(LocalDate.now());
         return notificationResponse;

@@ -45,7 +45,7 @@ public class CharityService {
             bookingRepository.save(booking1);
             charity.setCharityStatus(CharityStatus.BOOKED);
             charityRepository.save(charity);
-            charity.addNotification(notificationService.bookedCharity(user,charity.getUser().getId(),charity.getGiftName()));
+            charity.addNotification(notificationService.bookedCharity(user,charity.getUser().getId(),charity));
             notificationRepository.saveAll(charity.getNotifications());
             return "You have successfully booked this charity";
         } else {
