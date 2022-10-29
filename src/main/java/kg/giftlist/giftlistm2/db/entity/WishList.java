@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import kg.giftlist.giftlistm2.enums.WishListStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,6 +44,9 @@ public class WishList {
             inverseJoinColumns = @JoinColumn(name = "holiday_id"))
     @JsonIgnore
     private List<Holiday> holidays;
+
+    @Enumerated(EnumType.STRING)
+    private WishListStatus wishListStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
