@@ -2,7 +2,6 @@ package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.UserInfoRequest;
 import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
-
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
@@ -27,7 +26,7 @@ public class UserInfoService {
 
     @Transactional
     public UserInfoResponse update(Long userInfoId, UserInfoRequest userInfoRequest) {
-        if (userRepository.findById(userInfoId).isEmpty()){
+        if (userRepository.findById(userInfoId).isEmpty()) {
             throw new EmptyValueException("There is no any user with id " + userInfoId);
         }
         User user = getAuthenticatedUser();
@@ -44,9 +43,10 @@ public class UserInfoService {
         user.setLastName(user.getLastName());
         String currentEmail = user.getEmail();
         String newEmail = userInfoRequest.getEmail();
-        if (!currentEmail.equals(newEmail) ) {
+        if (!currentEmail.equals(newEmail)) {
             user.setImage(newEmail);
         }
+
         User user1 = findByUserInfoId(userInfoId);
         userInfoEditMapper.update(user1, userInfoRequest);
         log.info("User info with id: {} successfully updated in db", user1.getId());
@@ -70,4 +70,5 @@ public class UserInfoService {
                         String.format("userInfo with id = %s does not exists", userInfoId)
                 ));
     }
+
 }

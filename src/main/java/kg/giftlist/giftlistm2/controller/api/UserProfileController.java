@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("api/users/profile")
+@RequestMapping("api/profile")
 @RequiredArgsConstructor
 @CrossOrigin
 @PreAuthorize("hasAnyAuthority('USER')")
@@ -28,19 +28,19 @@ public class UserProfileController {
     private final UserService userService;
 
     @Operation(summary = "Update user profile information ", description = "User can update profile information")
-    @PostMapping("/edit/{userInfoId}")
-    public UserInfoResponse updateUserProfile(@PathVariable Long userInfoId, @RequestBody UserInfoRequest userInfoRequest) {
-        return userInfoService.update(userInfoId, userInfoRequest);
+    @PatchMapping("/customers/{id}")
+    public UserInfoResponse updateUserProfile(@PathVariable Long id, @RequestBody UserInfoRequest userInfoRequest) {
+        return userInfoService.update(id, userInfoRequest);
     }
 
     @Operation(summary = "Get user profile ", description = "Find by id user profile")
-    @GetMapping("/me")
+    @GetMapping("/customers")
     public UserInfoResponse getUserProfile() {
         return userInfoService.findById();
     }
 
     @Operation(summary = "Change password ", description = "User can change password")
-    @PostMapping("/password")
+    @PostMapping("/customers")
     public AuthResponse changePassword(@RequestBody UserChangePasswordRequest request) {
         return userService.changeUserPassword(request);
     }

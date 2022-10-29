@@ -1,6 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,13 +17,12 @@ import javax.persistence.*;
 public class ClothingSize {
 
     @Id
-    @GeneratedValue(generator = "category_gen", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "category_gen", sequenceName = "category_seq", allocationSize = 1)
     private Long id;
 
-    private String clothingSize;
+    private String size;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
