@@ -14,30 +14,37 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Notification API", description = "User can")
 public class NotificationController {
+
     private final NotificationService notificationService;
 
     @GetMapping
-    public List<NotificationResponse> getAllNotification(){
+    public List<NotificationResponse> getAllNotification() {
         return notificationService.getAllNotification();
     }
 
     @GetMapping("isRead")
-    public List<NotificationResponse> getAllIsReadNotification(){
+    public List<NotificationResponse> getAllIsReadNotification() {
         return notificationService.getAllIsReadNotification();
     }
 
+    @GetMapping("unRead")
+    public List<NotificationResponse> getAllUnReadNotification() {
+        return notificationService.getAllUnReadNotification();
+    }
+
     @GetMapping("{id}")
-    public NotificationResponse getNotificationById(@PathVariable Long id){
+    public NotificationResponse getNotificationById(@PathVariable Long id) {
         return notificationService.getNotificationById(id);
     }
 
     @DeleteMapping
-    public String deleteAllNotification(){
+    public String deleteAllNotification() {
         return notificationService.deleteAllNotification();
     }
 
     @DeleteMapping("{id}")
-    public String deleteNotificationById(@PathVariable Long id){
+    public String deleteNotificationById(@PathVariable Long id) {
         return notificationService.deleteNotificationById(id);
     }
+
 }
