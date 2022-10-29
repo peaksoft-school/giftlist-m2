@@ -4,10 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.NotificationResponse;
 import kg.giftlist.giftlistm2.db.service.NotificationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +19,14 @@ public class NotificationController {
     @GetMapping
     public List<NotificationResponse> getAllNotification(){
         return notificationService.getAllNotification();
+    }
+    @DeleteMapping
+    public String deleteAllNotification(){
+        return notificationService.deleteAllNotification();
+    }
+
+    @DeleteMapping
+    public String deleteNotificationById(@PathVariable Long id){
+        return notificationService.deleteNotificationById(id);
     }
 }

@@ -7,6 +7,7 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.enums.NotificationStatus;
+import kg.giftlist.giftlistm2.exception.NotificationNotFoundException;
 import kg.giftlist.giftlistm2.exception.UserNotFoundException;
 import kg.giftlist.giftlistm2.mapper.NotificationMapper;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class NotificationService {
         List<Notification> notifications = notificationRepository.getNotificationByUserId(user.getId());
         if (notifications.isEmpty()){
             log.error("Not found notification");
-            throw new UserNotFoundException("Not found notification");
+            throw new NotificationNotFoundException("Not found notification");
         }
         return view(notifications);
     }
@@ -74,6 +75,26 @@ public class NotificationService {
         notification.setGiftName(charity.getGiftName());
         notification.setNotificationStatus(NotificationStatus.BOOKED);
         return notification;
+    }
+    public String deleteAllNotification(){
+        User user = getAuthenticatedUser();
+        List<Notification> notifications = notificationRepository.getNotificationByUserId(user.getId());
+        if (notifications.isEmpty()){
+            log.error("Not found notification");
+            throw new NotificationNotFoundException("Not found notification");
+        }
+        notificationRepository.deleteAll(notifications);
+        return "Successfully deleted all notifications";
+    }
+
+    public String deleteNotificationById(Long id){
+        User user = getAuthenticatedUser();
+        Notification notification = notificationRepository.findById(id).get();
+        if (!(user.getNotifications().contains(notification))){
+            throw new NotificationNotFoundException("Not found Notification with id: "+id);
+        }
+        notificationRepository.deleteById(id);
+        return "Successfully deleted notification with id: "+id;
     }
 
     public User getAuthenticatedUser() {
