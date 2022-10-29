@@ -17,6 +17,7 @@ public class NotificationMapper {
             throw new UserNotFoundException("Not found notification user email"+notification.getUser().getEmail());
         }
         NotificationResponse notificationResponse = new NotificationResponse();
+        notificationResponse.setId(notification.getId());
         notificationResponse.setFirstName(notification.getUser().getFirstName());
         notificationResponse.setLastName(notification.getUser().getLastName());
         notificationResponse.setGiftName(notification.getGiftName());

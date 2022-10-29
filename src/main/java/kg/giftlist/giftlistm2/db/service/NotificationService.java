@@ -8,7 +8,6 @@ import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.enums.NotificationStatus;
 import kg.giftlist.giftlistm2.exception.NotificationNotFoundException;
-import kg.giftlist.giftlistm2.exception.UserNotFoundException;
 import kg.giftlist.giftlistm2.mapper.NotificationMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class NotificationService {
+
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
 
-
     public List<NotificationResponse> getAllNotification(){
         User user = getAuthenticatedUser();
-        List<Notification> notifications = notificationRepository.getNotificationByUserId(user.getId());
+        List<Notification> notifications = notificationRepository.getAllNotificationByUserId(user.getId());
         if (notifications.isEmpty()){
             log.error("Not found notification");
             throw new NotificationNotFoundException("Not found notification");
@@ -78,7 +77,7 @@ public class NotificationService {
     }
     public String deleteAllNotification(){
         User user = getAuthenticatedUser();
-        List<Notification> notifications = notificationRepository.getNotificationByUserId(user.getId());
+        List<Notification> notifications = notificationRepository.getAllNotificationByUserId(user.getId());
         if (notifications.isEmpty()){
             log.error("Not found notification");
             throw new NotificationNotFoundException("Not found notification");
@@ -89,11 +88,11 @@ public class NotificationService {
 
     public String deleteNotificationById(Long id){
         User user = getAuthenticatedUser();
-        Notification notification = notificationRepository.findById(id).get();
-        if (!(user.getNotifications().contains(notification))){
+        Notification notification = notificationRepository.getNotificationByUserId(user.getId());
+        if (notification == null){
             throw new NotificationNotFoundException("Not found Notification with id: "+id);
         }
-        notificationRepository.deleteById(id);
+        notificationRepository.delete(notification);
         return "Successfully deleted notification with id: "+id;
     }
 

@@ -25,7 +25,7 @@ public class NotificationController {
         return notificationService.deleteAllNotification();
     }
 
-    @DeleteMapping
+    @DeleteMapping("{id}")
     public String deleteNotificationById(@PathVariable Long id){
         return notificationService.deleteNotificationById(id);
     }

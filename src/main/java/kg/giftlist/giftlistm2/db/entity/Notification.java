@@ -31,7 +31,6 @@ public class Notification {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "charity_id")
     @JsonIgnore
     private Charity charity;
 
