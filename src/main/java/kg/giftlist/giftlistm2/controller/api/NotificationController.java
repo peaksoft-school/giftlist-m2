@@ -20,6 +20,12 @@ public class NotificationController {
     public List<NotificationResponse> getAllNotification(){
         return notificationService.getAllNotification();
     }
+
+    @GetMapping("{id}")
+    public NotificationResponse getNotificationById(@PathVariable Long id){
+        return notificationService.getNotificationById(id);
+    }
+
     @DeleteMapping
     public String deleteAllNotification(){
         return notificationService.deleteAllNotification();

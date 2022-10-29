@@ -23,6 +23,7 @@ public class NotificationMapper {
         notificationResponse.setGiftName(notification.getGiftName());
         notificationResponse.setNotificationStatus(notification.getNotificationStatus());
         notificationResponse.setCreated(LocalDate.now());
+        notificationResponse.setRead(notification.isRead());
         return notificationResponse;
     }
 

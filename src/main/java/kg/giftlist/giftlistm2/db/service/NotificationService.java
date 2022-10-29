@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,19 @@ public class NotificationService {
             log.error("Not found notification");
             throw new NotificationNotFoundException("Not found notification");
         }
+       notifications.stream().forEach(x->x.setRead(true));
+       notificationRepository.saveAll(notifications);
         return view(notifications);
+    }
+
+
+    public NotificationResponse getNotificationById(Long id){
+        User user = getAuthenticatedUser();
+        Notification notification = notificationRepository.getNotificationByUserId(user.getId());
+        if (notification == null ){
+            throw new NotificationNotFoundException("Not found Notification with id: "+id);
+        }
+        return notificationMapper.notificationResponse(notification);
     }
 
     public List<NotificationResponse> view(List<Notification> notifications) {
@@ -47,14 +60,13 @@ public class NotificationService {
     }
 
     public Notification sendNotification(User user,Long friendId){
-
         Notification notification = new Notification();
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
         notification.setReceiverId(friendId);
         notification.setNotificationStatus(NotificationStatus.REQUEST_TO_FRIEND);
+        log.info("Notification status: "+NotificationStatus.REQUEST_TO_FRIEND);
         return notification;
-
     }
 
     public Notification acceptSendNotification(User user,Long friendId){
@@ -63,6 +75,7 @@ public class NotificationService {
         notification.setUser(user);
         notification.setReceiverId(friendId);
         notification.setNotificationStatus(NotificationStatus.ACCEPT_YOUR_REQUEST);
+        log.info("Notification status: "+NotificationStatus.ACCEPT_YOUR_REQUEST);
         return notification;
     }
 
@@ -75,6 +88,7 @@ public class NotificationService {
         notification.setNotificationStatus(NotificationStatus.BOOKED);
         return notification;
     }
+
     public String deleteAllNotification(){
         User user = getAuthenticatedUser();
         List<Notification> notifications = notificationRepository.getAllNotificationByUserId(user.getId());
@@ -83,6 +97,7 @@ public class NotificationService {
             throw new NotificationNotFoundException("Not found notification");
         }
         notificationRepository.deleteAll(notifications);
+        log.info("Successfully deleted all notification");
         return "Successfully deleted all notifications";
     }
 
@@ -90,15 +105,18 @@ public class NotificationService {
         User user = getAuthenticatedUser();
         Notification notification = notificationRepository.getNotificationByUserId(user.getId());
         if (notification == null){
+            log.error("Not found notification with id: "+id);
             throw new NotificationNotFoundException("Not found Notification with id: "+id);
         }
-        notificationRepository.delete(notification);
+        notificationRepository.deleteById(id);
+        log.info("Successfully deleted notification with id: "+id);
         return "Successfully deleted notification with id: "+id;
     }
 
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
+        log.info("User: "+ authentication.getName());
         return userRepository.findByEmail(login);
     }
 

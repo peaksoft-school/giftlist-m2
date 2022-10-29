@@ -16,5 +16,6 @@ public class NotificationResponse {
     private NotificationStatus notificationStatus;
     private String giftName;
     private LocalDate created;
+    private boolean read;
 
 }

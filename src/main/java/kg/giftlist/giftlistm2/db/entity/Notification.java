@@ -21,19 +21,25 @@ public class Notification {
     @GeneratedValue(generator = "notification_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1)
     private Long id;
+
     private Long receiverId;
+
     private LocalDate created;
+
     @Enumerated(EnumType.STRING)
     private NotificationStatus notificationStatus;
 
     private String giftName;
+
+    private boolean read;
     @ManyToOne
     private User user;
-
     @ManyToOne
     @JsonIgnore
     private Charity charity;
-
+//    public void isRead(boolean read){
+//        this.read=read;
+//    }
     }
 
 
