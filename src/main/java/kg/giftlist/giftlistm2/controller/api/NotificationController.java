@@ -21,6 +21,11 @@ public class NotificationController {
         return notificationService.getAllNotification();
     }
 
+    @GetMapping("isRead")
+    public List<NotificationResponse> getAllIsReadNotification(){
+        return notificationService.getAllIsReadNotification();
+    }
+
     @GetMapping("{id}")
     public NotificationResponse getNotificationById(@PathVariable Long id){
         return notificationService.getNotificationById(id);

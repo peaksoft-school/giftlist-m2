@@ -41,6 +41,14 @@ public class NotificationService {
         return view(notifications);
     }
 
+    public List<NotificationResponse> getAllIsReadNotification(){
+        User user = getAuthenticatedUser();
+        List<Notification> notifications = notificationRepository.getAllIsReadNotification(user.getId());
+        if (notifications.isEmpty()){
+            throw new NotificationNotFoundException("Read notification not found");
+        }
+        return view(notifications);
+    }
 
     public NotificationResponse getNotificationById(Long id){
         User user = getAuthenticatedUser();
@@ -48,6 +56,8 @@ public class NotificationService {
         if (notification == null ){
             throw new NotificationNotFoundException("Not found Notification with id: "+id);
         }
+        notification.setRead(true);
+        notificationRepository.save(notification);
         return notificationMapper.notificationResponse(notification);
     }
 
