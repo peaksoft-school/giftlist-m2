@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "booking")
@@ -30,5 +32,13 @@ public class Booking {
     @JoinColumn(name = "charity_id")
     @JsonIgnore
     private Charity charity;
+
+    @OneToOne
+    @JoinColumn(name = "wish_list_id")
+    @JsonIgnore
+    private WishList wishList;
+
+    @CreatedDate
+    private LocalDate created;
 
 }
