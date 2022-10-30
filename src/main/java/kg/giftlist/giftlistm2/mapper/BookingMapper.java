@@ -25,4 +25,18 @@ public class BookingMapper {
         return bookingResponse;
     }
 
+    public BookingResponse bookingWishListResponse(Booking booking) {
+        if (booking == null) {
+            throw new BookingNotFoundException("Not found booking");
+        }
+        BookingResponse bookingResponse = new BookingResponse();
+        bookingResponse.setId(booking.getId());
+        bookingResponse.setFirstName(booking.getCharity().getUser().getFirstName());
+        bookingResponse.setLastName(booking.getCharity().getUser().getLastName());
+        bookingResponse.setGitName(booking.getCharity().getGiftName());
+        bookingResponse.setCondition(booking.getCharity().getCondition());
+        bookingResponse.setCreated(booking.getCharity().getCreatedDate());
+        return bookingResponse;
+    }
+
 }
