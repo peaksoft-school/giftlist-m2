@@ -1,12 +1,10 @@
 package kg.giftlist.giftlistm2.controller.payload;
 
-import kg.giftlist.giftlistm2.db.entity.Holiday;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Setter
 @Getter
@@ -14,8 +12,11 @@ public class WishListResponse {
 
     private Long id;
     private String giftName;
+    private Long userId;
+    private String firstName;
+    private String lastName;
     private String link;
-    private List<Holiday> holidays;
+    private String holidayName;
     private LocalDate holidayDate;
     private String description;
     private String image;

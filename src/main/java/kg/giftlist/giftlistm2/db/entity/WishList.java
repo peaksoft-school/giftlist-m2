@@ -38,12 +38,10 @@ public class WishList {
 
     private String image;
 
-    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinTable(name = "wish_list_holiday",
-            joinColumns = @JoinColumn(name = "wish_list_id"),
-            inverseJoinColumns = @JoinColumn(name = "holiday_id"))
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(name = "holiday_id")
     @JsonIgnore
-    private List<Holiday> holidays;
+    private Holiday holidays;
 
     @Enumerated(EnumType.STRING)
     private WishListStatus wishListStatus;

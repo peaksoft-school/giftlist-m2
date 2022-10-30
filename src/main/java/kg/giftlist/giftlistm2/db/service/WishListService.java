@@ -2,11 +2,17 @@ package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.WishListRequest;
 import kg.giftlist.giftlistm2.controller.payload.WishListResponse;
+import kg.giftlist.giftlistm2.db.entity.Charity;
+import kg.giftlist.giftlistm2.db.entity.Holiday;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.entity.WishList;
+import kg.giftlist.giftlistm2.db.repository.BookingRepository;
+import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.repository.WishListRepository;
+import kg.giftlist.giftlistm2.enums.CharityStatus;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
+import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,14 +27,22 @@ public class WishListService {
 
     private final UserRepository userRepository;
     private final WishListRepository wishListRepository;
+    private final HolidayRepository holidayRepository;
+    private final BookingRepository bookingRepository;
 
     public WishListResponse create(WishListRequest request) {
         User user = getAuthenticatedUser();
+        Holiday holiday = holidayRepository.findById(request.getHolidayId()).get();
         WishList wishList = new WishList();
-        wishList.setGiftName(request.getGiftName());
+        if (request.getGiftName().isEmpty()) {
+            throw new EmptyValueException("Wish list name must not be empty!");
+        } else {
+            wishList.setGiftName(request.getGiftName());
+        }
+        wishList.setUser(user);
         wishList.setLink(request.getLink());
         wishList.setImage(request.getImage());
-        wishList.setHolidays(request.getHolidays());
+        wishList.setHolidays(holiday);
         wishList.setHolidayDate(request.getHolidayDate());
         wishList.setDescription(request.getDescription());
         wishList.setWishListStatus(WishListStatus.NOT_BOOKED);
@@ -38,34 +52,70 @@ public class WishListService {
 
     public WishListResponse update(Long id, WishListRequest request) {
         User user = getAuthenticatedUser();
+        if (wishListRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any wish list with id " + id);
+        }
         WishList wishList = wishListRepository.findById(id).get();
-        wishList.setGiftName(request.getGiftName());
-        wishList.setLink(request.getLink());
-        wishList.setImage(request.getImage());
-        wishList.setHolidays(request.getHolidays());
-        wishList.setHolidayDate(request.getHolidayDate());
-        wishList.setDescription(request.getDescription());
-        wishList.setWishListStatus(WishListStatus.NOT_BOOKED);
-        wishListRepository.save(wishList);
-        return mapToResponse(wishList);
+        if (user.getWishLists().contains(wishList)) {
+            Holiday holiday = holidayRepository.findById(request.getHolidayId()).get();
+            if (request.getGiftName().isEmpty()) {
+                throw new EmptyValueException("Wish list name must not be empty!");
+            }
+            wishList.setGiftName(request.getGiftName());
+            wishList.setLink(request.getLink());
+            wishList.setImage(request.getImage());
+            wishList.setHolidays(holiday);
+            wishList.setHolidayDate(request.getHolidayDate());
+            wishList.setDescription(request.getDescription());
+            if (bookingRepository.findById(wishList.getId()).isPresent()) {
+                wishList.setWishListStatus(WishListStatus.BOOKED);
+            }
+            if (bookingRepository.findById(wishList.getId()).isEmpty()) {
+                wishList.setWishListStatus(WishListStatus.NOT_BOOKED);
+            }
+            wishListRepository.save(wishList);
+            return mapToResponse(wishList);
+        } else {
+            throw new EmptyValueException("You have no any wish list with id " + id);
+        }
     }
 
     public String delete(Long id) {
         User user = getAuthenticatedUser();
+        if (wishListRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any wish list with id " + id);
+        }
         WishList wishList = wishListRepository.findById(id).get();
-        wishListRepository.deleteById(wishList.getId());
-        return "Wish list successfully was deleted!";
+        if (user.getWishLists().isEmpty()) {
+            throw new EmptyValueException("You have no any wish list with id " + id);
+        }
+        if (user.getWishLists().contains(wishList)) {
+            wishListRepository.deleteById(wishList.getId());
+            return "Wish list successfully was deleted!";
+        } else {
+            throw new EmptyValueException("You have no any wish list with id " + id);
+        }
     }
 
     public WishListResponse getWishListById(Long id) {
         User user = getAuthenticatedUser();
+        if (wishListRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any wish list with id " + id);
+        }
         WishList wishList = wishListRepository.findById(id).get();
-        return mapToResponse(wishList);
+        if (user.getWishLists().contains(wishList)) {
+            return mapToResponse(wishList);
+        } else {
+            throw new EmptyValueException("You have no any wish list with id " + id);
+        }
     }
 
-    public List <WishListResponse> getAllWishLists() {
+    public List<WishListResponse> getAllWishLists() {
         User user = getAuthenticatedUser();
-        List <WishList> wishLists = wishListRepository.getWishListByUserId(user.getId());
+        if (user.getWishLists().isEmpty()) {
+            throw new EmptyValueException("There are no any wish lists");
+        }
+        List<WishList> wishLists = wishListRepository.getWishListByUserId(user.getId());
         return view(wishLists);
     }
 
@@ -76,9 +126,12 @@ public class WishListService {
         WishListResponse wishListResponse = new WishListResponse();
         wishListResponse.setId(wishList.getId());
         wishListResponse.setGiftName(wishList.getGiftName());
+        wishListResponse.setUserId(wishList.getUser().getId());
+        wishListResponse.setFirstName(wishList.getUser().getFirstName());
+        wishListResponse.setLastName(wishList.getUser().getLastName());
         wishListResponse.setLink(wishList.getLink());
         wishListResponse.setImage(wishList.getImage());
-        wishListResponse.setHolidays(wishList.getHolidays());
+        wishListResponse.setHolidayName(wishList.getHolidays().getName());
         wishListResponse.setHolidayDate(wishList.getHolidayDate());
         wishListResponse.setDescription(wishList.getDescription());
         wishListResponse.setWishListStatus(wishList.getWishListStatus());
