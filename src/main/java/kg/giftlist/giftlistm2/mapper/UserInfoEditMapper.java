@@ -26,6 +26,7 @@ public class UserInfoEditMapper {
             shoeSize.stream().forEach(a->a.setUser(user));
         }
         else user.setShoeSize(userInfoRequest.getShoeSize());
+        shoeSize.stream().forEach(a->a.setUser(user));
         user.setHobbies(userInfoRequest.getHobby());
     }
 
