@@ -44,6 +44,17 @@ public class BookingService {
         return view(booking);
     }
 
+    public BookingResponse getBookingById(Long id){
+        User  user = getAuthenticatedUser();
+        Booking booking = bookingRepository.findById(id).orElseThrow( ()->new BookingNotFoundException("Not found"));
+        if (user.getBookings().contains(booking)){
+            return bookingMapper.bookingResponse(booking);
+        }
+        else {
+            throw new BookingNotFoundException("Booking not found in user id: "+user.getId());
+        }
+    }
+
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
