@@ -52,4 +52,10 @@ public class WishListController {
         return wishListService.delete(id);
     }
 
+//    @Operation(summary = "Wish list booking", description = "Booking a wish list")
+//    @PostMapping("{id}")
+//    public String booking(@PathVariable Long id) {
+//        return wishListService.book(id);
+//    }
+
 }

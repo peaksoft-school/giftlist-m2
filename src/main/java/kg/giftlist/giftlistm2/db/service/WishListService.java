@@ -2,16 +2,13 @@ package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.WishListRequest;
 import kg.giftlist.giftlistm2.controller.payload.WishListResponse;
-import kg.giftlist.giftlistm2.db.entity.Charity;
-import kg.giftlist.giftlistm2.db.entity.Holiday;
-import kg.giftlist.giftlistm2.db.entity.User;
-import kg.giftlist.giftlistm2.db.entity.WishList;
+import kg.giftlist.giftlistm2.db.entity.*;
 import kg.giftlist.giftlistm2.db.repository.BookingRepository;
 import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.repository.WishListRepository;
-import kg.giftlist.giftlistm2.enums.CharityStatus;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
+import kg.giftlist.giftlistm2.exception.BadCredentialsException;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -118,6 +115,26 @@ public class WishListService {
         List<WishList> wishLists = wishListRepository.getWishListByUserId(user.getId());
         return view(wishLists);
     }
+
+//    public String book(Long id) {
+//        User user = getAuthenticatedUser();
+//        if (wishListRepository.findById(id).isEmpty()) {
+//            throw new EmptyValueException("There is no wishList with id " + id);
+//        }
+//        WishList wishList = wishListRepository.findById(id).get();
+//        if (bookingRepository.findById(wishList.getId()).isEmpty()) {
+//            Booking booking1 = new Booking();
+//            booking1.setId(booking1.getId());
+//            booking1.setWishList(wishList);
+//            booking1.setUserId(user);
+//            bookingRepository.save(booking1);
+//            wishList.setWishListStatus(WishListStatus.BOOKED);
+//            wishListRepository.save(wishList);
+//            return "You have successfully booked this wishList";
+//        } else {
+//            throw new BadCredentialsException("This wishList is already booked");
+//        }
+//    }
 
     private WishListResponse mapToResponse(WishList wishList) {
         if (wishList == null) {
