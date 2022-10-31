@@ -21,26 +21,26 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 @CrossOrigin
 @PreAuthorize("hasAnyAuthority('USER')")
-@Tag(name = "User API", description = "Users with role  \"User\" can create, update profile")
+@Tag(name = "User API", description = "Users with role  \"User\" can view profile, change password, update profile")
 public class UserProfileController {
 
     private final UserInfoService userInfoService;
     private final UserService userService;
 
     @Operation(summary = "Update user profile information ", description = "User can update profile information")
-    @PatchMapping("/customers/{id}")
+    @PatchMapping("/{id}")
     public UserInfoResponse updateUserProfile(@PathVariable Long id, @RequestBody UserInfoRequest userInfoRequest) {
         return userInfoService.update(id, userInfoRequest);
     }
 
     @Operation(summary = "Get user profile ", description = "Find by id user profile")
-    @GetMapping("/customers")
+    @GetMapping("/me")
     public UserInfoResponse getUserProfile() {
         return userInfoService.findById();
     }
 
     @Operation(summary = "Change password ", description = "User can change password")
-    @PostMapping("/customers")
+    @PostMapping("/password-change")
     public AuthResponse changePassword(@RequestBody UserChangePasswordRequest request) {
         return userService.changeUserPassword(request);
     }

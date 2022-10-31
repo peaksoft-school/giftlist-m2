@@ -131,6 +131,7 @@ public class UserService {
             authResponse.setJwtToken(jwtTokenUtil.generateToken(user));
             return authResponse;
         }
+
     }
 
     public User getAuthenticatedUser() {
