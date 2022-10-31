@@ -20,6 +20,7 @@ public class BookingMapper {
         bookingResponse.setFirstName(booking.getCharity().getUser().getFirstName());
         bookingResponse.setLastName(booking.getCharity().getUser().getLastName());
         bookingResponse.setGitName(booking.getCharity().getGiftName());
+        bookingResponse.setCharityImage(booking.getCharity().getImage());
         bookingResponse.setCondition(booking.getCharity().getCondition());
         bookingResponse.setCreated(booking.getCharity().getCreatedDate());
         return bookingResponse;

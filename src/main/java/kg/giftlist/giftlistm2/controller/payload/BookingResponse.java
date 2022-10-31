@@ -15,9 +15,9 @@ public class BookingResponse {
     private String firstName;
     private String lastName;
     private String gitName;
+    private String charityImage;
     private Condition condition;
     private LocalDate created;
-
     private WishList wishList;
 
 }
