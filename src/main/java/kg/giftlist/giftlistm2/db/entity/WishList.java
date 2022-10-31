@@ -54,4 +54,7 @@ public class WishList {
     @JsonIgnore
     private User user;
 
+    @OneToOne(mappedBy = "wishList", cascade = CascadeType.ALL)
+    private Booking booking;
+
 }

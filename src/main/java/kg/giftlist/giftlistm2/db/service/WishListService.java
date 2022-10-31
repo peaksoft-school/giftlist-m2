@@ -7,7 +7,6 @@ import kg.giftlist.giftlistm2.db.repository.BookingRepository;
 import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.repository.WishListRepository;
-import kg.giftlist.giftlistm2.enums.CharityStatus;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
 import kg.giftlist.giftlistm2.exception.BadCredentialsException;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
@@ -17,12 +16,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class WishListService {
 
     private final UserRepository userRepository;
@@ -146,11 +147,10 @@ public class WishListService {
         if (bookingRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no wish list with id " + id);
         }
-        WishList wishList = wishListRepository.findById(id).get();
-        Booking booking = bookingRepository.findById(wishList.getId()).get();
+        Booking booking = bookingRepository.findById(id).get();
         if (user.getBookings().contains(booking)) {
             user.getBookings().remove(booking);
-            bookingRepository.delete(booking);
+            bookingRepository.delete(booking.getId());
             booking.getWishList().setWishListStatus(WishListStatus.NOT_BOOKED);
             return "You have successfully unbooked this wish list";
         } else {
