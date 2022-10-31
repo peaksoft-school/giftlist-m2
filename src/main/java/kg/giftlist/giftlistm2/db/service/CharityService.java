@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class CharityService {
 
     private final CharityRepository charityRepository;
@@ -35,7 +38,7 @@ public class CharityService {
             throw new EmptyValueException("There is no charity with id " + id);
         }
         Charity charity = charityRepository.findById(id).get();
-        if (bookingRepository.findById(charity.getId()).isEmpty()) {
+        if (charity.getCharityStatus().equals(CharityStatus.NOT_BOOKED)) {
             Booking booking1 = new Booking();
             booking1.setId(booking1.getId());
             booking1.setCharity(charity);
@@ -49,6 +52,22 @@ public class CharityService {
         }
     }
 
+    public String unBook(Long id) {
+        User user = getAuthenticatedUser();
+        if (bookingRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no charity with id " + id + " to remove from booking");
+        }
+        Booking booking = bookingRepository.findById(id).get();
+        if (user.getBookings().contains(booking)) {
+            user.getBookings().remove(booking);
+            bookingRepository.delete(booking.getId());
+            booking.getCharity().setCharityStatus(CharityStatus.NOT_BOOKED);
+            return "You have successfully unbooked this charity";
+        } else {
+            throw new BadCredentialsException("This charity is already unbooked");
+        }
+    }
+
     public String deleteCharity(Long id) {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
@@ -59,6 +78,7 @@ public class CharityService {
             throw new EmptyValueException("You have no any charity with id " + id);
         }
         if (user.getCharities().contains(charity)) {
+            user.getCharities().remove(charity);
             charityRepository.deleteById(charity.getId());
             return "Charity successfully was deleted!";
         } else {

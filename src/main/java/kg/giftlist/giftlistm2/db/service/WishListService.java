@@ -7,10 +7,12 @@ import kg.giftlist.giftlistm2.db.repository.BookingRepository;
 import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.db.repository.WishListRepository;
+import kg.giftlist.giftlistm2.enums.CharityStatus;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
 import kg.giftlist.giftlistm2.exception.BadCredentialsException;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class WishListService {
 
     private final UserRepository userRepository;
@@ -87,11 +90,13 @@ public class WishListService {
             throw new EmptyValueException("You have no any wish list with id " + id);
         }
         if (user.getWishLists().contains(wishList)) {
-            wishListRepository.deleteById(wishList.getId());
-            return "Wish list successfully was deleted!";
+            log.info("wishList"+wishList.getGiftName());
+            user.getWishLists().remove(wishList);
+            wishListRepository.delete(wishList);
         } else {
             throw new EmptyValueException("You have no any wish list with id " + id);
         }
+        return "Wish list successfully was deleted!";
     }
 
     public WishListResponse getWishListById(Long id) {
@@ -116,25 +121,42 @@ public class WishListService {
         return view(wishLists);
     }
 
-//    public String book(Long id) {
-//        User user = getAuthenticatedUser();
-//        if (wishListRepository.findById(id).isEmpty()) {
-//            throw new EmptyValueException("There is no wishList with id " + id);
-//        }
-//        WishList wishList = wishListRepository.findById(id).get();
-//        if (bookingRepository.findById(wishList.getId()).isEmpty()) {
-//            Booking booking1 = new Booking();
-//            booking1.setId(booking1.getId());
-//            booking1.setWishList(wishList);
-//            booking1.setUserId(user);
-//            bookingRepository.save(booking1);
-//            wishList.setWishListStatus(WishListStatus.BOOKED);
-//            wishListRepository.save(wishList);
-//            return "You have successfully booked this wishList";
-//        } else {
-//            throw new BadCredentialsException("This wishList is already booked");
-//        }
-//    }
+    public String book(Long id) {
+        User user = getAuthenticatedUser();
+        if (wishListRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no wishList with id " + id);
+        }
+        WishList wishList = wishListRepository.findById(id).get();
+        if (wishList.getWishListStatus().equals(WishListStatus.NOT_BOOKED)) {
+            Booking booking1 = new Booking();
+            booking1.setId(booking1.getId());
+            booking1.setWishList(wishList);
+            booking1.setUserId(user);
+            bookingRepository.save(booking1);
+            wishList.setWishListStatus(WishListStatus.BOOKED);
+            wishListRepository.save(wishList);
+            return "You have successfully booked this wishList";
+        } else {
+            throw new BadCredentialsException("This wishList is already booked");
+        }
+    }
+
+    public String unBook(Long id) {
+        User user = getAuthenticatedUser();
+        if (bookingRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no wish list with id " + id);
+        }
+        WishList wishList = wishListRepository.findById(id).get();
+        Booking booking = bookingRepository.findById(wishList.getId()).get();
+        if (user.getBookings().contains(booking)) {
+            user.getBookings().remove(booking);
+            bookingRepository.delete(booking);
+            booking.getWishList().setWishListStatus(WishListStatus.NOT_BOOKED);
+            return "You have successfully unbooked this wish list";
+        } else {
+            throw new BadCredentialsException("This wish list is already unbooked");
+        }
+    }
 
     private WishListResponse mapToResponse(WishList wishList) {
         if (wishList == null) {
