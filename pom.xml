@@ -130,6 +130,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>giftlist-m2</finalName>
     </build>
 
 </project>
