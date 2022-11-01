@@ -42,7 +42,7 @@ public class WishList {
     private LocalDate created;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinTable(name = "holiday_id")
+    @JoinColumn(name = "holiday_id")
     @JsonIgnore
     private Holiday holidays;
 

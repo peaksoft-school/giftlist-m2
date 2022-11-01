@@ -10,6 +10,8 @@ import kg.giftlist.giftlistm2.db.repository.WishListRepository;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
 import kg.giftlist.giftlistm2.exception.BadCredentialsException;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
+import kg.giftlist.giftlistm2.exception.UserExistException;
+import kg.giftlist.giftlistm2.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -35,7 +37,7 @@ public class WishListService {
         User user = getAuthenticatedUser();
         Holiday holiday = holidayRepository.findById(request.getHolidayId()).get();
         WishList wishList = new WishList();
-        if (request.getGiftName().isEmpty()) {
+        if (request.getGiftName()==null) {
             throw new EmptyValueException("Wish list name must not be empty!");
         } else {
             wishList.setGiftName(request.getGiftName());
@@ -49,6 +51,23 @@ public class WishListService {
         wishList.setWishListStatus(WishListStatus.NOT_BOOKED);
         wishListRepository.save(wishList);
         return mapToResponse(wishList);
+    }
+
+    public WishListResponse addWishList(Long id){
+        User user = getAuthenticatedUser();
+        WishList wishList = wishListRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException("WishList not found with id: " + id));
+        if (user.getWishLists().contains(wishList)){
+            throw new UserExistException("You have this wishList");
+        }
+        WishListRequest wishListRequest = new WishListRequest();
+        wishListRequest.setGiftName(wishList.getGiftName());
+        wishListRequest.setDescription(wishList.getDescription());
+        wishListRequest.setLink(wishList.getLink());
+        wishListRequest.setHolidayDate(wishListRequest.getHolidayDate());
+        wishListRequest.setImage(wishList.getImage());
+        wishListRequest.setHolidayId(wishList.getHolidays().getId());
+        return  create(wishListRequest);
     }
 
     public WishListResponse update(Long id, WishListRequest request) {

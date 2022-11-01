@@ -27,6 +27,11 @@ public class WishListController {
         return wishListService.getWishListById(id);
     }
 
+    @PostMapping("add/{id}")
+    public WishListResponse addWishList(@PathVariable Long id){
+        return wishListService.addWishList(id);
+    }
+
     @Operation(summary = "Get all wish lists", description = "Getting all wish lists")
     @GetMapping
     public List<WishListResponse> getAllWishLists() {
