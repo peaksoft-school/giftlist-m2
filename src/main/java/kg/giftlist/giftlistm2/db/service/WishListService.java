@@ -2,7 +2,10 @@ package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.WishListRequest;
 import kg.giftlist.giftlistm2.controller.payload.WishListResponse;
-import kg.giftlist.giftlistm2.db.entity.*;
+import kg.giftlist.giftlistm2.db.entity.Booking;
+import kg.giftlist.giftlistm2.db.entity.Holiday;
+import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.db.entity.WishList;
 import kg.giftlist.giftlistm2.db.repository.BookingRepository;
 import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
@@ -10,8 +13,8 @@ import kg.giftlist.giftlistm2.db.repository.WishListRepository;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
 import kg.giftlist.giftlistm2.exception.BadCredentialsException;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
-import kg.giftlist.giftlistm2.exception.UserExistException;
 import kg.giftlist.giftlistm2.exception.UserNotFoundException;
+import kg.giftlist.giftlistm2.exception.WishListExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -37,7 +40,7 @@ public class WishListService {
         User user = getAuthenticatedUser();
         Holiday holiday = holidayRepository.findById(request.getHolidayId()).get();
         WishList wishList = new WishList();
-        if (request.getGiftName()==null) {
+        if (request.getGiftName() == null) {
             throw new EmptyValueException("Wish list name must not be empty!");
         } else {
             wishList.setGiftName(request.getGiftName());
@@ -53,12 +56,12 @@ public class WishListService {
         return mapToResponse(wishList);
     }
 
-    public WishListResponse addWishList(Long id){
+    public WishListResponse addWishList(Long id) {
         User user = getAuthenticatedUser();
         WishList wishList = wishListRepository.findById(id).orElseThrow(
                 () -> new UserNotFoundException("WishList not found with id: " + id));
-        if (user.getWishLists().contains(wishList)){
-            throw new UserExistException("You have this wishList");
+        if (user.getWishLists().contains(wishList)) {
+            throw new WishListExistException("You have this wishList");
         }
         WishListRequest wishListRequest = new WishListRequest();
         wishListRequest.setGiftName(wishList.getGiftName());
@@ -67,7 +70,7 @@ public class WishListService {
         wishListRequest.setHolidayDate(wishListRequest.getHolidayDate());
         wishListRequest.setImage(wishList.getImage());
         wishListRequest.setHolidayId(wishList.getHolidays().getId());
-        return  create(wishListRequest);
+        return create(wishListRequest);
     }
 
     public WishListResponse update(Long id, WishListRequest request) {
@@ -110,7 +113,7 @@ public class WishListService {
             throw new EmptyValueException("You have no any wish list with id " + id);
         }
         if (user.getWishLists().contains(wishList)) {
-            log.info("wishList"+wishList.getGiftName());
+            log.info("wishList" + wishList.getGiftName());
             user.getWishLists().remove(wishList);
             wishListRepository.delete(wishList);
         } else {

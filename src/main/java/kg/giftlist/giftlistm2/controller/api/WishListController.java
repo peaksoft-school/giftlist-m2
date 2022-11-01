@@ -27,8 +27,9 @@ public class WishListController {
         return wishListService.getWishListById(id);
     }
 
+    @Operation(summary = "Add wish list", description = "Adding a wish list by id")
     @PostMapping("add/{id}")
-    public WishListResponse addWishList(@PathVariable Long id){
+    public WishListResponse addWishList(@PathVariable Long id) {
         return wishListService.addWishList(id);
     }
 
