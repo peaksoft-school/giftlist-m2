@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/wishLists")
+@RequestMapping("api/wishlists")
 @CrossOrigin
 @Tag(name = "WishList API", description = "User can get wish list by id, get all wish lists, create, update or delete wish list")
 @SecurityRequirement(name = "Authorization")
@@ -27,19 +27,19 @@ public class WishListController {
         return wishListService.getWishListById(id);
     }
 
-    @Operation(summary = "Add wish list", description = "Adding a wish list by id")
-    @PostMapping("add/{id}")
-    public WishListResponse addWishList(@PathVariable Long id) {
-        return wishListService.addWishList(id);
-    }
-
     @Operation(summary = "Get all wish lists", description = "Getting all wish lists")
     @GetMapping
     public List<WishListResponse> getAllWishLists() {
         return wishListService.getAllWishLists();
     }
 
-    @Operation(summary = "Add a wish list", description = "Adding a wish list")
+    @Operation(summary = "Add wish list", description = "Adding a wish list by id")
+    @PostMapping("add/{id}")
+    public WishListResponse addWishList(@PathVariable Long id) {
+        return wishListService.addWishList(id);
+    }
+
+    @Operation(summary = "Creat new wish list", description = "Creating wish list")
     @PostMapping
     public WishListResponse addWishList(@RequestBody WishListRequest request) {
         return wishListService.create(request);
@@ -64,8 +64,8 @@ public class WishListController {
         return wishListService.book(id);
     }
 
-    @Operation(summary = "Wish list booking", description = "Booking a wish list")
-    @DeleteMapping("wishList/{id}")
+    @Operation(summary = "Wish list un booking", description = "Un booking a wish list")
+    @DeleteMapping("wishlist/{id}")
     public String unBook(@PathVariable Long id) {
         return wishListService.unBook(id);
     }

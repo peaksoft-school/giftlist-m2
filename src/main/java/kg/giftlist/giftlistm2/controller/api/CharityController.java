@@ -46,7 +46,7 @@ public class CharityController {
     }
 
     @Operation(summary = "Cancelling charity booking", description = "Remove a charity from booking")
-    @DeleteMapping("charity/{id}")
+    @DeleteMapping("cancel/{id}")
     public String unBook(@PathVariable Long id) {
         return charityService.unBook(id);
     }
