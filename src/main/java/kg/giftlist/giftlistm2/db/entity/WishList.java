@@ -1,15 +1,16 @@
 package kg.giftlist.giftlistm2.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import kg.giftlist.giftlistm2.enums.WishListStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "wish_list")
@@ -37,16 +38,23 @@ public class WishList {
 
     private String image;
 
-    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinTable(name = "wish_list_holiday",
-            joinColumns = @JoinColumn(name = "wish_list_id"),
-            inverseJoinColumns = @JoinColumn(name = "holiday_id"))
+    @CreatedDate
+    private LocalDate created;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "holiday_id")
     @JsonIgnore
-    private List<Holiday> holidays;
+    private Holiday holidays;
+
+    @Enumerated(EnumType.STRING)
+    private WishListStatus wishListStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+    @OneToOne(mappedBy = "wishList", cascade = CascadeType.ALL)
+    private Booking booking;
 
 }

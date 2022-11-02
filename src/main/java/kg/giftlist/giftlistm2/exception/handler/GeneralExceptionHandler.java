@@ -1,13 +1,7 @@
 package kg.giftlist.giftlistm2.exception.handler;
 
-import kg.giftlist.giftlistm2.exception.BadCredentialsException;
-import kg.giftlist.giftlistm2.exception.EmptyValueException;
-import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
-import kg.giftlist.giftlistm2.exception.EmptyLoginException;
+import kg.giftlist.giftlistm2.exception.*;
 import kg.giftlist.giftlistm2.exception.ExceptionResponse.ExceptionResponse;
-import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
-import kg.giftlist.giftlistm2.exception.UserExistException;
-import kg.giftlist.giftlistm2.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -52,6 +46,13 @@ public class GeneralExceptionHandler {
     public ExceptionResponse userAllReadyExist(UserExistException userExistException) {
         return new ExceptionResponse(HttpStatus.FORBIDDEN, userExistException.getClass().getName(),
                 userExistException.getMessage());
+    }
+
+    @ExceptionHandler(WishListExistException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse wishListAllReadyExist(WishListExistException wishListExistException) {
+        return new ExceptionResponse(HttpStatus.FORBIDDEN, wishListExistException.getClass().getName(),
+                wishListExistException.getMessage());
     }
 
 }

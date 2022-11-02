@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -44,6 +45,7 @@ public class Charity {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @CreatedDate
     private LocalDate createdDate;
 
     @OneToOne(mappedBy = "charity", cascade = CascadeType.ALL)

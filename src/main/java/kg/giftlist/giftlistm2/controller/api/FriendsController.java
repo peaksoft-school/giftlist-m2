@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.FriendProfileResponse;
 import kg.giftlist.giftlistm2.controller.payload.FriendResponse;
@@ -15,6 +16,7 @@ import java.util.List;
 @CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "User API", description = "The user can send a request, accept a request, unfriend, list all friends and all friend requests, and can see a friend's profile")
+@SecurityRequirement(name = "Authorization")
 public class FriendsController {
 
     private final FriendsService friendsService;
