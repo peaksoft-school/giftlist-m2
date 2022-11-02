@@ -41,7 +41,7 @@ public class WishListController {
 
     @Operation(summary = "Creat new wish list", description = "Creating wish list")
     @PostMapping
-    public WishListResponse addWishList(@RequestBody WishListRequest request) {
+    public WishListResponse creatWishList(@RequestBody WishListRequest request) {
         return wishListService.create(request);
     }
 
