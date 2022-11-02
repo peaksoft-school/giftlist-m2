@@ -49,6 +49,13 @@ public class GeneralExceptionHandler {
                 userExistException.getMessage());
     }
 
+    @ExceptionHandler(WishListExistException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse wishListAllReadyExist(WishListExistException wishListExistException) {
+        return new ExceptionResponse(HttpStatus.FORBIDDEN, wishListExistException.getClass().getName(),
+                wishListExistException.getMessage());
+    }
+
     @ExceptionHandler(NotificationNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionResponse notificationNotFoundException(NotificationNotFoundException notificationNotFoundException) {

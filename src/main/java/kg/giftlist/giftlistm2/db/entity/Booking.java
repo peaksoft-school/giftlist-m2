@@ -31,4 +31,9 @@ public class Booking {
     @JsonIgnore
     private Charity charity;
 
+    @OneToOne
+    @JoinColumn(name = "wish_list_id")
+    @JsonIgnore
+    private WishList wishList;
+
 }
