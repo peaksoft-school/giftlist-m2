@@ -42,7 +42,7 @@ public class NotificationService {
 
     public List<NotificationResponse> getAllIsReadNotification() {
         User user = getAuthenticatedUser();
-        List<Notification> notifications = notificationRepository.getAllNotificationByUserId(user.getId());
+        List<Notification> notifications = notificationRepository.getAllIsReadNotification(user.getId());
         if (notifications.isEmpty()) {
             throw new NotificationNotFoundException("Read notification not found");
         }
@@ -51,7 +51,7 @@ public class NotificationService {
 
     public List<NotificationResponse> getAllUnReadNotification() {
         User user = getAuthenticatedUser();
-        List<Notification> notifications = notificationRepository.getAllNotificationByUserId(user.getId());
+        List<Notification> notifications = notificationRepository.getAllUnReadNotification(user.getId());
         if (notifications.isEmpty()) {
             throw new NotificationNotFoundException("Read notification not found");
         }
