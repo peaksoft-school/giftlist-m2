@@ -42,7 +42,7 @@ public class NotificationService {
 
     public List<NotificationResponse> getAllIsReadNotification() {
         User user = getAuthenticatedUser();
-        List<Notification> notifications = notificationRepository.getAllIsReadNotification(user.getId());
+        List<Notification> notifications = notificationRepository.getAllNotificationByUserId(user.getId());
         if (notifications.isEmpty()) {
             throw new NotificationNotFoundException("Read notification not found");
         }
@@ -51,7 +51,7 @@ public class NotificationService {
 
     public List<NotificationResponse> getAllUnReadNotification() {
         User user = getAuthenticatedUser();
-        List<Notification> notifications = notificationRepository.getAllUnReadNotification(user.getId());
+        List<Notification> notifications = notificationRepository.getAllNotificationByUserId(user.getId());
         if (notifications.isEmpty()) {
             throw new NotificationNotFoundException("Read notification not found");
         }
@@ -77,31 +77,31 @@ public class NotificationService {
         return responses;
     }
 
-    public Notification sendNotification(User user, Long friendId) {
+    public Notification sendNotification(User user,List<User>receivers) {
         Notification notification = new Notification();
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
-        notification.setReceiverId(friendId);
+        notification.setReceivers(receivers);
         notification.setNotificationStatus(NotificationStatus.REQUEST_TO_FRIEND);
         log.info("Notification status: " + NotificationStatus.REQUEST_TO_FRIEND);
         return notification;
     }
 
-    public Notification acceptSendNotification(User user, Long friendId) {
+    public Notification acceptSendNotification(User user, List<User>receivers) {
         Notification notification = new Notification();
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
-        notification.setReceiverId(friendId);
+        notification.setReceivers(receivers);
         notification.setNotificationStatus(NotificationStatus.ACCEPT_YOUR_REQUEST);
         log.info("Notification status: " + NotificationStatus.ACCEPT_YOUR_REQUEST);
         return notification;
     }
 
-    public Notification bookedCharity(User user, Long friendId, Charity charity) {
+    public Notification bookedCharity(User user,List<User>receivers, Charity charity) {
         Notification notification = new Notification();
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
-        notification.setReceiverId(friendId);
+        notification.setReceivers(receivers);
         notification.setGiftName(charity.getGiftName());
         notification.setNotificationStatus(NotificationStatus.BOOKED);
         return notification;
@@ -117,18 +117,6 @@ public class NotificationService {
         notificationRepository.deleteAll(notifications);
         log.info("Successfully deleted all notification");
         return "Successfully deleted all notifications";
-    }
-
-    public String deleteNotificationById(Long id) {
-        User user = getAuthenticatedUser();
-        Notification notification = notificationRepository.getNotificationByUserId(user.getId());
-        if (notification == null) {
-            log.error("Not found notification with id: " + id);
-            throw new NotificationNotFoundException("Not found Notification with id: " + id);
-        }
-        notificationRepository.deleteById(id);
-        log.info("Successfully deleted notification with id: " + id);
-        return "Successfully deleted notification with id: " + id;
     }
 
     public User getAuthenticatedUser() {

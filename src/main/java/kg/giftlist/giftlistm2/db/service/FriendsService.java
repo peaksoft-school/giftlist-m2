@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -78,7 +79,7 @@ public class FriendsService {
         }
         friend.sendRequestToFriend(user);
         userRepository.save(friend);
-        friend.addNotification(notificationService.sendNotification(user,friendId));
+        friend.addNotification(notificationService.sendNotification(user,new ArrayList<>(List.of(friend))));
         notificationRepository.saveAll(friend.getNotifications());
 
         log.info("Request to friend successfully send");
@@ -100,7 +101,7 @@ public class FriendsService {
             friend.addUserToFriend(user);
             user.getRequestToFriends().remove(friend);
             userRepository.save(friend);
-            friend.addNotification(notificationService.acceptSendNotification(user,friendId));
+            friend.addNotification(notificationService.acceptSendNotification(user,new ArrayList<>(List.of(friend))));
             notificationRepository.saveAll(friend.getNotifications());
         }
         return FriendMapper.INSTANCE.response(friend, holidayRepository.getAllUserHolidays(friendId).size(),

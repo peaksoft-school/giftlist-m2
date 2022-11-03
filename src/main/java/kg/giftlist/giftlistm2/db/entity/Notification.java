@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "notification")
@@ -17,12 +19,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notification {
+
     @Id
     @GeneratedValue(generator = "notification_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1)
     private Long id;
 
-    private Long receiverId;
+    @ManyToMany
+    private List<User> receivers = new ArrayList<>();
 
     private LocalDate created;
 
@@ -32,14 +36,14 @@ public class Notification {
     private String giftName;
 
     private boolean read;
+
     @ManyToOne
     private User user;
+
     @ManyToOne
     @JsonIgnore
     private Charity charity;
-//    public void isRead(boolean read){
-//        this.read=read;
-//    }
+
     }
 
 

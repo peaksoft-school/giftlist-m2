@@ -104,6 +104,9 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Notification> notifications = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "receivers")
+    private List<Notification> notificationList = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>();
@@ -124,8 +127,14 @@ public class User implements UserDetails {
         }
         friends.add(user);
     }
+
     public void addNotification(Notification notification){
         notifications.add(notification);
+    }
+    public void saveNotification(Notification notification){
+        if (CollectionUtils.isEmpty(notificationList)){
+            notificationList = new ArrayList<>();
+        }
     }
 
     @Override
