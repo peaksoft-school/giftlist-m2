@@ -2,6 +2,7 @@ package kg.giftlist.giftlistm2.exception.handler;
 
 import kg.giftlist.giftlistm2.db.entity.Booking;
 import kg.giftlist.giftlistm2.exception.*;
+import kg.giftlist.giftlistm2.exception.*;
 import kg.giftlist.giftlistm2.exception.ExceptionResponse.ExceptionResponse;
 import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,13 @@ public class GeneralExceptionHandler {
     public ExceptionResponse userAllReadyExist(UserExistException userExistException) {
         return new ExceptionResponse(HttpStatus.FORBIDDEN, userExistException.getClass().getName(),
                 userExistException.getMessage());
+    }
+
+    @ExceptionHandler(WishListExistException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse wishListAllReadyExist(WishListExistException wishListExistException) {
+        return new ExceptionResponse(HttpStatus.FORBIDDEN, wishListExistException.getClass().getName(),
+                wishListExistException.getMessage());
     }
 
     @ExceptionHandler(BookingNotFoundException.class)

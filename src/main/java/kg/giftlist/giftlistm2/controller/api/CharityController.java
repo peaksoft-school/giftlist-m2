@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.*;
+import kg.giftlist.giftlistm2.db.repository.BookingRepository;
 import kg.giftlist.giftlistm2.db.service.CharityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,12 @@ public class CharityController {
     @PostMapping("{id}")
     public String booking(@PathVariable Long id) {
         return charityService.book(id);
+    }
+
+    @Operation(summary = "Cancelling charity booking", description = "Remove a charity from booking")
+    @DeleteMapping("cancel/{id}")
+    public String unBook(@PathVariable Long id) {
+        return charityService.unBook(id);
     }
 
     @Operation(summary = "Update charity", description = "Charity updating by id")

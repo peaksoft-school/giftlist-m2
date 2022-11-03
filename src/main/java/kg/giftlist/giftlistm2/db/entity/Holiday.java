@@ -31,10 +31,7 @@ public class Holiday {
 
     private String image;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(name = "wish_list_holiday",
-            joinColumns = @JoinColumn(name = "holiday_id"),
-            inverseJoinColumns = @JoinColumn(name = "wish_list_id"))
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JsonIgnore
     private List<WishList> wishLists;
 
