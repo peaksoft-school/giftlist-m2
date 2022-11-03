@@ -172,7 +172,7 @@ public class WishListService {
         Booking booking = bookingRepository.findById(id).get();
         if (user.getBookings().contains(booking)) {
             user.getBookings().remove(booking);
-            bookingRepository.delete(booking.getId());
+            bookingRepository.delete(booking);
             booking.getWishList().setWishListStatus(WishListStatus.NOT_BOOKED);
             return "You have successfully unbooked this wish list";
         } else {

@@ -2,9 +2,7 @@ package kg.giftlist.giftlistm2.db.repository;
 
 import kg.giftlist.giftlistm2.db.entity.Booking;
 import kg.giftlist.giftlistm2.db.entity.Charity;
-import kg.giftlist.giftlistm2.db.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +15,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Charity> getBookingsByCharityId(Long id);
 
     @Query("select b from Booking b join b.userId u where u.id=?1")
-    List<Booking> getBookingByUserId(Long id);
+    List<Booking> getWishListBookingByUserId(Long id);
 
 }

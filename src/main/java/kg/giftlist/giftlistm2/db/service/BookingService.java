@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.BookingResponse;
+import kg.giftlist.giftlistm2.controller.payload.BookingWishListResponse;
 import kg.giftlist.giftlistm2.db.entity.Booking;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.BookingRepository;
@@ -34,14 +35,32 @@ public class BookingService {
         return responses;
     }
 
-    public List<BookingResponse> getAllBookings() {
+    public List<BookingResponse> getAllCharityBookings() {
         User user = getAuthenticatedUser();
         List<Booking> booking = bookingRepository.getBookingByUserId(user.getId());
         if (booking.isEmpty()) {
-            log.error("Booking not found id {} user " + user.getId());
+            log.error("Booking not found");
             throw new BookingNotFoundException("Bookings not found");
         }
         return view(booking);
+    }
+
+    public List<BookingWishListResponse> viewWishList(List<Booking> bookingList) {
+        List<BookingWishListResponse> responses = new ArrayList<>();
+        for (Booking booking : bookingList) {
+            responses.add(bookingMapper.bookingWishListResponse(booking));
+        }
+        return responses;
+    }
+
+    public List<BookingWishListResponse> getAllWishListBookings() {
+        User user = getAuthenticatedUser();
+        List<Booking> booking = bookingRepository.getBookingByUserId(user.getId());
+        if (booking.isEmpty()) {
+            log.error("Booking not found");
+            throw new BookingNotFoundException("Bookings not found");
+        }
+        return viewWishList(booking);
     }
 
     public BookingResponse getBookingById(Long id){

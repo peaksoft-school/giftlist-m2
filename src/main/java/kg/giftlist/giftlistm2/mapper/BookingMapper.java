@@ -2,6 +2,7 @@ package kg.giftlist.giftlistm2.mapper;
 
 import jdk.jfr.Category;
 import kg.giftlist.giftlistm2.controller.payload.BookingResponse;
+import kg.giftlist.giftlistm2.controller.payload.BookingWishListResponse;
 import kg.giftlist.giftlistm2.db.entity.Booking;
 import kg.giftlist.giftlistm2.exception.BookingNotFoundException;
 import org.springframework.stereotype.Component;
@@ -22,21 +23,21 @@ public class BookingMapper {
         bookingResponse.setGitName(booking.getCharity().getGiftName());
         bookingResponse.setCharityImage(booking.getCharity().getImage());
         bookingResponse.setCondition(booking.getCharity().getCondition());
-        bookingResponse.setCreated(booking.getCharity().getCreatedDate());
+        bookingResponse.setCreated(LocalDate.now());
         return bookingResponse;
     }
 
-    public BookingResponse bookingWishListResponse(Booking booking) {
+    public BookingWishListResponse bookingWishListResponse(Booking booking) {
         if (booking == null) {
             throw new BookingNotFoundException("Not found booking");
         }
-        BookingResponse bookingResponse = new BookingResponse();
+        BookingWishListResponse bookingResponse = new BookingWishListResponse();
         bookingResponse.setId(booking.getId());
-        bookingResponse.setFirstName(booking.getCharity().getUser().getFirstName());
-        bookingResponse.setLastName(booking.getCharity().getUser().getLastName());
-        bookingResponse.setGitName(booking.getCharity().getGiftName());
-        bookingResponse.setCondition(booking.getCharity().getCondition());
-        bookingResponse.setCreated(booking.getCharity().getCreatedDate());
+        bookingResponse.setFirstName(booking.getWishList().getUser().getFirstName());
+        bookingResponse.setLastName(booking.getWishList().getUser().getLastName());
+        bookingResponse.setWishListGiftName(booking.getWishList().getGiftName());
+        bookingResponse.setHolidayName(booking.getWishList().getHolidays().getName());
+        bookingResponse.setCreated(LocalDate.now());
         return bookingResponse;
     }
 
