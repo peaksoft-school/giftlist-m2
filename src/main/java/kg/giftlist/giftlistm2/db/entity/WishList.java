@@ -57,4 +57,7 @@ public class WishList {
     @OneToOne(mappedBy = "wishList", cascade = CascadeType.ALL)
     private Booking booking;
 
+    @OneToOne(mappedBy = "wishListId", cascade = CascadeType.ALL)
+    private Complaints complaints;
+
 }

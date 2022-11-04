@@ -28,4 +28,8 @@ public class Complaints {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne
+    @JoinColumn(name = "wish_list_id")
+    private WishList wishListId;
+
 }
