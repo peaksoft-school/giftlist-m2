@@ -58,4 +58,7 @@ public class Charity {
     @Enumerated(EnumType.STRING)
     private CharityStatus charityStatus;
 
+    @OneToOne(mappedBy = "charityId", cascade = CascadeType.ALL)
+    private Complaints complaints;
+
 }

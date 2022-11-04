@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.giftlist.giftlistm2.enums.ComplaintsType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,10 +27,17 @@ public class Complaints {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToOne
     @JoinColumn(name = "wish_list_id")
+    @JsonIgnore
     private WishList wishListId;
+
+    @OneToOne
+    @JoinColumn(name = "charity_id")
+    @JsonIgnore
+    private Charity charityId;
 
 }

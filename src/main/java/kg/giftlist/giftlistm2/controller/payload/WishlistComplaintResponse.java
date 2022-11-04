@@ -1,6 +1,5 @@
 package kg.giftlist.giftlistm2.controller.payload;
 
-import kg.giftlist.giftlistm2.db.entity.Complaints;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +8,7 @@ import java.time.LocalDate;
 
 @Setter
 @Getter
-public class ComplainedWishListResponse {
+public class WishlistComplaintResponse {
 
     private Long id;
     private String giftName;
