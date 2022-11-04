@@ -103,6 +103,7 @@ public class User implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
     @JsonIgnore
     private List<Notification> notifications = new ArrayList<>();
+
      public void deleteNotification(Notification notification){
         this.notifications.remove(notification);
     }

@@ -78,7 +78,7 @@ public class NotificationService {
         return responses;
     }
 
-    public Notification sendNotification(User user,List<User>receivers) {
+    public Notification sendNotification(User user, List<User> receivers) {
         Notification notification = new Notification();
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
@@ -88,7 +88,7 @@ public class NotificationService {
         return notification;
     }
 
-    public Notification acceptSendNotification(User user, List<User>receivers) {
+    public Notification acceptSendNotification(User user, List<User> receivers) {
         Notification notification = new Notification();
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
@@ -98,7 +98,7 @@ public class NotificationService {
         return notification;
     }
 
-    public Notification bookedCharity(User user,List<User>receivers, Charity charity) {
+    public Notification bookedCharity(User user, List<User> receivers, Charity charity) {
         Notification notification = new Notification();
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
@@ -108,12 +108,11 @@ public class NotificationService {
         return notification;
     }
 
-    public Notification wishListNotification(User user, List<User> receivers, WishList wishList){
+    public Notification wishListNotification(User user, List<User> receivers, WishList wishList) {
         Notification notification = new Notification();
         notification.setCreated(LocalDate.now());
         notification.setUser(user);
         notification.setReceivers(receivers);
-//        notification.setWishListId(wishList.getId());
         notification.setGiftName(wishList.getGiftName());
         notification.setNotificationStatus(NotificationStatus.ADDED_WISHED_GIFT);
         return notification;
@@ -130,7 +129,6 @@ public class NotificationService {
             notification.deleteUser(user);
         }
         notificationRepository.saveAll(notifications);
-     //   notificationRepository.deleteAll(notifications);
         log.info("Successfully deleted all notification");
         return "Successfully deleted all notifications";
     }

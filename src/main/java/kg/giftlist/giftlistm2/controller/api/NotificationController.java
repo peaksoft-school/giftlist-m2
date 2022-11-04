@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.NotificationResponse;
 import kg.giftlist.giftlistm2.db.service.NotificationService;
@@ -14,6 +15,7 @@ import java.util.List;
 @CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "Notification API", description = "User can get all notifications, get all un and is read notifications, get notification by id and delete all notification")
+@SecurityRequirement(name = "Authorization")
 public class NotificationController {
 
     private final NotificationService notificationService;
@@ -25,13 +27,13 @@ public class NotificationController {
     }
 
     @Operation(summary = "Get all is read notifications ", description = "User can see all is read notifications")
-    @GetMapping("isRead")
+    @GetMapping("isread")
     public List<NotificationResponse> getAllIsReadNotification() {
         return notificationService.getAllIsReadNotification();
     }
 
     @Operation(summary = "Get all un read notifications ", description = "User can see all un read notifications")
-    @GetMapping("unRead")
+    @GetMapping("unread")
     public List<NotificationResponse> getAllUnReadNotification() {
         return notificationService.getAllUnReadNotification();
     }
