@@ -14,7 +14,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b from Booking b join Charity c on b.charity.id=c.id where c.id=?1")
     List<Charity> getBookingsByCharityId(Long id);
 
-    @Query("select b from Booking b join b.userId u where u.id=?1")
-    List<Booking> getWishListBookingByUserId(Long id);
+    @Query("select c from User u join u.bookings b join b.charity c c where u.id=?1")
+    List<Charity> getWishListBookingByUserId(Long userId);
 
 }

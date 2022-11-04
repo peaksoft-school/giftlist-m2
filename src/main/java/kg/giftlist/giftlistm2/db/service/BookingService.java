@@ -37,7 +37,7 @@ public class BookingService {
 
     public List<BookingResponse> getAllCharityBookings() {
         User user = getAuthenticatedUser();
-        List<Booking> booking = bookingRepository.getBookingByUserId(user.getId());
+        List<Booking> booking = bookingRepository.getWishListBookingByUserId(user.getId());
         if (booking.isEmpty()) {
             log.error("Booking not found");
             throw new BookingNotFoundException("Bookings not found");
@@ -55,7 +55,7 @@ public class BookingService {
 
     public List<BookingWishListResponse> getAllWishListBookings() {
         User user = getAuthenticatedUser();
-        List<Booking> booking = bookingRepository.getBookingByUserId(user.getId());
+        List<Booking> booking = bookingRepository.getWishListBookingByUserId(user.getId());
         if (booking.isEmpty()) {
             log.error("Booking not found");
             throw new BookingNotFoundException("Bookings not found");
