@@ -48,10 +48,4 @@ public class NotificationController {
         return notificationService.deleteAllNotification();
     }
 
-    @Operation(summary = "Delete notification ", description = "User can delete notification by notification id")
-    @DeleteMapping("{id}")
-    public String deleteNotificationById(@PathVariable Long id) {
-        return notificationService.deleteNotificationById(id);
-    }
-
 }

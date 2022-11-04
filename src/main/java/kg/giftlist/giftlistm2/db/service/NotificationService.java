@@ -4,6 +4,7 @@ import kg.giftlist.giftlistm2.controller.payload.NotificationResponse;
 import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.entity.Notification;
 import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.db.entity.WishList;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.enums.NotificationStatus;
@@ -107,6 +108,17 @@ public class NotificationService {
         return notification;
     }
 
+    public Notification wishListNotification(User user, List<User> receivers, WishList wishList){
+        Notification notification = new Notification();
+        notification.setCreated(LocalDate.now());
+        notification.setUser(user);
+        notification.setReceivers(receivers);
+//        notification.setWishListId(wishList.getId());
+        notification.setGiftName(wishList.getGiftName());
+        notification.setNotificationStatus(NotificationStatus.ADDED_WISHED_GIFT);
+        return notification;
+    }
+
     public String deleteAllNotification() {
         User user = getAuthenticatedUser();
         List<Notification> notifications = notificationRepository.getAllNotificationByUserId(user.getId());
@@ -114,7 +126,11 @@ public class NotificationService {
             log.error("Not found notification");
             throw new NotificationNotFoundException("Not found notification");
         }
-        notificationRepository.deleteAll(notifications);
+        for (Notification notification : notifications) {
+            notification.deleteUser(user);
+        }
+        notificationRepository.saveAll(notifications);
+     //   notificationRepository.deleteAll(notifications);
         log.info("Successfully deleted all notification");
         return "Successfully deleted all notifications";
     }

@@ -62,10 +62,9 @@ public class Charity {
 
     @OneToMany(mappedBy = "charity",cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
+
     public void addNotification(Notification notification){
         notifications.add(notification);
     }
-
-
 
 }

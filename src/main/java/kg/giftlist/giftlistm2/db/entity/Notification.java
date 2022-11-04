@@ -25,8 +25,13 @@ public class Notification {
     @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1)
     private Long id;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     private List<User> receivers = new ArrayList<>();
+
+    public void deleteUser(User user) {
+        this.receivers.remove(user);
+        user.deleteNotification(this);
+    }
 
     private LocalDate created;
 
@@ -44,6 +49,10 @@ public class Notification {
     @JsonIgnore
     private Charity charity;
 
-    }
+    @ManyToOne
+    @JsonIgnore
+    private WishList wishList;
+
+}
 
 

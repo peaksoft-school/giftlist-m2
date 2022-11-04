@@ -3,11 +3,11 @@ package kg.giftlist.giftlistm2.db.repository;
 import kg.giftlist.giftlistm2.db.entity.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-
 
     @Query("select n FROM Notification n join n.receivers r where r.id=?1")
     List<Notification> getAllNotificationByUserId(Long id);
@@ -20,7 +20,5 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     @Query("select n From Notification n join n.receivers r where n.read=false and r.id=?1")
     List<Notification> getAllUnReadNotification(Long id);
-
-
 
 }
