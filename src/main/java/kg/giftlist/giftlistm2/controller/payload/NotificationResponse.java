@@ -14,8 +14,9 @@ public class NotificationResponse {
     private String firstName;
     private String lastName;
     private NotificationStatus notificationStatus;
+    private Long giftId;
     private String giftName;
-    private LocalDate created;
-    private boolean read;
+    private LocalDate createdAt;
+    private boolean isRead;
 
 }

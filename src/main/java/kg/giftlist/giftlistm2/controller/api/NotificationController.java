@@ -6,14 +6,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.NotificationResponse;
 import kg.giftlist.giftlistm2.db.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/notification")
+@RequestMapping("api/notifications")
 @CrossOrigin
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('USER')")
 @Tag(name = "Notification API", description = "User can get all notifications, get all un and is read notifications, get notification by id and delete all notification")
 @SecurityRequirement(name = "Authorization")
 public class NotificationController {
@@ -27,13 +29,13 @@ public class NotificationController {
     }
 
     @Operation(summary = "Get all is read notifications ", description = "User can see all is read notifications")
-    @GetMapping("isread")
+    @GetMapping("is-read")
     public List<NotificationResponse> getAllIsReadNotification() {
         return notificationService.getAllIsReadNotification();
     }
 
     @Operation(summary = "Get all un read notifications ", description = "User can see all un read notifications")
-    @GetMapping("unread")
+    @GetMapping("un-read")
     public List<NotificationResponse> getAllUnReadNotification() {
         return notificationService.getAllUnReadNotification();
     }

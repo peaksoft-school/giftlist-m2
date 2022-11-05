@@ -80,7 +80,7 @@ public class NotificationService {
 
     public Notification sendNotification(User user, List<User> receivers) {
         Notification notification = new Notification();
-        notification.setCreated(LocalDate.now());
+        notification.setCreatedAt(LocalDate.now());
         notification.setUser(user);
         notification.setReceivers(receivers);
         notification.setNotificationStatus(NotificationStatus.REQUEST_TO_FRIEND);
@@ -90,7 +90,7 @@ public class NotificationService {
 
     public Notification acceptSendNotification(User user, List<User> receivers) {
         Notification notification = new Notification();
-        notification.setCreated(LocalDate.now());
+        notification.setCreatedAt(LocalDate.now());
         notification.setUser(user);
         notification.setReceivers(receivers);
         notification.setNotificationStatus(NotificationStatus.ACCEPT_YOUR_REQUEST);
@@ -100,9 +100,10 @@ public class NotificationService {
 
     public Notification bookedCharity(User user, List<User> receivers, Charity charity) {
         Notification notification = new Notification();
-        notification.setCreated(LocalDate.now());
+        notification.setCreatedAt(LocalDate.now());
         notification.setUser(user);
         notification.setReceivers(receivers);
+        notification.setGiftId(charity.getId());
         notification.setGiftName(charity.getGiftName());
         notification.setNotificationStatus(NotificationStatus.BOOKED);
         return notification;
@@ -110,9 +111,10 @@ public class NotificationService {
 
     public Notification wishListNotification(User user, List<User> receivers, WishList wishList) {
         Notification notification = new Notification();
-        notification.setCreated(LocalDate.now());
+        notification.setCreatedAt(LocalDate.now());
         notification.setUser(user);
         notification.setReceivers(receivers);
+        notification.setGiftId(wishList.getId());
         notification.setGiftName(wishList.getGiftName());
         notification.setNotificationStatus(NotificationStatus.ADDED_WISHED_GIFT);
         return notification;

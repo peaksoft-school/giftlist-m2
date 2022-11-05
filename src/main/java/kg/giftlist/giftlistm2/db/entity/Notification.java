@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.giftlist.giftlistm2.enums.NotificationStatus;
 import lombok.AllArgsConstructor;
@@ -28,19 +29,17 @@ public class Notification {
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     private List<User> receivers = new ArrayList<>();
 
-    public void deleteUser(User user) {
-        this.receivers.remove(user);
-        user.deleteNotification(this);
-    }
-
-    private LocalDate created;
+    @JsonFormat(pattern = "yyyy.MM.dd")
+    private LocalDate createdAt;
 
     @Enumerated(EnumType.STRING)
     private NotificationStatus notificationStatus;
 
     private String giftName;
 
-    private boolean read;
+    private Long giftId;
+
+    private boolean isRead;
 
     @ManyToOne
     private User user;
@@ -52,6 +51,11 @@ public class Notification {
     @ManyToOne
     @JsonIgnore
     private WishList wishList;
+
+    public void deleteUser(User user) {
+        this.receivers.remove(user);
+        user.deleteNotification(this);
+    }
 
 }
 

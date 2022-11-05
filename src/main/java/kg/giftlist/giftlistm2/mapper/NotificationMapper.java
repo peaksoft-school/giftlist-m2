@@ -18,12 +18,12 @@ public class NotificationMapper {
         notificationResponse.setId(notification.getId());
         notificationResponse.setFirstName(notification.getUser().getFirstName());
         notificationResponse.setLastName(notification.getUser().getLastName());
+        notificationResponse.setGiftId(notification.getGiftId());
         notificationResponse.setGiftName(notification.getGiftName());
         notificationResponse.setNotificationStatus(notification.getNotificationStatus());
-        notificationResponse.setCreated(LocalDate.now());
+        notificationResponse.setCreatedAt(LocalDate.now());
         notificationResponse.setRead(notification.isRead());
         return notificationResponse;
     }
-
 
 }

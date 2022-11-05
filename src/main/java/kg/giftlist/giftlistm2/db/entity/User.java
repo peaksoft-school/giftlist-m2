@@ -70,6 +70,7 @@ public class User implements UserDetails {
     @Size(max = 10000)
     @Column(name = "important_to_know")
     private String importantToKnow;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -104,18 +105,11 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Notification> notifications = new ArrayList<>();
 
-     public void deleteNotification(Notification notification){
-        this.notifications.remove(notification);
-    }
-
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "receivers")
     private List<Notification> notificationList = new ArrayList<>();
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthority()));
-        return grantedAuthorities;
+    public void deleteNotification(Notification notification){
+        this.notifications.remove(notification);
     }
 
     public void sendRequestToFriend(User user) {
@@ -135,10 +129,12 @@ public class User implements UserDetails {
     public void addNotification(Notification notification){
         notifications.add(notification);
     }
-    public void saveNotification(Notification notification){
-        if (CollectionUtils.isEmpty(notificationList)){
-            notificationList = new ArrayList<>();
-        }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+        return grantedAuthorities;
     }
 
     @Override

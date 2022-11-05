@@ -7,6 +7,7 @@ import kg.giftlist.giftlistm2.controller.payload.FriendProfileResponse;
 import kg.giftlist.giftlistm2.controller.payload.FriendResponse;
 import kg.giftlist.giftlistm2.db.service.FriendsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "User API", description = "The user can send a request, accept a request, unfriend, list all friends and all friend requests, and can see a friend's profile")
 @SecurityRequirement(name = "Authorization")
+@PreAuthorize("hasAuthority('USER')")
 public class FriendsController {
 
     private final FriendsService friendsService;
