@@ -8,11 +8,13 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +37,8 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
+    private String image;
+
     @Email
     private String email;
 
@@ -54,10 +58,11 @@ public class User implements UserDetails {
     @Size(max = 10000)
     private String hobbies;
 
+    private String city;
+
     @Size(max = 10000)
     @Column(name = "important_to_know")
     private String importantToKnow;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -68,6 +73,7 @@ public class User implements UserDetails {
     private List<ShoeSize> shoeSize;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<WishList> wishLists;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
@@ -77,16 +83,40 @@ public class User implements UserDetails {
     private List<Booking> bookings;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<Holiday> holidays;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Complaints> complaints;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "friends")
+    @JsonIgnore
+    private List<User> friends = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<User> requestToFriends = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthority()));
         return grantedAuthorities;
+    }
+
+    public void sendRequestToFriend(User user) {
+        if (CollectionUtils.isEmpty(requestToFriends)) {
+            requestToFriends = new ArrayList<>();
+        }
+        requestToFriends.add(user);
+    }
+
+    public void addUserToFriend(User user) {
+        if (CollectionUtils.isEmpty(friends)) {
+            friends = new ArrayList<>();
+        }
+        friends.add(user);
     }
 
     @Override
