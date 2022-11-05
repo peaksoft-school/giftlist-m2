@@ -31,6 +31,8 @@ public class CharityService {
     private final CategoryRepository categoryRepository;
     private final BookingRepository bookingRepository;
     private final SubcategoryRepository subcategoryRepository;
+    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     public String book(Long id) {
         User user = getAuthenticatedUser();
@@ -46,6 +48,8 @@ public class CharityService {
             bookingRepository.save(booking1);
             charity.setCharityStatus(CharityStatus.BOOKED);
             charityRepository.save(charity);
+            charity.addNotification(notificationService.bookedCharity(user,new ArrayList<>(List.of(charity.getUser())),charity));
+            notificationRepository.saveAll(charity.getNotifications());
             return "You have successfully booked this charity";
         } else {
             throw new BadCredentialsException("This charity is already booked");
