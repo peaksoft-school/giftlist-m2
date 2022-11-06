@@ -218,4 +218,6 @@ public class WishListService {
     public List<WishList> search(String name) {
         return wishListRepository.searchWishListByName(name);
     }
+
+
 }
