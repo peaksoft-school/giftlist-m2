@@ -3,6 +3,7 @@ package kg.giftlist.giftlistm2.db.service;
 import kg.giftlist.giftlistm2.controller.payload.BookingResponse;
 import kg.giftlist.giftlistm2.controller.payload.BookingWishListResponse;
 import kg.giftlist.giftlistm2.db.entity.Booking;
+import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.BookingRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
@@ -35,9 +36,17 @@ public class BookingService {
         return responses;
     }
 
+    public List<BookingResponse> viewCharity(List<Charity> charities) {
+        List<BookingResponse> responses = new ArrayList<>();
+        for (Charity charity :charities) {
+            responses.add(bookingMapper.bookingResponse(charity));
+        }
+        return responses;
+    }
+
     public List<BookingResponse> getAllCharityBookings() {
         User user = getAuthenticatedUser();
-        List<Booking> booking = bookingRepository.getWishListBookingByUserId(user.getId());
+        List<Charity> booking = bookingRepository.getWishListBookingByUserId(user.getId());
         if (booking.isEmpty()) {
             log.error("Booking not found");
             throw new BookingNotFoundException("Bookings not found");
