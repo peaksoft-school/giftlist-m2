@@ -1,10 +1,7 @@
 package kg.giftlist.giftlistm2.controller.payload;
 
-import kg.giftlist.giftlistm2.db.entity.Charity;
-import kg.giftlist.giftlistm2.db.entity.Holiday;
-import kg.giftlist.giftlistm2.db.entity.WishList;
-import kg.giftlist.giftlistm2.enums.ClothingSize;
-import kg.giftlist.giftlistm2.enums.ShoeSize;
+import kg.giftlist.giftlistm2.db.entity.*;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

@@ -64,16 +64,10 @@ public class ComplaintController {
         return complaintService.getAllCharityComplaints();
     }
 
-    @Operation(summary = "Delete wish list complaint", description = "Admin can delete a wish list complaint by id")
+    @Operation(summary = "Delete a complaint", description = "Admin can delete a complaint by id")
     @DeleteMapping("wishlist/{id}")
-    public String deleteWishlistComplaint(@PathVariable Long id) {
-        return complaintService.deleteWishlistComplaint(id);
-    }
-
-    @Operation(summary = "Delete charity complaint", description = "Admin can delete a charity complaint by id")
-    @DeleteMapping("charity/{id}")
-    public String deleteCharityComplaint(@PathVariable Long id) {
-        return complaintService.deleteCharityComplaint(id);
+    public String deleteComplaint(@PathVariable Long id) {
+        return complaintService.deleteComplaint(id);
     }
 
     @Operation(summary = "Block charity", description = "Admin can block a charity by id")
