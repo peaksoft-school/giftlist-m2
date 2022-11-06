@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,8 +26,6 @@ public class WishList {
     @GeneratedValue(generator = "wish_list_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "wish_list_gen", sequenceName = "wish_list_seq", allocationSize = 1)
     private Long id;
-
-    private boolean blocked;
 
     @Column(name = "gift_name")
     private String giftName;
@@ -60,7 +59,11 @@ public class WishList {
     @OneToOne(mappedBy = "wishList", cascade = CascadeType.ALL)
     private Booking booking;
 
-    @OneToMany (mappedBy = "wishListId", cascade = CascadeType.ALL)
-    private List<Complaints> complaints;
+    @OneToMany(mappedBy = "charity",cascade = CascadeType.ALL)
+    private List<Notification> notifications = new ArrayList<>();
+
+    public void addNotification(Notification notification){
+        notifications.add(notification);
+    }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,8 +27,6 @@ public class Charity {
     @GeneratedValue(generator = "charity_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "charity_gen", sequenceName = "charity_seq", allocationSize = 1)
     private Long id;
-
-    private boolean blocked;
 
     private String giftName;
 
@@ -61,7 +60,11 @@ public class Charity {
     @Enumerated(EnumType.STRING)
     private CharityStatus charityStatus;
 
-    @OneToMany(mappedBy = "charityId", cascade = CascadeType.ALL)
-    private List <Complaints> complaints;
+    @OneToMany(mappedBy = "charity",cascade = CascadeType.ALL)
+    private List<Notification> notifications = new ArrayList<>();
+
+    public void addNotification(Notification notification){
+        notifications.add(notification);
+    }
 
 }

@@ -1,9 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import kg.giftlist.giftlistm2.enums.ClothingSize;
 import kg.giftlist.giftlistm2.enums.Role;
-import kg.giftlist.giftlistm2.enums.ShoeSize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +26,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(generator = "user_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "user_gen", sequenceName = "user_seq", allocationSize = 1, initialValue = 3)
@@ -46,6 +42,11 @@ public class User implements UserDetails {
     @Email
     private String email;
 
+    @Column(name = "city")
+    private String city;
+
+    private String image;
+
     private String password;
 
     @Column(name = "date_of_birth")
@@ -53,14 +54,6 @@ public class User implements UserDetails {
 
     @Column(name = "phone_number")
     private String phoneNumber;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "clothing_size")
-    private ClothingSize clothingSize;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "shoe_size")
-    private ShoeSize shoeSize;
 
     @Size(max = 10000)
     private String hobbies;
@@ -70,15 +63,21 @@ public class User implements UserDetails {
     @Size(max = 10000)
     @Column(name = "important_to_know")
     private String importantToKnow;
+
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<ClothingSize> clothingSize;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<ShoeSize> shoeSize;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
     @JsonIgnore
     private List<WishList> wishLists;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    @JsonIgnore
     private List<Charity> charities;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
@@ -100,11 +99,15 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<User> requestToFriends = new ArrayList<>();
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthority()));
-        return grantedAuthorities;
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
+    @JsonIgnore
+    private List<Notification> notifications = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "receivers")
+    private List<Notification> notificationList = new ArrayList<>();
+
+    public void deleteNotification(Notification notification){
+        this.notifications.remove(notification);
     }
 
     public void sendRequestToFriend(User user) {
@@ -119,6 +122,17 @@ public class User implements UserDetails {
             friends = new ArrayList<>();
         }
         friends.add(user);
+    }
+
+    public void addNotification(Notification notification){
+        notifications.add(notification);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+        return grantedAuthorities;
     }
 
     @Override
