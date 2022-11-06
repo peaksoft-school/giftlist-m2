@@ -14,6 +14,4 @@ public interface WishListRepository extends JpaRepository<WishList, Long> {
 
     @Query("select w from WishList w where w.giftName like concat('%', :name, '%')")
     List<WishList> searchWishListByName(String name);
-
-    List<WishList> searchWishListByGiftName(String name);
 }

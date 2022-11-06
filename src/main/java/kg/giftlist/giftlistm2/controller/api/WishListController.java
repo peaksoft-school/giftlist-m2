@@ -75,10 +75,4 @@ public class WishListController {
     public List<WishList> search(@RequestParam String name) {
         return wishListService.search(name);
     }
-
-
-    @GetMapping("/search1")
-    public List<WishList> search1(@RequestParam String name) {
-        return wishListService.search1(name);
-    }
 }
