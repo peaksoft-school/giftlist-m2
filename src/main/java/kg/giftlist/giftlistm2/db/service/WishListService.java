@@ -6,10 +6,7 @@ import kg.giftlist.giftlistm2.db.entity.Booking;
 import kg.giftlist.giftlistm2.db.entity.Holiday;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.entity.WishList;
-import kg.giftlist.giftlistm2.db.repository.BookingRepository;
-import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
-import kg.giftlist.giftlistm2.db.repository.UserRepository;
-import kg.giftlist.giftlistm2.db.repository.WishListRepository;
+import kg.giftlist.giftlistm2.db.repository.*;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
 import kg.giftlist.giftlistm2.exception.BadCredentialsException;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
@@ -35,6 +32,8 @@ public class WishListService {
     private final WishListRepository wishListRepository;
     private final HolidayRepository holidayRepository;
     private final BookingRepository bookingRepository;
+    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     public WishListResponse create(WishListRequest request) {
         User user = getAuthenticatedUser();
@@ -53,6 +52,9 @@ public class WishListService {
         wishList.setDescription(request.getDescription());
         wishList.setWishListStatus(WishListStatus.NOT_BOOKED);
         wishListRepository.save(wishList);
+        List<User>friendList = userRepository.getAllFriendByUserId(user.getId());
+        wishList.addNotification(notificationService.wishListNotification(user,friendList,wishList));
+        notificationRepository.saveAll(wishList.getNotifications());
         return mapToResponse(wishList);
     }
 
