@@ -130,46 +130,62 @@ public class ComplaintService {
     }
 
     public String blockCharity(Long id) {
-        Charity charity = charityRepository.findById(id).get();
-        if (charity.isBlocked()) {
-            throw new BadCredentialsException("You have already blocked the charity with id " + id);
+        if (charityRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any charity with id " + id);
         } else {
-            charity.setBlocked(true);
-            charityRepository.save(charity);
-            return "You have blocked the charity with id " + id;
+            Charity charity = charityRepository.findById(id).get();
+            if (charity.isBlocked()) {
+                throw new BadCredentialsException("You have already blocked the charity with id " + id);
+            } else {
+                charity.setBlocked(true);
+                charityRepository.save(charity);
+                return "You have blocked the charity with id " + id;
+            }
         }
     }
 
     public String blockWishlist(Long id) {
-        WishList wishList = wishListRepository.findById(id).get();
-        if (wishList.isBlocked()) {
-            throw new BadCredentialsException("You have already blocked the wish list with id " + id);
+        if (wishListRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any wih list with id " + id);
         } else {
-            wishList.setBlocked(true);
-            wishListRepository.save(wishList);
-            return "You have blocked the wish list with id " + id;
+            WishList wishList = wishListRepository.findById(id).get();
+            if (wishList.isBlocked()) {
+                throw new BadCredentialsException("You have already blocked the wish list with id " + id);
+            } else {
+                wishList.setBlocked(true);
+                wishListRepository.save(wishList);
+                return "You have blocked the wish list with id " + id;
+            }
         }
     }
 
     public String unBlockCharity(Long id) {
-        Charity charity = charityRepository.findById(id).get();
-        if (!charity.isBlocked()) {
-            throw new BadCredentialsException("You have already unblocked the charity with id " + id);
+        if (charityRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any charity with id " + id);
         } else {
-            charity.setBlocked(false);
-            charityRepository.save(charity);
-            return "You have unblocked the charity with id " + id;
+            Charity charity = charityRepository.findById(id).get();
+            if (!charity.isBlocked()) {
+                throw new BadCredentialsException("You have already unblocked the charity with id " + id);
+            } else {
+                charity.setBlocked(false);
+                charityRepository.save(charity);
+                return "You have unblocked the charity with id " + id;
+            }
         }
     }
 
     public String unBlockWishlist(Long id) {
-        WishList wishList = wishListRepository.findById(id).get();
-        if (!wishList.isBlocked()) {
-            throw new BadCredentialsException("You have already unblocked the wish list with id " + id);
+        if (wishListRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any wih list with id " + id);
         } else {
-            wishList.setBlocked(false);
-            wishListRepository.save(wishList);
-            return "You have unblocked the wish list with id " + id;
+            WishList wishList = wishListRepository.findById(id).get();
+            if (!wishList.isBlocked()) {
+                throw new BadCredentialsException("You have already unblocked the wish list with id " + id);
+            } else {
+                wishList.setBlocked(false);
+                wishListRepository.save(wishList);
+                return "You have unblocked the wish list with id " + id;
+            }
         }
     }
 
