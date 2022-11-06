@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "wish_list")
@@ -57,7 +58,7 @@ public class WishList {
     @OneToOne(mappedBy = "wishList", cascade = CascadeType.ALL)
     private Booking booking;
 
-    @OneToOne(mappedBy = "wishListId", cascade = CascadeType.ALL)
-    private Complaints complaints;
+    @OneToMany (mappedBy = "wishListId", cascade = CascadeType.ALL)
+    private List<Complaints> complaints;
 
 }

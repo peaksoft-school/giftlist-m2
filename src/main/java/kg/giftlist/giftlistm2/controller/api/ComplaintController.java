@@ -53,13 +53,13 @@ public class ComplaintController {
     }
 
     @Operation(summary = "Get all wish list complaints", description = "Getting all wish list complaints")
-    @GetMapping("wishlist")
+    @GetMapping("wishlist/all")
     public List<WishlistComplaintResponse> getAllWishListComplaints() {
         return complaintService.getAllWishListComplaints();
     }
 
     @Operation(summary = "Get all charity complaints", description = "Getting all charity complaints")
-    @GetMapping("charity")
+    @GetMapping("charity/all")
     public List<CharityComplaintResponse> getAllCharityComplaints() {
         return complaintService.getAllCharityComplaints();
     }

@@ -30,12 +30,12 @@ public class Complaints {
     @JsonIgnore
     private User user;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "wish_list_id")
     @JsonIgnore
     private WishList wishListId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "charity_id")
     @JsonIgnore
     private Charity charityId;
