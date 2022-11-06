@@ -24,20 +24,20 @@ public class ComplaintController {
 
     private final ComplaintService complaintService;
 
-    @Operation(summary = "Complaining the wish list posts", description = "Complain the wish list posts to admin")
+    @Operation(summary = "Complaining the wish list posts to admin", description = "Creating a complain by wish list id")
     @PostMapping("wishlist/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public String wishlistComplaint(@PathVariable Long id,
-                                    @RequestBody ComplaintRequest request) {
-        return complaintService.wishlistComplaint(id, request);
+    public String createWishlistComplaint(@PathVariable Long id,
+                                          @RequestBody ComplaintRequest request) {
+        return complaintService.createWishlistComplaint(id, request);
     }
 
-    @Operation(summary = "Complaining the charity posts", description = "Complain the charity posts to admin")
+    @Operation(summary = "Complaining the charity posts", description = "Creating a complain by charity id")
     @PostMapping("charity/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public String charityComplaint(@PathVariable Long id,
-                                   @RequestBody ComplaintRequest request) {
-        return complaintService.charityComplaint(id, request);
+    public String createCharityComplaint(@PathVariable Long id,
+                                         @RequestBody ComplaintRequest request) {
+        return complaintService.createCharityComplaint(id, request);
     }
 
     @Operation(summary = "Get wish list complaint", description = "Getting a wish list complaint by id")

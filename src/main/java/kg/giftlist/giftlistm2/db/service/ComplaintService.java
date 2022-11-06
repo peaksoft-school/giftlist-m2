@@ -21,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -34,7 +33,7 @@ public class ComplaintService {
     private final ComplaintRepository complaintRepository;
     private final CharityRepository charityRepository;
 
-    public String wishlistComplaint(Long id, ComplaintRequest request) {
+    public String createWishlistComplaint(Long id, ComplaintRequest request) {
         User user = getAuthenticatedUser();
         if (wishListRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any wish list with id " + id);
@@ -56,7 +55,7 @@ public class ComplaintService {
     }
 
 
-    public String charityComplaint(Long id, ComplaintRequest request) {
+    public String createCharityComplaint(Long id, ComplaintRequest request) {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any charity with id " + id);
@@ -97,7 +96,7 @@ public class ComplaintService {
         if (complaintRepository.findAll().isEmpty()) {
             throw new EmptyValueException("There is no any complained wish list");
         }
-        List<Complaints> complaints = complaintRepository.findAll();
+        List<Complaints> complaints = complaintRepository.getAllWishlistComplaints();
         return wishlistView(complaints);
     }
 
@@ -105,7 +104,7 @@ public class ComplaintService {
         if (complaintRepository.findAll().isEmpty()) {
             throw new EmptyValueException("There is no any complained charity");
         }
-        List<Complaints> complaints = complaintRepository.findAll();
+        List<Complaints> complaints = complaintRepository.getAllCharityComplaints();
         return charityView(complaints);
     }
 
