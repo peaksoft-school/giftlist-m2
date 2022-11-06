@@ -64,7 +64,7 @@ public class WishListController {
         return wishListService.book(id);
     }
 
-    @Operation(summary = "Wish list un booking", description = "Un booking a wish list")
+    @Operation(summary = "Wish list unbooking", description = "Unbooking a wish list(deleting a book by id which contains wish list)")
     @DeleteMapping("wishlist/{id}")
     public String unBook(@PathVariable Long id) {
         return wishListService.unBook(id);

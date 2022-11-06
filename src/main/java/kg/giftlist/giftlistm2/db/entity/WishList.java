@@ -26,6 +26,8 @@ public class WishList {
     @SequenceGenerator(name = "wish_list_gen", sequenceName = "wish_list_seq", allocationSize = 1)
     private Long id;
 
+    private boolean blocked;
+
     @Column(name = "gift_name")
     private String giftName;
 

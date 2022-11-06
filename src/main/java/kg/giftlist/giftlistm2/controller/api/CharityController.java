@@ -38,13 +38,13 @@ public class CharityController {
         return charityService.createCharity(charityRequest);
     }
 
-    @Operation(summary = "charity booking", description = "Booking a charity")
+    @Operation(summary = "Charity booking", description = "Booking a charity")
     @PostMapping("{id}")
     public String booking(@PathVariable Long id) {
         return charityService.book(id);
     }
 
-    @Operation(summary = "Cancelling charity booking", description = "Remove a charity from booking")
+    @Operation(summary = "Charity unbooking", description = "Unbooking a charity(deleting a book by id which contains charity)")
     @DeleteMapping("cancel/{id}")
     public String unBook(@PathVariable Long id) {
         return charityService.unBook(id);

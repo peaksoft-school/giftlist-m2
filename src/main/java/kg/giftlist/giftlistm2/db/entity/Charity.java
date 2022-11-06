@@ -27,6 +27,8 @@ public class Charity {
     @SequenceGenerator(name = "charity_gen", sequenceName = "charity_seq", allocationSize = 1)
     private Long id;
 
+    private boolean blocked;
+
     private String giftName;
 
     @Enumerated(EnumType.STRING)
