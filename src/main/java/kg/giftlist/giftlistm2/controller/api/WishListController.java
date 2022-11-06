@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.WishListRequest;
 import kg.giftlist.giftlistm2.controller.payload.WishListResponse;
+import kg.giftlist.giftlistm2.db.entity.WishList;
 import kg.giftlist.giftlistm2.db.service.WishListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -70,4 +71,14 @@ public class WishListController {
         return wishListService.unBook(id);
     }
 
+    @GetMapping("/search")
+    public List<WishList> search(@RequestParam String name) {
+        return wishListService.search(name);
+    }
+
+
+    @GetMapping("/search1")
+    public List<WishList> search1(@RequestParam String name) {
+        return wishListService.search1(name);
+    }
 }

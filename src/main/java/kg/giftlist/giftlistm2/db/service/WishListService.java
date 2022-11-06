@@ -215,4 +215,11 @@ public class WishListService {
         return userRepository.findByEmail(login);
     }
 
+    public List<WishList> search(String name) {
+        return wishListRepository.searchWishListByName(name);
+    }
+
+    public List<WishList> search1(String name) {
+        return wishListRepository.searchWishListByGiftName(name);
+    }
 }
