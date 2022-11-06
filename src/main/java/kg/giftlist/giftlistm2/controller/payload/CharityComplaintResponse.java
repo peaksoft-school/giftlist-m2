@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class CharityComplaintResponse {
 
     private Long id;
+    private Long charityId;
     private String giftName;
     private Long userId;
     private String firstName;

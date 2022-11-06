@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class WishlistComplaintResponse {
 
     private Long id;
+    private Long wishlistId;
     private String giftName;
     private Long userId;
     private String firstName;

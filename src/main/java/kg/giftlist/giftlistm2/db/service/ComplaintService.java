@@ -32,73 +32,78 @@ public class ComplaintService {
     private final WishListRepository wishListRepository;
     private final ComplaintRepository complaintRepository;
     private final CharityRepository charityRepository;
-    private final WishListService wishListService;
 
     public String createWishlistComplaint(Long id, ComplaintRequest request) {
         User user = getAuthenticatedUser();
         if (wishListRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any wish list with id " + id);
+        } else {
+            WishList wishList = wishListRepository.findById(id).get();
+            if (user.getWishLists().contains(wishList)) {
+                throw new BadCredentialsException("You can not complain to your own posts!");
+            } else {
+                Complaints complaints = new Complaints();
+                if (request.getComplaints().isEmpty()) {
+                    throw new EmptyValueException("The field must not be empty!");
+                }
+                complaints.setUser(user);
+                complaints.setComplaintsType(ComplaintsType.valueOf(request.getComplaints()));
+                complaints.setWishListId(wishList);
+                complaintRepository.save(complaints);
+                return "Thank you for letting us know!\n" +
+                        "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
+            }
         }
-        WishList wishList = wishListRepository.findById(id).get();
-        if (user.getWishLists().contains(wishList)) {
-            throw new BadCredentialsException("You can not complain to your own posts!");
-        }
-        Complaints complaints = new Complaints();
-        if (request.getComplaints().isEmpty()) {
-            throw new EmptyValueException("The field must not be empty!");
-        }
-        complaints.setUser(user);
-        complaints.setComplaintsType(ComplaintsType.valueOf(request.getComplaints()));
-        complaints.setWishListId(wishList);
-        complaintRepository.save(complaints);
-        return "Thank you for letting us know!\n" +
-                "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
     }
-
 
     public String createCharityComplaint(Long id, ComplaintRequest request) {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any charity with id " + id);
+        } else {
+            Charity charity = charityRepository.findById(id).get();
+            if (user.getCharities().contains(charity)) {
+                throw new BadCredentialsException("You can not complain to your own posts!");
+            } else {
+                Complaints complaints = new Complaints();
+                if (request.getComplaints().isEmpty()) {
+                    throw new EmptyValueException("The field must not be empty!");
+                }
+                complaints.setUser(user);
+                complaints.setComplaintsType(ComplaintsType.valueOf(request.getComplaints()));
+                complaints.setCharityId(charity);
+                complaintRepository.save(complaints);
+                return "Thank you for letting us know!\n" +
+                        "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
+            }
         }
-        Charity charity = charityRepository.findById(id).get();
-        if (user.getCharities().contains(charity)) {
-            throw new BadCredentialsException("You can not complain to your own posts!");
-        }
-        Complaints complaints = new Complaints();
-        if (request.getComplaints().isEmpty()) {
-            throw new EmptyValueException("The field must not be empty!");
-        }
-        complaints.setUser(user);
-        complaints.setComplaintsType(ComplaintsType.valueOf(request.getComplaints()));
-        complaints.setCharityId(charity);
-        complaintRepository.save(complaints);
-        return "Thank you for letting us know!\n" +
-                "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
     }
 
     public WishlistComplaintResponse getWishlistComplaintById(Long id) {
         if (complaintRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any complained wish list with id " + id);
+        } else {
+            Complaints complaints = complaintRepository.findById(id).get();
+            return wishlistMapToResponse(complaints);
         }
-        Complaints complaints = complaintRepository.findById(id).get();
-        return wishlistMapToResponse(complaints);
     }
 
     public CharityComplaintResponse getCharityComplaintById(Long id) {
         if (complaintRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any complained charity with id " + id);
+        } else {
+            Complaints complaints = complaintRepository.findById(id).get();
+            return charityMapToResponse(complaints);
         }
-        Complaints complaints = complaintRepository.findById(id).get();
-        return charityMapToResponse(complaints);
     }
 
     public List<WishlistComplaintResponse> getAllWishListComplaints() {
         if (complaintRepository.findAll().isEmpty()) {
             throw new EmptyValueException("There is no any complained wish list");
+        } else {
+            List<Complaints> complaints = complaintRepository.getAllWishlistComplaints();
+            return wishlistView(complaints);
         }
-        List<Complaints> complaints = complaintRepository.getAllWishlistComplaints();
-        return wishlistView(complaints);
     }
 
     public List<CharityComplaintResponse> getAllCharityComplaints() {
@@ -211,7 +216,8 @@ public class ComplaintService {
             return null;
         }
         WishlistComplaintResponse response = new WishlistComplaintResponse();
-        response.setId(complaints.getWishListId().getId());
+        response.setId(complaints.getId());
+        response.setWishlistId(complaints.getWishListId().getId());
         response.setGiftName(complaints.getWishListId().getGiftName());
         response.setUserId(complaints.getWishListId().getUser().getId());
         response.setFirstName(complaints.getWishListId().getUser().getFirstName());
@@ -233,7 +239,8 @@ public class ComplaintService {
             return null;
         }
         CharityComplaintResponse response = new CharityComplaintResponse();
-        response.setId(complaints.getCharityId().getId());
+        response.setId(complaints.getId());
+        response.setCharityId(complaints.getCharityId().getId());
         response.setGiftName(complaints.getCharityId().getGiftName());
         response.setUserId(complaints.getCharityId().getUser().getId());
         response.setFirstName(complaints.getCharityId().getUser().getFirstName());
