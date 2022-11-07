@@ -20,8 +20,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class ComplaintService {
     private final WishListRepository wishListRepository;
     private final ComplaintRepository complaintRepository;
     private final CharityRepository charityRepository;
+    private final EntityManager entityManager;
 
     public String createWishlistComplaint(Long id, ComplaintRequest request) {
         User user = getAuthenticatedUser();
@@ -70,26 +73,27 @@ public class ComplaintService {
             Charity charity = charityRepository.findById(id).get();
             if (user.getCharities().contains(charity)) {
                 throw new BadCredentialsException("You can not complain to your own posts!");
+            }
+//                Complaints chary = complaintRepository.getCharityById(charity.getId());
+            if (request.getComplaints().isEmpty()) {
+                throw new EmptyValueException("The field must not be empty!");
+            }
+            Complaints complaints1 = complaintRepository.getCharityById(charity.getId());
+            if (user.getComplaints().contains(complaints1)) {
+                throw new BadCredentialsException("You have complained this post");
             } else {
-                Complaints charityId = complaintRepository.getCharityById(charity.getId());
-                if (user.getComplaints().contains(charityId)) {
-                    throw new BadCredentialsException("You have complained this post");
-                }
-                 else {
-                    Complaints complaints = new Complaints();
-                    if (request.getComplaints().isEmpty()) {
-                        throw new EmptyValueException("The field must not be empty!");
-                    }
-                    complaints.setUser(user);
-                    complaints.setComplaintsType(ComplaintsType.valueOf(request.getComplaints()));
-                    complaints.setCharityId(charity);
-                    complaintRepository.save(complaints);
-                    return "Thank you for letting us know!\n" +
-                            "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
-                }
+                Complaints complaints = new Complaints();
+                complaints.setUser(user);
+                complaints.setComplaintsType(ComplaintsType.valueOf(request.getComplaints()));
+                complaints.setCharityId(charity);
+                complaintRepository.save(complaints);
+                return "Thank you for letting us know!\n" +
+                        "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
+
             }
         }
     }
+
 
     public WishlistComplaintResponse getWishlistComplaintById(Long id) {
         if (complaintRepository.findById(id).isEmpty()) {
