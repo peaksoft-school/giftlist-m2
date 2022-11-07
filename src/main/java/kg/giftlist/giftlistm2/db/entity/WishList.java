@@ -64,7 +64,7 @@ public class WishList {
     @OneToMany(mappedBy = "charity",cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
 
-    @OneToMany (mappedBy = "wishListId", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "wishList", cascade = CascadeType.ALL)
     private List<Complaints> complaints;
 
     public void addNotification(Notification notification){

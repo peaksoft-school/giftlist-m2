@@ -33,11 +33,11 @@ public class Complaints {
     @ManyToOne
     @JoinColumn(name = "wish_list_id")
     @JsonIgnore
-    private WishList wishListId;
+    private WishList wishList;
 
     @ManyToOne
     @JoinColumn(name = "charity_id")
     @JsonIgnore
-    private Charity charityId;
+    private Charity charity;
 
 }

@@ -7,10 +7,7 @@ import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.entity.Complaints;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.entity.WishList;
-import kg.giftlist.giftlistm2.db.repository.CharityRepository;
-import kg.giftlist.giftlistm2.db.repository.ComplaintRepository;
-import kg.giftlist.giftlistm2.db.repository.UserRepository;
-import kg.giftlist.giftlistm2.db.repository.WishListRepository;
+import kg.giftlist.giftlistm2.db.repository.*;
 import kg.giftlist.giftlistm2.enums.ComplaintsType;
 import kg.giftlist.giftlistm2.exception.BadCredentialsException;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +31,7 @@ public class ComplaintService {
     private final ComplaintRepository complaintRepository;
     private final CharityRepository charityRepository;
     private final EntityManager entityManager;
+    private final ComplainRepImpl complainRep;
 
     public String createWishlistComplaint(Long id, ComplaintRequest request) {
         User user = getAuthenticatedUser();
@@ -56,7 +53,7 @@ public class ComplaintService {
                     }
                     complaints.setUser(user);
                     complaints.setComplaintsType(ComplaintsType.valueOf(request.getComplaints()));
-                    complaints.setWishListId(wishList);
+                    complaints.setWishList(wishList);
                     complaintRepository.save(complaints);
                     return "Thank you for letting us know!\n" +
                             "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
@@ -78,14 +75,15 @@ public class ComplaintService {
             if (request.getComplaints().isEmpty()) {
                 throw new EmptyValueException("The field must not be empty!");
             }
-            Complaints complaints1 = complaintRepository.getCharityById(charity.getId());
-            if (user.getComplaints().contains(complaints1)) {
+            Complaints getCharityFromComplaint = complaintRepository.getCharityById(charity.getId());
+            Complaints get = complainRep.getCharityFromComp(charity.getId()).get();
+            if (user.getComplaints().contains(get)) {
                 throw new BadCredentialsException("You have complained this post");
             } else {
                 Complaints complaints = new Complaints();
                 complaints.setUser(user);
                 complaints.setComplaintsType(ComplaintsType.valueOf(request.getComplaints()));
-                complaints.setCharityId(charity);
+                complaints.setCharity(charity);
                 complaintRepository.save(complaints);
                 return "Thank you for letting us know!\n" +
                         "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
@@ -223,17 +221,17 @@ public class ComplaintService {
         }
         WishlistComplaintResponse response = new WishlistComplaintResponse();
         response.setId(complaints.getId());
-        response.setWishlistId(complaints.getWishListId().getId());
-        response.setGiftName(complaints.getWishListId().getGiftName());
-        response.setUserId(complaints.getWishListId().getUser().getId());
-        response.setFirstName(complaints.getWishListId().getUser().getFirstName());
-        response.setLastName(complaints.getWishListId().getUser().getLastName());
-        response.setLink(complaints.getWishListId().getLink());
-        response.setHolidayName(complaints.getWishListId().getHolidays().getName());
-        response.setHolidayDate(complaints.getWishListId().getHolidayDate());
-        response.setDescription(complaints.getWishListId().getDescription());
-        response.setImage(complaints.getWishListId().getImage());
-        response.setWishListStatus(complaints.getWishListId().getWishListStatus());
+        response.setWishlistId(complaints.getWishList().getId());
+        response.setGiftName(complaints.getWishList().getGiftName());
+        response.setUserId(complaints.getWishList().getUser().getId());
+        response.setFirstName(complaints.getWishList().getUser().getFirstName());
+        response.setLastName(complaints.getWishList().getUser().getLastName());
+        response.setLink(complaints.getWishList().getLink());
+        response.setHolidayName(complaints.getWishList().getHolidays().getName());
+        response.setHolidayDate(complaints.getWishList().getHolidayDate());
+        response.setDescription(complaints.getWishList().getDescription());
+        response.setImage(complaints.getWishList().getImage());
+        response.setWishListStatus(complaints.getWishList().getWishListStatus());
         response.setComplainingUserName(complaints.getUser().getFirstName());
         response.setComplainingUserLastname(complaints.getUser().getLastName());
         response.setComplaintCause(complaints.getComplaintsType().name());
@@ -246,17 +244,17 @@ public class ComplaintService {
         }
         CharityComplaintResponse response = new CharityComplaintResponse();
         response.setId(complaints.getId());
-        response.setCharityId(complaints.getCharityId().getId());
-        response.setGiftName(complaints.getCharityId().getGiftName());
-        response.setUserId(complaints.getCharityId().getUser().getId());
-        response.setFirstName(complaints.getCharityId().getUser().getFirstName());
-        response.setLastName(complaints.getCharityId().getUser().getLastName());
-        response.setCharityStatus(complaints.getCharityId().getCharityStatus());
-        response.setCondition(complaints.getCharityId().getCondition());
-        response.setCategory(complaints.getCharityId().getCategory().getCategoryName());
-        response.setImage(complaints.getCharityId().getImage());
-        response.setDescription(complaints.getCharityId().getDescription());
-        response.setCreatedDate(complaints.getCharityId().getCreatedDate());
+        response.setCharityId(complaints.getCharity().getId());
+        response.setGiftName(complaints.getCharity().getGiftName());
+        response.setUserId(complaints.getCharity().getUser().getId());
+        response.setFirstName(complaints.getCharity().getUser().getFirstName());
+        response.setLastName(complaints.getCharity().getUser().getLastName());
+        response.setCharityStatus(complaints.getCharity().getCharityStatus());
+        response.setCondition(complaints.getCharity().getCondition());
+        response.setCategory(complaints.getCharity().getCategory().getCategoryName());
+        response.setImage(complaints.getCharity().getImage());
+        response.setDescription(complaints.getCharity().getDescription());
+        response.setCreatedDate(complaints.getCharity().getCreatedDate());
         response.setComplainingUserName(complaints.getUser().getFirstName());
         response.setComplainingUserLastname(complaints.getUser().getLastName());
         response.setComplaintCause(complaints.getComplaintsType().name());
