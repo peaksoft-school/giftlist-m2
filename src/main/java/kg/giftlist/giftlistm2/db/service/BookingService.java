@@ -36,23 +36,30 @@ public class BookingService {
         return responses;
     }
 
-    public List<BookingResponse> viewCharity(List<Charity> charities) {
-        List<BookingResponse> responses = new ArrayList<>();
-        for (Charity charity :charities) {
-            responses.add(bookingMapper.bookingResponse(charity));
-        }
-        return responses;
-    }
+//    public List<BookingResponse> viewCharity(List<Charity> charities) {
+//        List<BookingResponse> responses = new ArrayList<>();
+//        for (Charity charity :charities) {
+//            responses.add(bookingMapper.bookingResponse(charity));
+//        }
+//        return responses;
+//    }
 
     public List<BookingResponse> getAllCharityBookings() {
         User user = getAuthenticatedUser();
-        List<Charity> booking = bookingRepository.getWishListBookingByUserId(user.getId());
+        List<Booking> booking = bookingRepository.getAllCharityBooking();
         if (booking.isEmpty()) {
             log.error("Booking not found");
             throw new BookingNotFoundException("Bookings not found");
         }
-        return view(booking);
-    }
+
+            log.info("Get all ");
+            return view(booking);
+        }
+//        else {
+//            log.error("You have no any booked charity");
+//            throw new BookingNotFoundException("You have no any booked charity");
+//        }
+ //   }
 
     public List<BookingWishListResponse> viewWishList(List<Booking> bookingList) {
         List<BookingWishListResponse> responses = new ArrayList<>();
