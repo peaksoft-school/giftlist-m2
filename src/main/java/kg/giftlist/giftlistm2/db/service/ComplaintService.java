@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +29,8 @@ public class ComplaintService {
     private final WishListRepository wishListRepository;
     private final ComplaintRepository complaintRepository;
     private final CharityRepository charityRepository;
-    private final EntityManager entityManager;
-    private final ComplainRepImpl complainRep;
+    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     public String createWishlistComplaint(Long id, ComplaintRequest request) {
         User user = getAuthenticatedUser();
@@ -42,9 +41,8 @@ public class ComplaintService {
             if (user.getWishLists().contains(wishList)) {
                 throw new BadCredentialsException("You can not complain to your own posts!");
             } else {
-                Complaints wishlistId = complaintRepository.getWishlistById(wishList.getId());
-                if (user.getComplaints().contains(wishlistId)) {
-                    System.out.println("UUUUUU");
+                Complaints getUserFromComplaint = complaintRepository.getUserFromComplain(user.getId());
+                if (wishList.getComplaints().contains(getUserFromComplaint)) {
                     throw new BadCredentialsException("You have complained this post");
                 } else {
                     Complaints complaints = new Complaints();
@@ -71,13 +69,11 @@ public class ComplaintService {
             if (user.getCharities().contains(charity)) {
                 throw new BadCredentialsException("You can not complain to your own posts!");
             }
-//                Complaints chary = complaintRepository.getCharityById(charity.getId());
             if (request.getComplaints().isEmpty()) {
                 throw new EmptyValueException("The field must not be empty!");
             }
-            Complaints getCharityFromComplaint = complaintRepository.getCharityById(charity.getId());
-            Complaints get = complainRep.getCharityFromComp(charity.getId()).get();
-            if (user.getComplaints().contains(get)) {
+            Complaints getUserFromComplaint = complaintRepository.getUserFromComplain(user.getId());
+            if (charity.getComplaints().contains(getUserFromComplaint)) {
                 throw new BadCredentialsException("You have complained this post");
             } else {
                 Complaints complaints = new Complaints();
@@ -85,9 +81,11 @@ public class ComplaintService {
                 complaints.setComplaintsType(ComplaintsType.valueOf(request.getComplaints()));
                 complaints.setCharity(charity);
                 complaintRepository.save(complaints);
+                User admin = userRepository.findByEmail("admin@gmail.com");
+                complaints.addNotification(notificationService.sendNotificationToAdmin(user, new ArrayList<>(List.of(admin)), complaints));
+                notificationRepository.saveAll(complaints.getNotifications());
                 return "Thank you for letting us know!\n" +
                         "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
-
             }
         }
     }
@@ -137,67 +135,6 @@ public class ComplaintService {
         complaintRepository.deleteById(complaints.getId());
         return "Complaint successfully was deleted!";
     }
-
-    public String blockCharity(Long id) {
-        if (charityRepository.findById(id).isEmpty()) {
-            throw new EmptyValueException("There is no any charity with id " + id);
-        } else {
-            Charity charity = charityRepository.findById(id).get();
-            if (charity.isBlocked()) {
-                throw new BadCredentialsException("You have already blocked the charity with id " + id);
-            } else {
-                charity.setBlocked(true);
-                charityRepository.save(charity);
-                return "You have blocked the charity with id " + id;
-            }
-        }
-    }
-
-    public String blockWishlist(Long id) {
-        if (wishListRepository.findById(id).isEmpty()) {
-            throw new EmptyValueException("There is no any wih list with id " + id);
-        } else {
-            WishList wishList = wishListRepository.findById(id).get();
-            if (wishList.isBlocked()) {
-                throw new BadCredentialsException("You have already blocked the wish list with id " + id);
-            } else {
-                wishList.setBlocked(true);
-                wishListRepository.save(wishList);
-                return "You have blocked the wish list with id " + id;
-            }
-        }
-    }
-
-    public String unBlockCharity(Long id) {
-        if (charityRepository.findById(id).isEmpty()) {
-            throw new EmptyValueException("There is no any charity with id " + id);
-        } else {
-            Charity charity = charityRepository.findById(id).get();
-            if (!charity.isBlocked()) {
-                throw new BadCredentialsException("You have already unblocked the charity with id " + id);
-            } else {
-                charity.setBlocked(false);
-                charityRepository.save(charity);
-                return "You have unblocked the charity with id " + id;
-            }
-        }
-    }
-
-    public String unBlockWishlist(Long id) {
-        if (wishListRepository.findById(id).isEmpty()) {
-            throw new EmptyValueException("There is no any wih list with id " + id);
-        } else {
-            WishList wishList = wishListRepository.findById(id).get();
-            if (!wishList.isBlocked()) {
-                throw new BadCredentialsException("You have already unblocked the wish list with id " + id);
-            } else {
-                wishList.setBlocked(false);
-                wishListRepository.save(wishList);
-                return "You have unblocked the wish list with id " + id;
-            }
-        }
-    }
-
 
     private List<WishlistComplaintResponse> wishlistView(List<Complaints> complaints) {
         List<WishlistComplaintResponse> responses = new ArrayList<>();

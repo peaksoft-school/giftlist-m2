@@ -106,9 +106,9 @@ public class CharityService {
         if (charityRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any charity with id " + id);
         }
-        Charity charities = charityRepository.findById(id).get();
-        if (user.getCharities().contains(charities)) {
-            return mapToResponse(charities);
+        Charity charity = charityRepository.findById(id).get();
+        if (user.getCharities().contains(charity)) {
+            return mapToResponse(charity);
         } else {
             throw new EmptyValueException("You have no any charity with id " + id);
         }
@@ -117,7 +117,7 @@ public class CharityService {
     public List<CharityResponse> getAllCharities() {
         User user = getAuthenticatedUser();
         if (user.getCharities().isEmpty()) {
-            throw new EmptyValueException("There is no any charities");
+            throw new EmptyValueException("There are no any charities");
         }
         List<Charity> charities = charityRepository.getCharityByUserId(user.getId());
         return view(charities);
@@ -213,6 +213,54 @@ public class CharityService {
                 } else {
                     throw new EmptyValueException("You have no any charity with id " + id);
                 }
+            }
+        }
+    }
+
+    public CharityResponse getCharityByAdmin(Long id) {
+        if (charityRepository.existsById(id)) {
+            Charity charity = charityRepository.findById(id).get();
+            return mapToResponse(charity);
+        } else {
+            throw new EmptyValueException("There is no any charity with id " + id);
+        }
+    }
+
+    public List<CharityResponse> getAllCharitiesByAdmin() {
+        if (charityRepository.findAll().isEmpty()) {
+            throw new EmptyValueException("There is no any charity");
+        } else {
+            List<Charity> charities = charityRepository.findAll();
+            return view(charities);
+        }
+    }
+
+    public String blockCharityByAdmin(Long id) {
+        if (charityRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any charity with id " + id);
+        } else {
+            Charity charity = charityRepository.findById(id).get();
+            if (charity.isBlocked()) {
+                throw new BadCredentialsException("You have already blocked the charity with id " + id);
+            } else {
+                charity.setBlocked(true);
+                charityRepository.save(charity);
+                return "You have blocked the charity with id " + id;
+            }
+        }
+    }
+
+    public String unBlockCharityByAdmin(Long id) {
+        if (charityRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any charity with id " + id);
+        } else {
+            Charity charity = charityRepository.findById(id).get();
+            if (!charity.isBlocked()) {
+                throw new BadCredentialsException("You have already unblocked the charity with id " + id);
+            } else {
+                charity.setBlocked(false);
+                charityRepository.save(charity);
+                return "You have unblocked the charity with id " + id;
             }
         }
     }

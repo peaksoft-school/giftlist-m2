@@ -1,11 +1,9 @@
 package kg.giftlist.giftlistm2.db.service;
 
+import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
 import kg.giftlist.giftlistm2.controller.payload.WishListRequest;
 import kg.giftlist.giftlistm2.controller.payload.WishListResponse;
-import kg.giftlist.giftlistm2.db.entity.Booking;
-import kg.giftlist.giftlistm2.db.entity.Holiday;
-import kg.giftlist.giftlistm2.db.entity.User;
-import kg.giftlist.giftlistm2.db.entity.WishList;
+import kg.giftlist.giftlistm2.db.entity.*;
 import kg.giftlist.giftlistm2.db.repository.*;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
 import kg.giftlist.giftlistm2.exception.BadCredentialsException;
@@ -53,8 +51,8 @@ public class WishListService {
         wishList.setDescription(request.getDescription());
         wishList.setWishListStatus(WishListStatus.NOT_BOOKED);
         wishListRepository.save(wishList);
-        List<User>friendList = userRepository.getAllFriendByUserId(user.getId());
-        wishList.addNotification(notificationService.wishListNotification(user,friendList,wishList));
+        List<User> friendList = userRepository.getAllFriendByUserId(user.getId());
+        wishList.addNotification(notificationService.wishListNotification(user, friendList, wishList));
         notificationRepository.saveAll(wishList.getNotifications());
         return mapToResponse(wishList);
     }
@@ -196,6 +194,54 @@ public class WishListService {
                 return "You have successfully unbooked this wish list";
             } else {
                 throw new BadCredentialsException("This wish list is already unbooked");
+            }
+        }
+    }
+
+    public WishListResponse getWishListByAdmin(Long id) {
+        if (wishListRepository.existsById(id)) {
+            WishList wishList = wishListRepository.findById(id).get();
+            return mapToResponse(wishList);
+        } else {
+            throw new EmptyValueException("There is no any wish list with id " + id);
+        }
+    }
+
+    public List<WishListResponse> getAllWishlistsByAdmin() {
+        if (wishListRepository.findAll().isEmpty()) {
+            throw new EmptyValueException("There is no any wish list");
+        } else {
+            List<WishList> wishLists = wishListRepository.findAll();
+            return view(wishLists);
+        }
+    }
+
+    public String blockWishlistByAdmin(Long id) {
+        if (wishListRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any wih list with id " + id);
+        } else {
+            WishList wishList = wishListRepository.findById(id).get();
+            if (wishList.isBlocked()) {
+                throw new BadCredentialsException("You have already blocked the wish list with id " + id);
+            } else {
+                wishList.setBlocked(true);
+                wishListRepository.save(wishList);
+                return "You have blocked the wish list with id " + id;
+            }
+        }
+    }
+
+    public String unBlockWishlistByAdmin(Long id) {
+        if (wishListRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any wih list with id " + id);
+        } else {
+            WishList wishList = wishListRepository.findById(id).get();
+            if (!wishList.isBlocked()) {
+                throw new BadCredentialsException("You have already unblocked the wish list with id " + id);
+            } else {
+                wishList.setBlocked(false);
+                wishListRepository.save(wishList);
+                return "You have unblocked the wish list with id " + id;
             }
         }
     }

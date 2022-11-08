@@ -15,7 +15,6 @@ import java.util.List;
 @RequestMapping("api/notifications")
 @CrossOrigin
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('USER')")
 @Tag(name = "Notification API", description = "User can get all notifications, get all un and is read notifications, get notification by id and delete all notification")
 @SecurityRequirement(name = "Authorization")
 public class NotificationController {

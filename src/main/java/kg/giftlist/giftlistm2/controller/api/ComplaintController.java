@@ -26,7 +26,7 @@ public class ComplaintController {
 
     @Operation(summary = "Complain the wish list posts to admin", description = "Creating a complaint by wish list id")
     @PostMapping("wishlist/{id}")
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public String createWishlistComplaint(@PathVariable Long id,
                                           @RequestBody ComplaintRequest request) {
         return complaintService.createWishlistComplaint(id, request);
@@ -34,7 +34,7 @@ public class ComplaintController {
 
     @Operation(summary = "Complain the charity posts to admin", description = "Creating a complain by charity id")
     @PostMapping("charity/{id}")
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public String createCharityComplaint(@PathVariable Long id,
                                          @RequestBody ComplaintRequest request) {
         return complaintService.createCharityComplaint(id, request);
@@ -65,33 +65,9 @@ public class ComplaintController {
     }
 
     @Operation(summary = "Delete a complaint", description = "Admin can delete a complaint by id")
-    @DeleteMapping("wishlist/{id}")
+    @DeleteMapping("{id}")
     public String deleteComplaint(@PathVariable Long id) {
         return complaintService.deleteComplaint(id);
-    }
-
-    @Operation(summary = "Block charity", description = "Admin can block a charity by id")
-    @PostMapping("charity/block/{id}")
-    public String blockCharity(@PathVariable Long id) {
-        return complaintService.blockCharity(id);
-    }
-
-    @Operation(summary = "Block wish list", description = "Admin can block a wish list by id")
-    @PostMapping("wishlist/block/{id}")
-    public String blockWishlist(@PathVariable Long id) {
-        return complaintService.blockWishlist(id);
-    }
-
-    @Operation(summary = "Unblock charity", description = "Admin can unblock a charity by id")
-    @PostMapping("charity/unblock/{id}")
-    public String unBlockCharity(@PathVariable Long id) {
-        return complaintService.unBlockCharity(id);
-    }
-
-    @Operation(summary = "Unblock wish list", description = "Admin can unblock a wish list by id")
-    @PostMapping("wishlist/unblock/{id}")
-    public String unBlockWishlist(@PathVariable Long id) {
-        return complaintService.unBlockWishlist(id);
     }
 
 }
