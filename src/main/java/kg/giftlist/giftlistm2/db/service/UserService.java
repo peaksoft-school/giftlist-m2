@@ -4,6 +4,7 @@ import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
 import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
+import kg.giftlist.giftlistm2.controller.payload.UserChangePasswordRequest;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.enums.Role;
@@ -16,9 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -107,6 +112,33 @@ public class UserService {
         user.setEmail(signupRequest.getEmail());
         user.setPassword(signupRequest.getConfirmPassword());
         return user;
+    }
+
+    @Transactional
+    public AuthResponse changeUserPassword(UserChangePasswordRequest userChangePasswordRequest) {
+        User user = getAuthenticatedUser();
+        if (!passwordEncoder.matches(userChangePasswordRequest.getCurrentPassword(), user.getPassword())) {
+            log.error("invalid password");
+            throw new NotFoundException(
+                    "invalid password");
+        } else {
+            user.setPassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
+            log.info("Password successfully changed");
+            AuthResponse authResponse = new AuthResponse();
+            authResponse.setId(user.getId());
+            authResponse.setFirstName(user.getFirstName());
+            authResponse.setLastName(user.getLastName());
+            authResponse.setEmail(user.getEmail());
+            authResponse.setJwtToken(jwtTokenUtil.generateToken(user));
+            return authResponse;
+        }
+
+    }
+
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String login = authentication.getName();
+        return userRepository.findByEmail(login);
     }
 
 }

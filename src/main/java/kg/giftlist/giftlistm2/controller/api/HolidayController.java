@@ -52,4 +52,5 @@ public class HolidayController {
     public List<HolidayResponse> getHolidays() {
         return service.getHolidays();
     }
+
 }
