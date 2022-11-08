@@ -28,4 +28,5 @@ public class FeedController {
     public List<WishListResponse> getAllWishes() {
         return wishService.getWishesForFeed();
     }
+
 }

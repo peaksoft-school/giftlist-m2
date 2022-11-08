@@ -208,6 +208,7 @@ public class WishListService {
         }
         return responses;
     }
+
     public List<WishListResponse> getWishesForFeed() {
         User user = getAuthenticatedUser();
         List<WishList> allFriendWishes = wishListRepository.getAllFriendWishes(user.getId());
