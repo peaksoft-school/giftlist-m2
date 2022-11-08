@@ -19,4 +19,7 @@ public interface ComplaintRepository extends JpaRepository<Complaints, Long> {
     @Query("select c from Complaints c where c.user.id=?1")
     Complaints getUserFromComplain(Long userId);
 
+    @Query("select c from Complaints c join User u on c.user.id=u.id where u.id=?1")
+    Complaints getWishlistFromComplaints(Long wishlistId);
+
 }

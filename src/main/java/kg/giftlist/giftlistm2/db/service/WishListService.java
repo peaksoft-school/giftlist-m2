@@ -1,6 +1,5 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
 import kg.giftlist.giftlistm2.controller.payload.WishListRequest;
 import kg.giftlist.giftlistm2.controller.payload.WishListResponse;
 import kg.giftlist.giftlistm2.db.entity.*;

@@ -41,23 +41,27 @@ public class ComplaintService {
             if (user.getWishLists().contains(wishList)) {
                 throw new BadCredentialsException("You can not complain to your own posts!");
             } else {
-                Complaints getUserFromComplaint = complaintRepository.getUserFromComplain(user.getId());
-                if (wishList.getComplaints().contains(getUserFromComplaint)) {
+                if (request.getComplaints().isEmpty()) {
+                    throw new EmptyValueException("The field must not be empty!");
+                }
+                Complaints getWLFromComplaint = complaintRepository.getWishlistFromComplaints(user.getId());
+                if (wishList.getComplaints().contains(getWLFromComplaint)) {
                     throw new BadCredentialsException("You have complained this post");
                 } else {
                     Complaints complaints = new Complaints();
-                    if (request.getComplaints().isEmpty()) {
-                        throw new EmptyValueException("The field must not be empty!");
-                    }
                     complaints.setUser(user);
                     complaints.setComplaintsType(ComplaintsType.valueOf(request.getComplaints()));
                     complaints.setWishList(wishList);
                     complaintRepository.save(complaints);
+                    User admin = userRepository.findByEmail("admin@gmail.com");
+                    complaints.addNotification(notificationService.sendWishlistComplaintNotification(user, new ArrayList<>(List.of(admin)), complaints));
+                    notificationRepository.saveAll(complaints.getNotifications());
                     return "Thank you for letting us know!\n" +
                             "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
                 }
             }
         }
+
     }
 
     public String createCharityComplaint(Long id, ComplaintRequest request) {
@@ -82,14 +86,13 @@ public class ComplaintService {
                 complaints.setCharity(charity);
                 complaintRepository.save(complaints);
                 User admin = userRepository.findByEmail("admin@gmail.com");
-                complaints.addNotification(notificationService.sendNotificationToAdmin(user, new ArrayList<>(List.of(admin)), complaints));
+                complaints.addNotification(notificationService.sendCharityComplaintNotification(user, new ArrayList<>(List.of(admin)), complaints));
                 notificationRepository.saveAll(complaints.getNotifications());
                 return "Thank you for letting us know!\n" +
                         "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
             }
         }
     }
-
 
     public WishlistComplaintResponse getWishlistComplaintById(Long id) {
         if (complaintRepository.findById(id).isEmpty()) {
