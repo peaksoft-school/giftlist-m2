@@ -15,6 +15,6 @@ public class BookingWishListResponse {
     private String WishListGiftName;
     private String HolidayName;
     private String WishListImage;
-    private LocalDate created;
+    private LocalDate createdAt;
 
 }

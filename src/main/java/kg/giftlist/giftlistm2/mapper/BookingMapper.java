@@ -1,6 +1,5 @@
 package kg.giftlist.giftlistm2.mapper;
 
-import jdk.jfr.Category;
 import kg.giftlist.giftlistm2.controller.payload.BookingResponse;
 import kg.giftlist.giftlistm2.controller.payload.BookingWishListResponse;
 import kg.giftlist.giftlistm2.db.entity.Booking;
@@ -23,7 +22,7 @@ public class BookingMapper {
         bookingResponse.setGitName(booking.getCharity().getGiftName());
         bookingResponse.setCharityImage(booking.getCharity().getImage());
         bookingResponse.setCondition(booking.getCharity().getCondition());
-        bookingResponse.setCreated(LocalDate.now());
+        bookingResponse.setCreatedAt(LocalDate.now());
         return bookingResponse;
     }
 
@@ -37,7 +36,7 @@ public class BookingMapper {
         bookingResponse.setLastName(booking.getWishList().getUser().getLastName());
         bookingResponse.setWishListGiftName(booking.getWishList().getGiftName());
         bookingResponse.setHolidayName(booking.getWishList().getHolidays().getName());
-        bookingResponse.setCreated(LocalDate.now());
+        bookingResponse.setCreatedAt(LocalDate.now());
         return bookingResponse;
     }
 

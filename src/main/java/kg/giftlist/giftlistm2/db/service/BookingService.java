@@ -3,7 +3,6 @@ package kg.giftlist.giftlistm2.db.service;
 import kg.giftlist.giftlistm2.controller.payload.BookingResponse;
 import kg.giftlist.giftlistm2.controller.payload.BookingWishListResponse;
 import kg.giftlist.giftlistm2.db.entity.Booking;
-import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.BookingRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
@@ -36,30 +35,15 @@ public class BookingService {
         return responses;
     }
 
-//    public List<BookingResponse> viewCharity(List<Charity> charities) {
-//        List<BookingResponse> responses = new ArrayList<>();
-//        for (Charity charity :charities) {
-//            responses.add(bookingMapper.bookingResponse(charity));
-//        }
-//        return responses;
-//    }
-
     public List<BookingResponse> getAllCharityBookings() {
         User user = getAuthenticatedUser();
-        List<Booking> booking = bookingRepository.getAllCharityBooking();
+        List<Booking> booking = bookingRepository.getAllCharityBooking(user.getId());
         if (booking.isEmpty()) {
             log.error("Booking not found");
             throw new BookingNotFoundException("Bookings not found");
         }
-
-            log.info("Get all ");
-            return view(booking);
-        }
-//        else {
-//            log.error("You have no any booked charity");
-//            throw new BookingNotFoundException("You have no any booked charity");
-//        }
- //   }
+        return view(booking);
+    }
 
     public List<BookingWishListResponse> viewWishList(List<Booking> bookingList) {
         List<BookingWishListResponse> responses = new ArrayList<>();
@@ -71,22 +55,22 @@ public class BookingService {
 
     public List<BookingWishListResponse> getAllWishListBookings() {
         User user = getAuthenticatedUser();
-        List<Booking> booking = bookingRepository.getWishListBookingByUserId(user.getId());
+        List<Booking> booking = bookingRepository.getAllWishListBooking(user.getId());
         if (booking.isEmpty()) {
             log.error("Booking not found");
             throw new BookingNotFoundException("Bookings not found");
         }
         return viewWishList(booking);
+
     }
 
-    public BookingResponse getBookingById(Long id){
-        User  user = getAuthenticatedUser();
-        Booking booking = bookingRepository.findById(id).orElseThrow( ()->new BookingNotFoundException("Not found"));
-        if (user.getBookings().contains(booking)){
+    public BookingResponse getBookingById(Long id) {
+        User user = getAuthenticatedUser();
+        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException("Not found"));
+        if (user.getBookings().contains(booking)) {
             return bookingMapper.bookingResponse(booking);
-        }
-        else {
-            throw new BookingNotFoundException("Booking not found in user id: "+user.getId());
+        } else {
+            throw new BookingNotFoundException("Booking not found in user id: " + user.getId());
         }
     }
 

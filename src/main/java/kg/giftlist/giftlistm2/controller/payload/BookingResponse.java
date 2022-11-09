@@ -17,6 +17,6 @@ public class BookingResponse {
     private String gitName;
     private String charityImage;
     private Condition condition;
-    private LocalDate created;
+    private LocalDate createdAt;
 
 }

@@ -39,6 +39,6 @@ public class Booking {
     private WishList wishList;
 
     @CreatedDate
-    private LocalDate created;
+    private LocalDate createdAt;
 
 }

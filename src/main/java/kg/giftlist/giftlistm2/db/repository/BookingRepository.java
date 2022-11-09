@@ -10,16 +10,10 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query("select b from Booking b where b.charity is not null")
-    List<Booking> getAllCharityBooking();
+    @Query("select b from Booking b where b.charity is not null and b.userId.id=?1")
+    List<Booking> getAllCharityBooking(Long userId);
 
-    @Query("select w from User b join Booking w  where b.id=?1")
-    List<Booking> getWishListBookingByUserId(Long userId);
-
-//    @Query("select c from Complaints c where c.wishList is not null")
-//    List<Complaints> getAllWishlistComplaints();
-//
-//    @Query("select c from Complaints c where c.charity is not null")
-//    List<Complaints> getAllCharityComplaints();
+    @Query("select b from Booking b  where b.wishList is not null and  b.userId.id=?1")
+    List<Booking> getAllWishListBooking(Long userId);
 
 }
