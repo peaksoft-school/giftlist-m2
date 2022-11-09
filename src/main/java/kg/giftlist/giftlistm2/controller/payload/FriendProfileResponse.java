@@ -1,7 +1,6 @@
 package kg.giftlist.giftlistm2.controller.payload;
 
 import kg.giftlist.giftlistm2.db.entity.*;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

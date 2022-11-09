@@ -65,16 +65,15 @@ public class CharityService {
         User user = getAuthenticatedUser();
         if (bookingRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no charity with id " + id + " to remove from booking");
+        }
+        Booking booking = bookingRepository.findById(id).get();
+        if (user.getBookings().contains(booking)) {
+            user.getBookings().remove(booking);
+            bookingRepository.delete(booking);
+            booking.getCharity().setCharityStatus(CharityStatus.NOT_BOOKED);
+            return "You have successfully unbooked this charity";
         } else {
-            Booking booking = bookingRepository.findById(id).get();
-            if (user.getBookings().contains(booking)) {
-                user.getBookings().remove(booking);
-                bookingRepository.delete(booking.getId());
-                booking.getCharity().setCharityStatus(CharityStatus.NOT_BOOKED);
-                return "You have successfully unbooked this charity";
-            } else {
-                throw new BadCredentialsException("This charity is already unbooked");
-            }
+            throw new BadCredentialsException("This charity is already unbooked");
         }
     }
 
