@@ -27,7 +27,7 @@ public class BookingService {
     private final BookingMapper bookingMapper;
 
 
-    public List<BookingResponse> view(List<Booking> bookingList) {
+    public List<BookingResponse> viewCharity(List<Booking> bookingList) {
         List<BookingResponse> responses = new ArrayList<>();
         for (Booking booking : bookingList) {
             responses.add(bookingMapper.bookingResponse(booking));
@@ -42,7 +42,7 @@ public class BookingService {
             log.error("Booking not found");
             throw new BookingNotFoundException("Bookings not found");
         }
-        return view(booking);
+        return viewCharity(booking);
     }
 
     public List<BookingWishListResponse> viewWishList(List<Booking> bookingList) {

@@ -1,10 +1,10 @@
 package kg.giftlist.giftlistm2.controller.payload;
 
-import kg.giftlist.giftlistm2.enums.Condition;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+
 @Getter
 @Setter
 public class BookingWishListResponse {
