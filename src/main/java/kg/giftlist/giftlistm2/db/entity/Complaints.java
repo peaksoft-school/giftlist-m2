@@ -10,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "complaints")
@@ -32,15 +33,15 @@ public class Complaints {
     @JsonIgnore
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "wish_list_id")
-    @JsonIgnore
-    private WishList wishList;
+//    @ManyToOne
+//    @JoinColumn(name = "wish_list_id")
+//    @JsonIgnore
+//    private WishList wishList;
 
     @ManyToOne
     @JoinColumn(name = "charity_id")
     @JsonIgnore
-    private Charity charity;
+    private  Charity charity;
 
     @OneToMany(mappedBy = "complaints", cascade = CascadeType.ALL)
     private List <Notification> notifications = new ArrayList<>();

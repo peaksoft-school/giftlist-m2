@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.CharityComplaintResponse;
-import kg.giftlist.giftlistm2.controller.payload.WishlistComplaintResponse;
 import kg.giftlist.giftlistm2.controller.payload.ComplaintRequest;
 import kg.giftlist.giftlistm2.db.service.ComplaintService;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +23,13 @@ public class ComplaintController {
 
     private final ComplaintService complaintService;
 
-    @Operation(summary = "Complain the wish list posts to admin", description = "Creating a complaint by wish list id")
-    @PostMapping("wishlist/{id}")
-    @PreAuthorize("hasAnyAuthority('USER')")
-    public String createWishlistComplaint(@PathVariable Long id,
-                                          @RequestBody ComplaintRequest request) {
-        return complaintService.createWishlistComplaint(id, request);
-    }
+//    @Operation(summary = "Complain the wish list posts to admin", description = "Creating a complaint by wish list id")
+//    @PostMapping("wishlist/{id}")
+//    @PreAuthorize("hasAnyAuthority('USER')")
+//    public String createWishlistComplaint(@PathVariable Long id,
+//                                          @RequestBody ComplaintRequest request) {
+//        return complaintService.createWishlistComplaint(id, request);
+//    }
 
     @Operation(summary = "Complain the charity posts to admin", description = "Creating a complain by charity id")
     @PostMapping("charity/{id}")
@@ -40,11 +39,11 @@ public class ComplaintController {
         return complaintService.createCharityComplaint(id, request);
     }
 
-    @Operation(summary = "Get wish list complaint", description = "Admin can get a wish list complaint by id")
-    @GetMapping("wishlist/{id}")
-    public WishlistComplaintResponse getWishlistComplaintById(@PathVariable Long id) {
-        return complaintService.getWishlistComplaintById(id);
-    }
+//    @Operation(summary = "Get wish list complaint", description = "Admin can get a wish list complaint by id")
+//    @GetMapping("wishlist/{id}")
+//    public WishlistComplaintResponse getWishlistComplaintById(@PathVariable Long id) {
+//        return complaintService.getWishlistComplaintById(id);
+//    }
 
     @Operation(summary = "Get charity complaint", description = "Admin can get a charity complaint by id")
     @GetMapping("charity/{id}")
@@ -52,11 +51,11 @@ public class ComplaintController {
         return complaintService.getCharityComplaintById(id);
     }
 
-    @Operation(summary = "Get all wish list complaints", description = "Admin can get all wish list complaints")
-    @GetMapping("wishlist/all")
-    public List<WishlistComplaintResponse> getAllWishListComplaints() {
-        return complaintService.getAllWishListComplaints();
-    }
+//    @Operation(summary = "Get all wish list complaints", description = "Admin can get all wish list complaints")
+//    @GetMapping("wishlist/all")
+//    public List<WishlistComplaintResponse> getAllWishListComplaints() {
+//        return complaintService.getAllWishListComplaints();
+//    }
 
     @Operation(summary = "Get all charity complaints", description = "Admin can get all charity complaints")
     @GetMapping("charity/all")
