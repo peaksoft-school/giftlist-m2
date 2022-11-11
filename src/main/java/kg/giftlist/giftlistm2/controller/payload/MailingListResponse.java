@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class MailingListResponse {
 
+    private Long id;
     private String image;
     private String header;
     private String text;

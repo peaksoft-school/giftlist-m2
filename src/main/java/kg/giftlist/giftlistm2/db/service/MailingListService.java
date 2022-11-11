@@ -34,7 +34,7 @@ public class MailingListService {
             simpleMailMessage.setFrom("temuchi500@gmail.com");
             simpleMailMessage.setTo(user.getEmail());
             simpleMailMessage.setSubject(request.getHeader());
-            simpleMailMessage.setText(request.getImage());
+            simpleMailMessage.setText(request.getText());
             simpleMailMessage.setText(request.getText());
             this.javaMailSender.send(simpleMailMessage);
         }

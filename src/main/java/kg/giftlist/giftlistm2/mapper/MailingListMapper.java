@@ -24,6 +24,7 @@ public class MailingListMapper {
             throw new EmptyValueException("Mailing lists are empty");
         }
        return MailingListResponse.builder()
+                .id(mailingList.getId())
                 .header(mailingList.getHeader())
                 .image(mailingList.getImage())
                 .text(mailingList.getText())
