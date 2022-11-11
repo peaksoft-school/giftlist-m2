@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,6 +157,43 @@ public class WishListService {
         }
         List<WishList> wishLists = wishListRepository.getWishListByUserId(user.getId());
         return view(wishLists);
+    }
+
+    public String book(Long id) {
+        User user = getAuthenticatedUser();
+        if (wishListRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no wishList with id " + id);
+        }
+        WishList wishList = wishListRepository.findById(id).get();
+        if (wishList.getWishListStatus().equals(WishListStatus.NOT_BOOKED)) {
+            Booking booking1 = new Booking();
+            booking1.setId(booking1.getId());
+            booking1.setWishList(wishList);
+            booking1.setUserId(user);
+            bookingRepository.save(booking1);
+            wishList.setWishListStatus(WishListStatus.BOOKED);
+            wishListRepository.save(wishList);
+            return "You have successfully booked this wishList";
+        } else {
+            throw new BadCredentialsException("This wishList is already booked");
+        }
+    }
+
+    public String unBook(Long id) {
+        User user = getAuthenticatedUser();
+        if (bookingRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no wish list with id " + id);
+        } else {
+            Booking booking = bookingRepository.findById(id).get();
+            if (user.getBookings().contains(booking)) {
+                user.getBookings().remove(booking);
+                bookingRepository.delete(booking);
+                booking.getWishList().setWishListStatus(WishListStatus.NOT_BOOKED);
+                return "You have successfully unbooked this wish list";
+            } else {
+                throw new BadCredentialsException("This wish list is already unbooked");
+            }
+        }
     }
 
     public WishListResponse getWishlistByAdmin(Long id) {

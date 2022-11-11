@@ -53,6 +53,18 @@ public class WishListController {
         return wishListService.update(id, request);
     }
 
+    @Operation(summary = "Wish list booking", description = "Booking a wish list")
+    @PostMapping("book/{id}")
+    public String booking(@PathVariable Long id) {
+        return wishListService.book(id);
+    }
+
+    @Operation(summary = "Wish list unbooking", description = "Unbooking a wish list(deleting a book by id which contains wish list)")
+    @DeleteMapping("unbook/{id}")
+    public String unBook(@PathVariable Long id) {
+        return wishListService.unBook(id);
+    }
+
     @Operation(summary = "Delete wish list", description = "Deleting a wish list by id")
     @DeleteMapping("{id}")
     public String deleteWishList(@PathVariable Long id) {
