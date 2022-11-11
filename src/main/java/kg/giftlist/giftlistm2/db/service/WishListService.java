@@ -22,6 +22,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -52,8 +53,8 @@ public class WishListService {
         wishList.setDescription(request.getDescription());
         wishList.setWishListStatus(WishListStatus.NOT_BOOKED);
         wishListRepository.save(wishList);
-        List<User>friendList = userRepository.getAllFriendByUserId(user.getId());
-        wishList.addNotification(notificationService.wishListNotification(user,friendList,wishList));
+        List<User> friendList = userRepository.getAllFriendByUserId(user.getId());
+        wishList.addNotification(notificationService.wishListNotification(user, friendList, wishList));
         notificationRepository.saveAll(wishList.getNotifications());
         return mapToResponse(wishList);
     }
@@ -213,7 +214,7 @@ public class WishListService {
         User user = getAuthenticatedUser();
         List<WishList> allFriendWishes = wishListRepository.getAllFriendWishes(user.getId());
         List<WishList> allWishes = wishListRepository.getAllWishes();
-        List<WishList> sortedWishes  = new ArrayList<>(allFriendWishes);
+        List<WishList> sortedWishes = new ArrayList<>(allFriendWishes);
         allWishes.removeAll(allFriendWishes);
         sortedWishes.addAll(allWishes);
         return view(sortedWishes);
