@@ -46,7 +46,7 @@ public class User implements UserDetails {
     @Column(name = "city")
     private String city;
 
-//    private String image;
+    private String image;
 
     private String password;
 
@@ -59,7 +59,7 @@ public class User implements UserDetails {
     @Size(max = 10000)
     private String hobbies;
 
-//    private String city;
+    private String city;
 
     @Size(max = 10000)
     @Column(name = "important_to_know")
