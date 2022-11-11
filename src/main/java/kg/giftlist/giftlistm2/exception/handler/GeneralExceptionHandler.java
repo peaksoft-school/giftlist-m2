@@ -2,7 +2,6 @@ package kg.giftlist.giftlistm2.exception.handler;
 
 import kg.giftlist.giftlistm2.exception.*;
 import kg.giftlist.giftlistm2.exception.ExceptionResponse.ExceptionResponse;
-import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -61,6 +60,13 @@ public class GeneralExceptionHandler {
     public ExceptionResponse notificationNotFoundException(NotificationNotFoundException notificationNotFoundException) {
         return new ExceptionResponse(HttpStatus.NOT_FOUND, notificationNotFoundException.getClass().getName(),
                 notificationNotFoundException.getMessage());
+    }
+
+    @ExceptionHandler(BookingNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse bookingNotFoundException(BookingNotFoundException bookingNotFoundException) {
+        return new ExceptionResponse(HttpStatus.NOT_FOUND, bookingNotFoundException.getClass().getName(),
+                bookingNotFoundException.getMessage());
     }
 
 }
