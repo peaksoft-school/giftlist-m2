@@ -1,10 +1,9 @@
 package kg.giftlist.giftlistm2.mapper;
 
-
 import kg.giftlist.giftlistm2.controller.payload.MailingListRequest;
 import kg.giftlist.giftlistm2.controller.payload.MailingListResponse;
 import kg.giftlist.giftlistm2.db.entity.MailingList;
-import kg.giftlist.giftlistm2.exception.UserNotFoundException;
+import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -22,7 +21,7 @@ public class MailingListMapper {
 
     public MailingListResponse mapToResponse(MailingList mailingList){
         if (mailingList == null){
-            throw new UserNotFoundException("Not foud");
+            throw new EmptyValueException("Mailing lists are empty");
         }
        return MailingListResponse.builder()
                 .header(mailingList.getHeader())
