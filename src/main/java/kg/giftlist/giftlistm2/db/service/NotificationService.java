@@ -117,16 +117,16 @@ public class NotificationService {
         return notification;
     }
 
-//    public Notification sendWishlistComplaintNotification(User user, List<User> receivers, Complaints complaints) {
-//        Notification notification = new Notification();
-//        notification.setCreatedAt(LocalDate.now());
-//        notification.setUser(user);
-//        notification.setReceivers(receivers);
-//        notification.setGiftId(complaints.getWishList().getId());
-//        notification.setGiftName(complaints.getWishList().getGiftName());
-//        notification.setNotificationStatus(NotificationStatus.HAS_COMPLAINED);
-//        return notification;
-//    }
+    public Notification sendWishlistComplaintNotification(User user, List<User> receivers, Complaints complaints) {
+        Notification notification = new Notification();
+        notification.setCreatedAt(LocalDate.now());
+        notification.setUser(user);
+        notification.setReceivers(receivers);
+        notification.setGiftId(complaints.getWishList().getId());
+        notification.setGiftName(complaints.getWishList().getGiftName());
+        notification.setNotificationStatus(NotificationStatus.HAS_COMPLAINED);
+        return notification;
+    }
 
 
     public Notification wishListNotification(User user, List<User> receivers, WishList wishList) {

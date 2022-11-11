@@ -44,11 +44,11 @@ public class CharityService {
                 throw new BadCredentialsException("This charity was blocked due to it got a complain. Contact to administration of Giftlist");
             } else {
                 if (charity.getCharityStatus().equals(CharityStatus.NOT_BOOKED)) {
-                    Booking booking1 = new Booking();
-                    booking1.setId(booking1.getId());
-                    booking1.setCharity(charity);
-                    booking1.setUserId(user);
-                    bookingRepository.save(booking1);
+                    Booking book = new Booking();
+                    book.setId(book.getId());
+                    book.setCharity(charity);
+                    book.setUserId(user);
+                    bookingRepository.save(book);
                     charity.setCharityStatus(CharityStatus.BOOKED);
                     charityRepository.save(charity);
                     charity.addNotification(notificationService.bookedCharity(user, new ArrayList<>(List.of(charity.getUser())), charity));
@@ -110,6 +110,17 @@ public class CharityService {
             return mapToResponse(charity);
         } else {
             throw new EmptyValueException("You have no any charity with id " + id);
+        }
+    }
+
+    public CharityResponse getFriendsCharityById(Long id) {
+        User user = getAuthenticatedUser();
+        Charity charity = charityRepository.findById(id).get();
+        User friend = userRepository.getFriendById(charity.getUser().getId());
+        if (user.getFriends().contains(friend) && (!charity.isBlocked())) {
+                return mapToResponse(charity);
+        } else {
+            throw new EmptyValueException("");
         }
     }
 
