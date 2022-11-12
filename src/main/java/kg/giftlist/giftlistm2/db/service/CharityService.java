@@ -118,7 +118,7 @@ public class CharityService {
         Charity charity = charityRepository.findById(id).get();
         User friend = userRepository.getFriendById(charity.getUser().getId());
         if (user.getFriends().contains(friend) && (!charity.isBlocked())) {
-                return mapToResponse(charity);
+            return mapToResponse(charity);
         } else {
             throw new EmptyValueException("");
         }
