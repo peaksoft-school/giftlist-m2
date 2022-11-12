@@ -1,6 +1,5 @@
 package kg.giftlist.giftlistm2.controller.api;
 
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,7 +16,7 @@ import java.util.List;
 @RequestMapping("api/mailing-list")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "User Mailing list", description = "The Admin can send mailing list to users")
+@Tag(name = "User Mailing", description = "The Admin can send mailing list to users")
 @SecurityRequirement(name = "Authorization")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class MailingListController {

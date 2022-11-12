@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class MailingList {
+
     @Id
     @GeneratedValue(generator = "mailing_list_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "mailing_list_gen", sequenceName = "mailing_list_seq", allocationSize = 1)
