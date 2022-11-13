@@ -43,6 +43,8 @@ public class WishList {
     @CreatedDate
     private LocalDate created;
 
+    private Boolean isBlock;
+
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "holiday_id")
     @JsonIgnore
