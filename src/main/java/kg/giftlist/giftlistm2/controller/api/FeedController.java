@@ -32,5 +32,4 @@ public class FeedController {
         return wishListService.getWishListById(id);
     }
 
-
 }

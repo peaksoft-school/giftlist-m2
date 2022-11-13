@@ -18,6 +18,4 @@ public interface WishListRepository extends JpaRepository<WishList, Long> {
     @Query("select aw from WishList aw where aw.isBlock=false order by aw.created DESC")
     List<WishList> getAllWishes();
 
-
-
 }
