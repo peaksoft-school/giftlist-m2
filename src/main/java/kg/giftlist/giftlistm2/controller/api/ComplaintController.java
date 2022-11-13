@@ -25,7 +25,7 @@ public class ComplaintController {
 
     @Operation(summary = "Complain the wish list posts to admin", description = "Creating a complaint by wish list id")
     @PostMapping("wishlist/{id}")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public String createWishlistComplaint(@PathVariable Long id,
                                           @RequestBody ComplaintRequest request) {
         return complaintService.createWishlistComplaint(id, request);
@@ -33,7 +33,7 @@ public class ComplaintController {
 
     @Operation(summary = "Complain the charity posts to admin", description = "Creating a complain by charity id")
     @PostMapping("charity/{id}")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public String createCharityComplaint(@PathVariable Long id,
                                          @RequestBody ComplaintRequest request) {
         return complaintService.createCharityComplaint(id, request);
