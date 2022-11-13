@@ -23,9 +23,9 @@ public class CharityComplaintResponse {
     private String subcategory;
     private String image;
     private String description;
-    private LocalDate createdDate;
-    private String complainingUserName;
-    private String complainingUserLastname;
-    private String complaintCause;
+    private LocalDate createdAt;
+    private String complainerFirstName;
+    private String complainerLastName;
+    private String complaintReason;
 
 }

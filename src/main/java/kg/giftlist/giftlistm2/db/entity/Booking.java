@@ -41,5 +41,4 @@ public class Booking {
     @CreatedDate
     private LocalDate createdAt;
 
-
 }

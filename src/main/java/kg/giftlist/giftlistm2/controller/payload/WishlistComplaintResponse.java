@@ -18,12 +18,12 @@ public class WishlistComplaintResponse {
     private String lastName;
     private String link;
     private String holidayName;
-    private LocalDate holidayDate;
+    private LocalDate createdAt;
     private String description;
     private String image;
     private WishListStatus wishListStatus;
-    private String complainingUserName;
-    private String complainingUserLastname;
-    private String complaintCause;
+    private String complainerFirstName;
+    private String complainerLastName;
+    private String complaintReason;
 
 }

@@ -174,13 +174,13 @@ public class ComplaintService {
         response.setLastName(complaints.getWishList().getUser().getLastName());
         response.setLink(complaints.getWishList().getLink());
         response.setHolidayName(complaints.getWishList().getHolidays().getName());
-        response.setHolidayDate(complaints.getWishList().getHolidayDate());
+        response.setCreatedAt(complaints.getWishList().getHolidayDate());
         response.setDescription(complaints.getWishList().getDescription());
         response.setImage(complaints.getWishList().getImage());
         response.setWishListStatus(complaints.getWishList().getWishListStatus());
-        response.setComplainingUserName(complaints.getUser().getFirstName());
-        response.setComplainingUserLastname(complaints.getUser().getLastName());
-        response.setComplaintCause(complaints.getComplaintsType().name());
+        response.setComplainerFirstName(complaints.getUser().getFirstName());
+        response.setComplainerLastName(complaints.getUser().getLastName());
+        response.setComplaintReason(complaints.getComplaintsType().name());
         return response;
     }
 
@@ -200,10 +200,10 @@ public class ComplaintService {
         response.setCategory(complaints.getCharity().getCategory().getCategoryName());
         response.setImage(complaints.getCharity().getImage());
         response.setDescription(complaints.getCharity().getDescription());
-        response.setCreatedDate(complaints.getCharity().getCreatedDate());
-        response.setComplainingUserName(complaints.getUser().getFirstName());
-        response.setComplainingUserLastname(complaints.getUser().getLastName());
-        response.setComplaintCause(complaints.getComplaintsType().name());
+        response.setCreatedAt(complaints.getCharity().getCreatedDate());
+        response.setComplainerFirstName(complaints.getUser().getFirstName());
+        response.setComplainerLastName(complaints.getUser().getLastName());
+        response.setComplaintReason(complaints.getComplaintsType().name());
         return response;
     }
 
