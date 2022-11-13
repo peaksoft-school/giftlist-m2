@@ -57,10 +57,10 @@ public class User implements UserDetails {
     @Size(max = 10000)
     private String hobbies;
 
-
     @Size(max = 10000)
     @Column(name = "important_to_know")
     private String importantToKnow;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -96,11 +96,15 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<User> requestToFriends = new ArrayList<>();
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthority()));
-        return grantedAuthorities;
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
+    @JsonIgnore
+    private List<Notification> notifications = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "receivers")
+    private List<Notification> notificationList = new ArrayList<>();
+
+    public void deleteNotification(Notification notification){
+        this.notifications.remove(notification);
     }
 
     public void sendRequestToFriend(User user) {
@@ -115,6 +119,17 @@ public class User implements UserDetails {
             friends = new ArrayList<>();
         }
         friends.add(user);
+    }
+
+    public void addNotification(Notification notification){
+        notifications.add(notification);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+        return grantedAuthorities;
     }
 
     @Override

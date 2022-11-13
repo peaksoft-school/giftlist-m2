@@ -55,4 +55,18 @@ public class GeneralExceptionHandler {
                 wishListExistException.getMessage());
     }
 
+    @ExceptionHandler(NotificationNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse notificationNotFoundException(NotificationNotFoundException notificationNotFoundException) {
+        return new ExceptionResponse(HttpStatus.NOT_FOUND, notificationNotFoundException.getClass().getName(),
+                notificationNotFoundException.getMessage());
+    }
+
+    @ExceptionHandler(BookingNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse bookingNotFoundException(BookingNotFoundException bookingNotFoundException) {
+        return new ExceptionResponse(HttpStatus.NOT_FOUND, bookingNotFoundException.getClass().getName(),
+                bookingNotFoundException.getMessage());
+    }
+
 }

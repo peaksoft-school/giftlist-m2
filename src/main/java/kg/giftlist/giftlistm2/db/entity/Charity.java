@@ -12,6 +12,8 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "charity")
@@ -57,5 +59,12 @@ public class Charity {
 
     @Enumerated(EnumType.STRING)
     private CharityStatus charityStatus;
+
+    @OneToMany(mappedBy = "charity",cascade = CascadeType.ALL)
+    private List<Notification> notifications = new ArrayList<>();
+
+    public void addNotification(Notification notification){
+        notifications.add(notification);
+    }
 
 }

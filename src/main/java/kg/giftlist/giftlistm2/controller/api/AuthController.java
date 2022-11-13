@@ -7,7 +7,6 @@ import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
