@@ -30,13 +30,15 @@ public class MailingListService {
     public MailingListResponse send(MailingListRequest request) {
         List<User> userList = userRepository.findAll();
         for (User user : userList) {
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom("temuchi500@gmail.com");
-            simpleMailMessage.setTo(user.getEmail());
-            simpleMailMessage.setSubject(request.getHeader());
-            simpleMailMessage.setText(request.getText());
-            simpleMailMessage.setText(request.getText());
-            this.javaMailSender.send(simpleMailMessage);
+            if (user.isSubscribeToNewsletter()) {
+                SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+                simpleMailMessage.setFrom("temuchi500@gmail.com");
+                simpleMailMessage.setTo(user.getEmail());
+                simpleMailMessage.setSubject(request.getHeader());
+                simpleMailMessage.setText(request.getText());
+                simpleMailMessage.setText(request.getText());
+                this.javaMailSender.send(simpleMailMessage);
+            }
         }
         return mailingListMapper.mapToResponse(mailingListRepository.save(mailingListMapper.mapToEntity(request)));
     }
