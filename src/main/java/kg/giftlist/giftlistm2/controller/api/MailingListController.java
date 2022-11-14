@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("api/mailing-list")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "User Mailing", description = "The Admin can send mailing list to users")
+@Tag(name = "Mailing list Api", description = "The Admin can send mailing list to users")
 @SecurityRequirement(name = "Authorization")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class MailingListController {
