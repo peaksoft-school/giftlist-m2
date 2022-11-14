@@ -209,6 +209,16 @@ public class WishListService {
         return responses;
     }
 
+    public List<WishListResponse> getWishesForFeed() {
+        User user = getAuthenticatedUser();
+        List<WishList> allFriendWishes = wishListRepository.getAllFriendWishes(user.getId());
+        List<WishList> allWishes = wishListRepository.getAllWishes();
+        List<WishList> sortedWishes = new ArrayList<>(allFriendWishes);
+        allWishes.removeAll(allFriendWishes);
+        sortedWishes.addAll(allWishes);
+        return view(sortedWishes);
+    }
+
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
