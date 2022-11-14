@@ -65,6 +65,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private boolean isSubscribeToNewsletter = false;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<ClothingSize> clothingSize;
 
@@ -97,14 +99,14 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<User> requestToFriends = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     @JsonIgnore
     private List<Notification> notifications = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "receivers")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "receivers")
     private List<Notification> notificationList = new ArrayList<>();
 
-    public void deleteNotification(Notification notification){
+    public void deleteNotification(Notification notification) {
         this.notifications.remove(notification);
     }
 
@@ -122,7 +124,7 @@ public class User implements UserDetails {
         friends.add(user);
     }
 
-    public void addNotification(Notification notification){
+    public void addNotification(Notification notification) {
         notifications.add(notification);
     }
 
