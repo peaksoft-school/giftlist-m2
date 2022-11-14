@@ -133,6 +133,17 @@ public class CharityService {
         return view(charities);
     }
 
+    public List<CharityResponse> getAllFriendsCharities(Long friendId) {
+        User user = getAuthenticatedUser();
+        User friend = userRepository.getFriendById(friendId);
+        if (user.getFriends().contains(friend)) {
+            List<Charity> charities = charityRepository.getFriendsCharities(friendId);
+            return view(charities);
+        } else {
+            throw new EmptyValueException("There is no friend with id " + friendId);
+        }
+    }
+
     public CharityResponse createCharity(CharityRequest request) {
         User user = getAuthenticatedUser();
         Charity charity = new Charity();
@@ -167,7 +178,7 @@ public class CharityService {
         } else {
             charity.setDescription(request.getDescription());
         }
-        charity.setCreatedDate(LocalDate.now());
+        charity.setCreatedAt(LocalDate.now());
         charity.setCharityStatus(CharityStatus.NOT_BOOKED);
         charityRepository.save(charity);
         return mapToResponse(charity);
@@ -211,7 +222,7 @@ public class CharityService {
                     } else {
                         charity.setDescription(request.getDescription());
                     }
-                    charity.setCreatedDate(LocalDate.now());
+                    charity.setCreatedAt(LocalDate.now());
                     if (bookingRepository.findById(charity.getId()).isPresent()) {
                         charity.setCharityStatus(CharityStatus.BOOKED);
                     }

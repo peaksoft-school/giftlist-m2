@@ -154,7 +154,7 @@ public class WishListService {
         if (user.getWishLists().isEmpty()) {
             throw new EmptyValueException("There are no any wish lists");
         }
-        List<WishList> wishLists = wishListRepository.getWishListByUserId(user.getId());
+        List<WishList> wishLists = wishListRepository.getWishByUserId(user.getId());
         return view(wishLists);
     }
 

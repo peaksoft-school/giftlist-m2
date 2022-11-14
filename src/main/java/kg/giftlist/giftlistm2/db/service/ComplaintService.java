@@ -200,7 +200,7 @@ public class ComplaintService {
         response.setCategory(complaints.getCharity().getCategory().getCategoryName());
         response.setImage(complaints.getCharity().getImage());
         response.setDescription(complaints.getCharity().getDescription());
-        response.setCreatedAt(complaints.getCharity().getCreatedDate());
+        response.setCreatedAt(complaints.getCharity().getCreatedAt());
         response.setComplainerFirstName(complaints.getUser().getFirstName());
         response.setComplainerLastName(complaints.getUser().getLastName());
         response.setComplaintReason(complaints.getComplaintsType().name());

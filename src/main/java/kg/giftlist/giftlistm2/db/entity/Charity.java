@@ -50,7 +50,7 @@ public class Charity {
     private Category category;
 
     @CreatedDate
-    private LocalDate createdDate;
+    private LocalDate createdAt;
 
     @OneToOne(mappedBy = "charity", cascade = CascadeType.ALL)
     private Booking booking;

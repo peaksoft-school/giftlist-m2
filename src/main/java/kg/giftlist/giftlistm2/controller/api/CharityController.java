@@ -36,6 +36,12 @@ public class CharityController {
         return charityService.getAllCharities();
     }
 
+    @GetMapping("friend/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<CharityResponse> getFriendCharities(@PathVariable Long id) {
+        return charityService.getAllFriendsCharities(id);
+    }
+
     @Operation(summary = "Add charity", description = "Creating a charity")
     @PostMapping
     @PreAuthorize("hasAuthority('USER')")
