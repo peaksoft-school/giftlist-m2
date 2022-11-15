@@ -9,6 +9,7 @@ import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.exception.UserExistException;
 import kg.giftlist.giftlistm2.exception.UserNotFoundException;
 import kg.giftlist.giftlistm2.mapper.FriendMapper;
+import kg.giftlist.giftlistm2.mapper.FriendMappers;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -29,6 +29,7 @@ public class FriendsService {
     private final HolidayRepository holidayRepository;
     private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
+    private final FriendMappers friendMappers;
 
     public List<FriendResponse> getAllFriends() {
         User user = getAuthenticatedUser();
@@ -49,7 +50,7 @@ public class FriendsService {
     public List<FriendResponse> view(List<User> userList) {
         List<FriendResponse> responses = new ArrayList<>();
         for (User us : userList) {
-            responses.add(FriendMapper.INSTANCE.response(us, holidayRepository.getAllUserHolidays(us.getId()).size(),
+            responses.add(friendMappers.response(us, holidayRepository.getAllUserHolidays(us.getId()).size(),
                     userRepository.getAllUserWishList(us.getId()).size(), ValidationType.SUCCESSFUL));
         }
         return responses;
@@ -58,7 +59,7 @@ public class FriendsService {
     public FriendProfileResponse getFriend(Long friendId) {
         userRepository.findById(friendId).orElseThrow(
                 () -> new UserNotFoundException("User not found with id: " + friendId));
-        return FriendMapper.INSTANCE.friendResponse(userRepository.getFriendById(friendId));
+        return friendMappers.friendResponse(userRepository.getFriendById(friendId));
     }
 
     public FriendResponse requestToFriend(Long friendId) {
@@ -83,7 +84,7 @@ public class FriendsService {
         notificationRepository.saveAll(friend.getNotifications());
 
         log.info("Request to friend successfully send");
-        return FriendMapper.INSTANCE.response(friend, holidayRepository.getAllUserHolidays(friendId).size(),
+        return friendMappers.response(friend, holidayRepository.getAllUserHolidays(friendId).size(),
                 userRepository.getAllUserWishList(friendId).size(), ValidationType.REQUEST_SUCCESSFULLY_SENT);
     }
 
@@ -104,7 +105,7 @@ public class FriendsService {
             friend.addNotification(notificationService.acceptSendNotification(user,new ArrayList<>(List.of(friend))));
             notificationRepository.saveAll(friend.getNotifications());
         }
-        return FriendMapper.INSTANCE.response(friend, holidayRepository.getAllUserHolidays(friendId).size(),
+        return friendMappers.response(friend, holidayRepository.getAllUserHolidays(friendId).size(),
                 userRepository.getAllUserWishList(friendId).size(), ValidationType.ACCEPTED);
     }
 
