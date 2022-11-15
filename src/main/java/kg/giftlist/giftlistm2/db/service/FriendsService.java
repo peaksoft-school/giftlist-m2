@@ -9,7 +9,6 @@ import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.exception.UserExistException;
 import kg.giftlist.giftlistm2.exception.UserNotFoundException;
 import kg.giftlist.giftlistm2.mapper.FriendMapper;
-import kg.giftlist.giftlistm2.mapper.FriendMappers;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +28,7 @@ public class FriendsService {
     private final HolidayRepository holidayRepository;
     private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
-    private final FriendMappers friendMappers;
+    private final FriendMapper friendMappers;
 
     public List<FriendResponse> getAllFriends() {
         User user = getAuthenticatedUser();
