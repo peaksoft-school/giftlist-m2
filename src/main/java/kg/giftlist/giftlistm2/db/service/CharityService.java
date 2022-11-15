@@ -38,21 +38,26 @@ public class CharityService {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no charity with id " + id);
-        }
-        Charity charity = charityRepository.findById(id).get();
-        if (charity.getCharityStatus().equals(CharityStatus.NOT_BOOKED)) {
-            Booking booking1 = new Booking();
-            booking1.setId(booking1.getId());
-            booking1.setCharity(charity);
-            booking1.setUserId(user);
-            bookingRepository.save(booking1);
-            charity.setCharityStatus(CharityStatus.BOOKED);
-            charityRepository.save(charity);
-            charity.addNotification(notificationService.bookedCharity(user,new ArrayList<>(List.of(charity.getUser())),charity));
-            notificationRepository.saveAll(charity.getNotifications());
-            return "You have successfully booked this charity";
         } else {
-            throw new BadCredentialsException("This charity is already booked");
+            Charity charity = charityRepository.findById(id).get();
+            if (charity.isBlocked()) {
+                throw new BadCredentialsException("This charity was blocked due to it got a complain. Contact to administration of Giftlist");
+            } else {
+                if (charity.getCharityStatus().equals(CharityStatus.NOT_BOOKED)) {
+                    Booking book = new Booking();
+                    book.setId(book.getId());
+                    book.setCharity(charity);
+                    book.setUserId(user);
+                    bookingRepository.save(book);
+                    charity.setCharityStatus(CharityStatus.BOOKED);
+                    charityRepository.save(charity);
+                    charity.addNotification(notificationService.bookedCharity(user, new ArrayList<>(List.of(charity.getUser())), charity));
+                    notificationRepository.saveAll(charity.getNotifications());
+                    return "You have successfully booked this charity";
+                } else {
+                    throw new BadCredentialsException("This charity is already booked");
+                }
+            }
         }
     }
 
@@ -76,17 +81,22 @@ public class CharityService {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any charity with id " + id);
-        }
-        Charity charity = charityRepository.findById(id).get();
-        if (user.getCharities().isEmpty()) {
-            throw new EmptyValueException("You have no any charity with id " + id);
-        }
-        if (user.getCharities().contains(charity)) {
-            user.getCharities().remove(charity);
-            charityRepository.deleteById(charity.getId());
-            return "Charity successfully was deleted!";
         } else {
-            throw new EmptyValueException("You have no any charity with id " + id);
+            Charity charity = charityRepository.findById(id).get();
+            if (charity.isBlocked()) {
+                throw new BadCredentialsException("Your charity was blocked due to it got a complain. Contact to administration of Giftlist");
+            } else {
+                if (user.getCharities().isEmpty()) {
+                    throw new EmptyValueException("You have no any charity with id " + id);
+                }
+                if (user.getCharities().contains(charity)) {
+                    user.getCharities().remove(charity);
+                    charityRepository.deleteById(charity.getId());
+                    return "Charity successfully was deleted!";
+                } else {
+                    throw new EmptyValueException("You have no any charity with id " + id);
+                }
+            }
         }
     }
 
@@ -95,9 +105,9 @@ public class CharityService {
         if (charityRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any charity with id " + id);
         }
-        Charity charities = charityRepository.findById(id).get();
-        if (user.getCharities().contains(charities)) {
-            return mapToResponse(charities);
+        Charity charity = charityRepository.findById(id).get();
+        if (user.getCharities().contains(charity)) {
+            return mapToResponse(charity);
         } else {
             throw new EmptyValueException("You have no any charity with id " + id);
         }
@@ -106,7 +116,7 @@ public class CharityService {
     public List<CharityResponse> getAllCharities() {
         User user = getAuthenticatedUser();
         if (user.getCharities().isEmpty()) {
-            throw new EmptyValueException("There is no any charities");
+            throw new EmptyValueException("There are no any charities");
         }
         List<Charity> charities = charityRepository.getCharityByUserId(user.getId());
         return view(charities);
@@ -122,6 +132,7 @@ public class CharityService {
         } else {
             charity.setGiftName(request.getGiftName());
         }
+        charity.setBlocked(false);
         charity.setUser(user);
         if (request.getCondition().isEmpty()) {
             throw new EmptyValueException("Please, choose a condition from list");
@@ -145,7 +156,7 @@ public class CharityService {
         } else {
             charity.setDescription(request.getDescription());
         }
-        charity.setCreatedDate(LocalDate.now());
+        charity.setCreatedAt(LocalDate.now());
         charity.setCharityStatus(CharityStatus.NOT_BOOKED);
         charityRepository.save(charity);
         return mapToResponse(charity);
@@ -155,48 +166,101 @@ public class CharityService {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
             throw new EmptyValueException("There is no any charity with id " + id);
+        } else {
+            Charity charity = charityRepository.findById(id).get();
+            if (charity.isBlocked()) {
+                throw new BadCredentialsException("Your charity was blocked due to it got a complain. Contact to administration of Giftlist");
+            } else {
+                if (user.getCharities().contains(charity)) {
+                    Category category = categoryRepository.findById(request.getCategoryId()).get();
+                    Subcategory subcategory = subcategoryRepository.findById(request.getSubcategoryId()).get();
+                    if (request.getGiftName().isEmpty()) {
+                        throw new EmptyValueException("Gift name must not be empty!");
+                    } else {
+                        charity.setGiftName(request.getGiftName());
+                    }
+                    if (request.getCondition().isEmpty()) {
+                        throw new EmptyValueException("Please, choose a condition from list");
+                    } else {
+                        charity.setCondition(Condition.valueOf(request.getCondition()));
+                    }
+                    if (request.getCategoryId() == null) {
+                        throw new EmptyValueException("Please, show a category of the gift");
+                    } else {
+                        charity.setCategory(category);
+                    }
+                    if (request.getSubcategoryId() == null) {
+                        throw new EmptyValueException("Please, show a subcategory of the gift");
+                    } else {
+                        charity.setSubcategory(subcategory);
+                    }
+                    charity.setImage(request.getImage());
+                    if (request.getDescription().isEmpty()) {
+                        throw new EmptyValueException("Please, at least describe your gift shortly");
+                    } else {
+                        charity.setDescription(request.getDescription());
+                    }
+                    charity.setCreatedAt(LocalDate.now());
+                    if (bookingRepository.findById(charity.getId()).isPresent()) {
+                        charity.setCharityStatus(CharityStatus.BOOKED);
+                    }
+                    if (bookingRepository.findById(charity.getId()).isEmpty()) {
+                        charity.setCharityStatus(CharityStatus.NOT_BOOKED);
+                    }
+                    charityRepository.save(charity);
+                    return mapToResponse(charity);
+                } else {
+                    throw new EmptyValueException("You have no any charity with id " + id);
+                }
+            }
         }
-        Charity charity = charityRepository.findById(id).get();
-        if (user.getCharities().contains(charity)) {
-            Category category = categoryRepository.findById(request.getCategoryId()).get();
-            Subcategory subcategory = subcategoryRepository.findById(request.getSubcategoryId()).get();
-            if (request.getGiftName().isEmpty()) {
-                throw new EmptyValueException("Gift name must not be empty!");
-            } else {
-                charity.setGiftName(request.getGiftName());
-            }
-            if (request.getCondition().isEmpty()) {
-                throw new EmptyValueException("Please, choose a condition from list");
-            } else {
-                charity.setCondition(Condition.valueOf(request.getCondition()));
-            }
-            if (request.getCategoryId() == null) {
-                throw new EmptyValueException("Please, show a category of the gift");
-            } else {
-                charity.setCategory(category);
-            }
-            if (request.getSubcategoryId() == null) {
-                throw new EmptyValueException("Please, show a subcategory of the gift");
-            } else {
-                charity.setSubcategory(subcategory);
-            }
-            charity.setImage(request.getImage());
-            if (request.getDescription().isEmpty()) {
-                throw new EmptyValueException("Please, at least describe your gift shortly");
-            } else {
-                charity.setDescription(request.getDescription());
-            }
-            charity.setCreatedDate(LocalDate.now());
-            if (bookingRepository.findById(charity.getId()).isPresent()) {
-                charity.setCharityStatus(CharityStatus.BOOKED);
-            }
-            if (bookingRepository.findById(charity.getId()).isEmpty()) {
-                charity.setCharityStatus(CharityStatus.NOT_BOOKED);
-            }
-            charityRepository.save(charity);
+    }
+
+    public CharityResponse getCharityByAdmin(Long id) {
+        if (charityRepository.existsById(id)) {
+            Charity charity = charityRepository.findById(id).get();
             return mapToResponse(charity);
         } else {
-            throw new EmptyValueException("You have no any charity with id " + id);
+            throw new EmptyValueException("There is no any charity with id " + id);
+        }
+    }
+
+    public List<CharityResponse> getAllCharitiesByAdmin() {
+        if (charityRepository.findAll().isEmpty()) {
+            throw new EmptyValueException("There is no any charity");
+        } else {
+            List<Charity> charities = charityRepository.findAll();
+            return view(charities);
+        }
+    }
+
+    public String blockCharityByAdmin(Long id) {
+        if (charityRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any charity with id " + id);
+        } else {
+            Charity charity = charityRepository.findById(id).get();
+            if (charity.isBlocked()) {
+                throw new BadCredentialsException("You have already blocked the charity with id " + id);
+            } else {
+                charity.setBlocked(true);
+                charityRepository.save(charity);
+                return "You have blocked the charity with id " + id;
+            }
+        }
+    }
+
+    public String unBlockCharityByAdmin(Long id) {
+        if (charityRepository.findById(id).isEmpty()) {
+            throw new EmptyValueException("There is no any charity with id " + id);
+        } else {
+            Charity charity = charityRepository.findById(id).get();
+            if (!charity.isBlocked()) {
+                throw new BadCredentialsException("You have already unblocked the charity with id " + id);
+            } else {
+                charity.setBlocked(false);
+                charityRepository.save(charity);
+                return "You have unblocked the charity with id " + id;
+            }
         }
     }
 
