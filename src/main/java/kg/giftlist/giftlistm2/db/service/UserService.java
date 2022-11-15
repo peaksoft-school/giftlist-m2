@@ -111,6 +111,7 @@ public class UserService {
         user.setLastName(signupRequest.getLastName());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(signupRequest.getConfirmPassword());
+        user.setSubscribeToNewsletter(signupRequest.isSubscribeToNewsletter());
         return user;
     }
 
