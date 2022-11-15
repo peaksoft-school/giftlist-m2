@@ -33,22 +33,13 @@ public class FriendMapper {
         friendProfileResponse.shoeSize(user.getShoeSize());
         friendProfileResponse.hobbies(user.getHobbies());
         friendProfileResponse.importantToKnow(user.getImportantToKnow());
-        List<WishList> wishlists = user.getWishLists();
-        if (wishlists != null) {
-            for (WishList wishes : wishlists) {
-                if (!wishes.getIsBlock()) {
-                    friendProfileResponse.wishLists(new ArrayList<WishList>(wishlists));
-                }
-            }
+        List<WishList> wishLists = user.getWishLists();
+        if (wishLists != null) {
+            friendProfileResponse.wishLists(new ArrayList<WishList>(wishLists));
         }
         List<Charity> charities = user.getCharities();
         if (charities != null) {
-            List<Charity> friendsCharities = charityRepository.getFriendsCharities(user.getId());
-            for (Charity charity : charities) {
-                if (charity.isBlocked() == false) {
-                    friendProfileResponse.charities(new ArrayList<Charity>(charities));
-                }
-            }
+            friendProfileResponse.charities(new ArrayList<Charity>(charities));
         }
         List<Holiday> holidays = user.getHolidays();
         if (holidays != null) {
