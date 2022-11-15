@@ -113,17 +113,6 @@ public class CharityService {
         }
     }
 
-    public CharityResponse getFriendsCharityById(Long id) {
-        User user = getAuthenticatedUser();
-        Charity charity = charityRepository.findById(id).get();
-        User friend = userRepository.getFriendById(charity.getUser().getId());
-        if (user.getFriends().contains(friend) && (!charity.isBlocked())) {
-            return mapToResponse(charity);
-        } else {
-            throw new EmptyValueException("");
-        }
-    }
-
     public List<CharityResponse> getAllCharities() {
         User user = getAuthenticatedUser();
         if (user.getCharities().isEmpty()) {
@@ -131,17 +120,6 @@ public class CharityService {
         }
         List<Charity> charities = charityRepository.getCharityByUserId(user.getId());
         return view(charities);
-    }
-
-    public List<CharityResponse> getAllFriendsCharities(Long friendId) {
-        User user = getAuthenticatedUser();
-        User friend = userRepository.getFriendById(friendId);
-        if (user.getFriends().contains(friend)) {
-            List<Charity> charities = charityRepository.getFriendsCharities(friendId);
-            return view(charities);
-        } else {
-            throw new EmptyValueException("There is no friend with id " + friendId);
-        }
     }
 
     public CharityResponse createCharity(CharityRequest request) {

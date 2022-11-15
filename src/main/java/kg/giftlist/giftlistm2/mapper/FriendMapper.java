@@ -2,12 +2,15 @@ package kg.giftlist.giftlistm2.mapper;
 
 import kg.giftlist.giftlistm2.controller.payload.FriendProfileResponse;
 import kg.giftlist.giftlistm2.controller.payload.FriendResponse;
-import kg.giftlist.giftlistm2.db.entity.*;
+import kg.giftlist.giftlistm2.db.entity.Charity;
+import kg.giftlist.giftlistm2.db.entity.Holiday;
+import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.db.entity.WishList;
 import kg.giftlist.giftlistm2.db.repository.CharityRepository;
+import kg.giftlist.giftlistm2.db.repository.WishListRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -15,6 +18,7 @@ import java.util.List;
 public class FriendMapper {
 
     private final CharityRepository charityRepository;
+    private final WishListRepository wishListRepository;
 
     public FriendProfileResponse friendResponse(User user) {
         if (user == null) {
@@ -33,17 +37,17 @@ public class FriendMapper {
         friendProfileResponse.shoeSize(user.getShoeSize());
         friendProfileResponse.hobbies(user.getHobbies());
         friendProfileResponse.importantToKnow(user.getImportantToKnow());
-        List<WishList> wishLists = user.getWishLists();
+        List<WishList> wishLists = wishListRepository.getWishLists(user.getId());
         if (wishLists != null) {
-            friendProfileResponse.wishLists(new ArrayList<WishList>(wishLists));
+            friendProfileResponse.wishLists(wishLists);
         }
-        List<Charity> charities = user.getCharities();
+        List<Charity> charities = charityRepository.getCharities(user.getId());
         if (charities != null) {
-            friendProfileResponse.charities(new ArrayList<Charity>(charities));
+            friendProfileResponse.charities(charities);
         }
         List<Holiday> holidays = user.getHolidays();
         if (holidays != null) {
-            friendProfileResponse.holidays(new ArrayList<Holiday>(holidays));
+            friendProfileResponse.holidays(holidays);
         }
         return friendProfileResponse.build();
     }

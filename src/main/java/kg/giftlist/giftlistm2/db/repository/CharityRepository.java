@@ -13,9 +13,7 @@ public interface CharityRepository extends JpaRepository<Charity, Long> {
     @Query("select ch from Charity ch join User u on ch.user.id=u.id where u.id=?1")
     List<Charity> getCharityByUserId(Long id);
 
-    @Query("select ch from User u join u.friends f join f.charities ch where ch.isBlocked=false and u.id=?1")
-    List<Charity> getFriendsCharities(Long userId);
-    @Query("select ch from Charity ch where ch.isBlocked=false")
-    List<Charity> getAllCharities();
+    @Query("select ch from User u join u.charities ch where ch.isBlocked=false and u.id=?1")
+    List<Charity> getCharities(Long userId);
 
 }
