@@ -3,13 +3,18 @@ package kg.giftlist.giftlistm2.mapper;
 import kg.giftlist.giftlistm2.controller.payload.FriendProfileResponse;
 import kg.giftlist.giftlistm2.controller.payload.FriendResponse;
 import kg.giftlist.giftlistm2.db.entity.*;
+import kg.giftlist.giftlistm2.db.repository.CharityRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@AllArgsConstructor
 public class FriendMapper {
+
+    private final CharityRepository charityRepository;
 
     public FriendProfileResponse friendResponse(User user) {
         if (user == null) {
@@ -28,17 +33,26 @@ public class FriendMapper {
         friendProfileResponse.shoeSize(user.getShoeSize());
         friendProfileResponse.hobbies(user.getHobbies());
         friendProfileResponse.importantToKnow(user.getImportantToKnow());
-        List<WishList> list = user.getWishLists();
-        if (list != null) {
-            friendProfileResponse.wishLists(new ArrayList<WishList>(list));
+        List<WishList> wishlists = user.getWishLists();
+        if (wishlists != null) {
+            for (WishList wishes : wishlists) {
+                if (!wishes.getIsBlock()) {
+                    friendProfileResponse.wishLists(new ArrayList<WishList>(wishlists));
+                }
+            }
         }
-        List<Charity> list1 = user.getCharities();
-        if (list1 != null) {
-            friendProfileResponse.charities(new ArrayList<Charity>(list1));
+        List<Charity> charities = user.getCharities();
+        if (charities != null) {
+            List<Charity> friendsCharities = charityRepository.getFriendsCharities(user.getId());
+            for (Charity charity : charities) {
+                if (charity.isBlocked() == false) {
+                    friendProfileResponse.charities(new ArrayList<Charity>(charities));
+                }
+            }
         }
-        List<Holiday> list2 = user.getHolidays();
-        if (list2 != null) {
-            friendProfileResponse.holidays(new ArrayList<Holiday>(list2));
+        List<Holiday> holidays = user.getHolidays();
+        if (holidays != null) {
+            friendProfileResponse.holidays(new ArrayList<Holiday>(holidays));
         }
         return friendProfileResponse.build();
     }
