@@ -38,6 +38,8 @@ public class Charity {
 
     private String image;
 
+    private Boolean isBlock;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore

@@ -64,6 +64,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private Boolean isBlock;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<ClothingSize> clothingSize;
 
