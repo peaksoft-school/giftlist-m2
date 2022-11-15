@@ -12,5 +12,6 @@ public class SignupRequest {
     private String email;
     private String password;
     private String confirmPassword;
+    private boolean isSubscribeToNewsletter = false;
 
 }

@@ -30,6 +30,8 @@ public class WishList {
     @Column(name = "gift_name")
     private String giftName;
 
+    private boolean isBlocked;
+
     private String link;
 
     @Column(name = "holyday_date")
@@ -61,8 +63,11 @@ public class WishList {
     @OneToOne(mappedBy = "wishList", cascade = CascadeType.ALL)
     private Booking booking;
 
-    @OneToMany(mappedBy = "charity",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wishList",cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "wishList", cascade = CascadeType.ALL)
+    private List <Complaints> complaints;
 
     public void addNotification(Notification notification){
         notifications.add(notification);
