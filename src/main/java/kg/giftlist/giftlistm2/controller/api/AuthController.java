@@ -20,6 +20,11 @@ public class AuthController {
 
     private final UserService userService;
 
+    @GetMapping("test")
+    public String test(Principal principal) {
+        return principal.getName();
+    }
+
     @Operation(summary = "Login", description = "Only registered users can login")
     @PostMapping("signin")
     public AuthResponse login(@RequestBody AuthRequest loginRequest) {
