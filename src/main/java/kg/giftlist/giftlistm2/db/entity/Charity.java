@@ -30,6 +30,8 @@ public class Charity {
 
     private String giftName;
 
+    private boolean isBlocked;
+
     @Enumerated(EnumType.STRING)
     private Condition condition;
 
@@ -48,7 +50,7 @@ public class Charity {
     private Category category;
 
     @CreatedDate
-    private LocalDate createdDate;
+    private LocalDate createdAt;
 
     @OneToOne(mappedBy = "charity", cascade = CascadeType.ALL)
     private Booking booking;
@@ -62,6 +64,9 @@ public class Charity {
 
     @OneToMany(mappedBy = "charity",cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "charity", cascade = CascadeType.ALL)
+    private List <Complaints> complaints;
 
     public void addNotification(Notification notification){
         notifications.add(notification);

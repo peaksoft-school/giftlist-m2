@@ -21,8 +21,8 @@ public class FriendProfileResponse {
     private LocalDate dateOfBirth;
     private String phoneNumber;
     private String city;
-    private ClothingSize clothingSize;
-    private ShoeSize shoeSize;
+    private List<ClothingSize> clothingSize;
+    private List<ShoeSize> shoeSize;
     private String hobbies;
     private String inviteStatus;
     private String importantToKnow;

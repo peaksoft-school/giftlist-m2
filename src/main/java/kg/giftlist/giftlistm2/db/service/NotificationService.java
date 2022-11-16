@@ -1,10 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.NotificationResponse;
-import kg.giftlist.giftlistm2.db.entity.Charity;
-import kg.giftlist.giftlistm2.db.entity.Notification;
-import kg.giftlist.giftlistm2.db.entity.User;
-import kg.giftlist.giftlistm2.db.entity.WishList;
+import kg.giftlist.giftlistm2.db.entity.*;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.enums.NotificationStatus;
@@ -108,6 +105,29 @@ public class NotificationService {
         notification.setNotificationStatus(NotificationStatus.BOOKED);
         return notification;
     }
+
+    public Notification sendCharityComplaintNotification(User user, List<User> receivers, Complaints complaints) {
+        Notification notification = new Notification();
+        notification.setCreatedAt(LocalDate.now());
+        notification.setUser(user);
+        notification.setReceivers(receivers);
+        notification.setGiftId(complaints.getCharity().getId());
+        notification.setGiftName(complaints.getCharity().getGiftName());
+        notification.setNotificationStatus(NotificationStatus.HAS_COMPLAINED);
+        return notification;
+    }
+
+    public Notification sendWishlistComplaintNotification(User user, List<User> receivers, Complaints complaints) {
+        Notification notification = new Notification();
+        notification.setCreatedAt(LocalDate.now());
+        notification.setUser(user);
+        notification.setReceivers(receivers);
+        notification.setGiftId(complaints.getWishList().getId());
+        notification.setGiftName(complaints.getWishList().getGiftName());
+        notification.setNotificationStatus(NotificationStatus.HAS_COMPLAINED);
+        return notification;
+    }
+
 
     public Notification wishListNotification(User user, List<User> receivers, WishList wishList) {
         Notification notification = new Notification();
