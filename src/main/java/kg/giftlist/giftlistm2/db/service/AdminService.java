@@ -83,7 +83,7 @@ public class AdminService {
     }
 
     private CommonUserProfileResponse viewCommonFriendProfile(User user) {
-        User user1 = getAuthenticatedUser();
+        User authenticatedUser = getAuthenticatedUser();
         CommonUserProfileResponse commonUserProfileResponse = new CommonUserProfileResponse();
         commonUserProfileResponse.setId(user.getId());
         commonUserProfileResponse.setFirstName(user.getFirstName());
@@ -100,11 +100,11 @@ public class AdminService {
         List<WishList> wishes = user.getWishLists();
         List<WishList> sortWishes = new ArrayList<>();
         for (WishList wish : wishes) {
-            if (user1.getRole().equals(Role.USER)) {
+            if (authenticatedUser.getRole().equals(Role.USER)) {
                 if (wish.getIsBlock().equals(false)) {
                     sortWishes.add(wish);
                 }
-            } else if (user1.getRole().equals(Role.ADMIN)) {
+            } else if (authenticatedUser.getRole().equals(Role.ADMIN)) {
                 sortWishes.add(wish);
             }
         }
@@ -114,11 +114,11 @@ public class AdminService {
         List<Charity> gifts = user.getCharities();
         List<Charity> sortGifts = new ArrayList<>();
         for (Charity charity : gifts) {
-            if (user1.getRole().equals(Role.USER)) {
+            if (authenticatedUser.getRole().equals(Role.USER)) {
                 if (charity.getIsBlock().equals(false)) {
                     sortGifts.add(charity);
                 }
-            } else if (user1.getRole().equals(Role.ADMIN)) {
+            } else if (authenticatedUser.getRole().equals(Role.ADMIN)) {
                 sortGifts.add(charity);
             }
         }
