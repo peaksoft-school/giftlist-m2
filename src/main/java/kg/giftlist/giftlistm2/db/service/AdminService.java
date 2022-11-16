@@ -34,7 +34,7 @@ public class AdminService {
         List<User> users = userRepository.getAll();
         List<AdminPageUserGetAllResponse> userList = new ArrayList<>();
         for (User i : users) {
-            userList.add(createUser(i));
+            userList.add(mapToAdminPageUser(i));
         }
         return userList;
     }
@@ -43,7 +43,7 @@ public class AdminService {
     public SimpleResponse blockUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(
-                        String.format("user with id = %s not found", id)));
+                        String.format("user with id: %s not found", id)));
         user.setIsBlock(true);
         log.info("Successfully blocked user with id: {}", user.getId());
         return new SimpleResponse("BLOCK", "user with id = " + id + " blocked");
@@ -54,22 +54,22 @@ public class AdminService {
     public SimpleResponse unBlockUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(
-                        String.format("user with id = %s not found", id)));
+                        String.format("user with id: %s not found", id)));
         user.setIsBlock(false);
         log.info("Successfully unblocked user with id: {}", user.getId());
-        return new SimpleResponse("UNBLOCK", "user with id = " + id + " unblocked");
+        return new SimpleResponse("UNBLOCK", "user with id:" + id + " unblocked");
     }
 
-    public AdminPageUserGetAllResponse createUser(User user) {
+    public AdminPageUserGetAllResponse mapToAdminPageUser(User user) {
         if (user == null) {
             return null;
         }
         AdminPageUserGetAllResponse adminUserGetAllResponse = new AdminPageUserGetAllResponse();
         adminUserGetAllResponse.setId(user.getId());
-        adminUserGetAllResponse.setCountGift(user.getWishLists().size());
-        adminUserGetAllResponse.setFirst_name(user.getFirstName());
-        adminUserGetAllResponse.setLast_name(user.getLastName());
-        adminUserGetAllResponse.setPhoto(user.getImage());
+        adminUserGetAllResponse.setGiftCount(user.getWishLists().size());
+        adminUserGetAllResponse.setFirstName(user.getFirstName());
+        adminUserGetAllResponse.setLastName(user.getLastName());
+        adminUserGetAllResponse.setImage(user.getImage());
         adminUserGetAllResponse.setIsBlock(user.getIsBlock());
 
         return adminUserGetAllResponse;
@@ -78,11 +78,11 @@ public class AdminService {
     public CommonUserProfileResponse getCommonFriendProfile(Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException("User with id " + userId + " not found"));
+                new NotFoundException("User with id:" + userId + " not found"));
         return viewCommonFriendProfile(user);
     }
 
-    public CommonUserProfileResponse viewCommonFriendProfile(User user) {
+    private CommonUserProfileResponse viewCommonFriendProfile(User user) {
         User user1 = getAuthenticatedUser();
         CommonUserProfileResponse commonUserProfileResponse = new CommonUserProfileResponse();
         commonUserProfileResponse.setId(user.getId());
@@ -122,12 +122,12 @@ public class AdminService {
                 sortGifts.add(charity);
             }
         }
-        commonUserProfileResponse.setCharityResponses(charityService.view(sortGifts));
+        commonUserProfileResponse.setCharities(charityService.view(sortGifts));
         commonUserProfileResponse.setIsBlock(user.getIsBlock());
         return commonUserProfileResponse;
     }
 
-    public User getAuthenticatedUser() {
+    private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
         return userRepository.findByEmail(login);

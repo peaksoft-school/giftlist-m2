@@ -28,20 +28,20 @@ public class AdminController {
         return adminService.getAllUsers();
     }
 
-    @Operation(summary = "Get user profile ", description = "Find by id user profile")
+    @Operation(summary = "Get user profile ", description = "Find user profile by user id ")
     @GetMapping("/user/{userId}")
     public CommonUserProfileResponse getUserProfile(@PathVariable Long userId) {
         return adminService.getCommonFriendProfile(userId);
     }
 
-    @Operation(summary = "Block User", description = "block user by id")
-    @PutMapping("/blockUser/{userId}")
+    @Operation(summary = "Block User", description = "Block user by id")
+    @PutMapping("/block-user/{userId}")
     public SimpleResponse block(@PathVariable("userId") Long id) {
         return adminService.blockUser(id);
     }
 
-    @Operation(summary = "UnBlock User", description = "UnBlock user by id")
-    @PutMapping("/unblockUser/{userId}")
+    @Operation(summary = "Unblock User", description = "Unblock user by id")
+    @PutMapping("/unblock-user/{userId}")
     public SimpleResponse unBlock(@PathVariable("userId") Long id) {
         return adminService.unBlockUser(id);
     }

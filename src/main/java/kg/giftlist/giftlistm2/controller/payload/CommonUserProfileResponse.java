@@ -28,7 +28,7 @@ public class CommonUserProfileResponse {
     private String importantNote;
     private List<WishListResponse> wishes;
     private List<HolidayResponse> holidays;
-    private List<CharityResponse> charityResponses;
+    private List<CharityResponse> charities;
     private Boolean isBlock;
 
 }

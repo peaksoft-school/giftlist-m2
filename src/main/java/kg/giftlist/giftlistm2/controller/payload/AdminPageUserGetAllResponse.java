@@ -8,10 +8,10 @@ import lombok.Setter;
 public class AdminPageUserGetAllResponse {
 
     private Long id;
-    private String first_name;
-    private String last_name;
-    private String photo;
-    private int countGift;
+    private String firstName;
+    private String lastName;
+    private String image;
+    private int giftCount;
     private Boolean isBlock;
 
 }
