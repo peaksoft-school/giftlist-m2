@@ -46,7 +46,7 @@ public class AdminService {
                         String.format("user with id: %s not found", id)));
         user.setIsBlock(true);
         log.info("Successfully blocked user with id: {}", user.getId());
-        return new SimpleResponse("BLOCK", "user with id = " + id + " blocked");
+        return new SimpleResponse("BLOCK", "user with id: " + id + " blocked");
     }
 
 
