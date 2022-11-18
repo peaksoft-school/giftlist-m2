@@ -32,9 +32,6 @@ public class FriendsService {
 
     public List<FriendResponse> getAllFriends() {
         User user = getAuthenticatedUser();
-        if (user.getFriends().isEmpty()) {
-            throw new UserNotFoundException("Not found your friends");
-        }
         return view(userRepository.getAllFriendByUserId(user.getId()));
     }
 
