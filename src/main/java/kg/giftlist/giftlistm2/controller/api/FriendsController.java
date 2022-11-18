@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("api/friends")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "User API", description = "The user can send a request, accept a request, unfriend, list all friends and all friend requests, and can see a friend's profile")
+@Tag(name = "Friend API", description = "The user can send a request, accept a request, unfriend, list all friends and all friend requests, and can see a friend's profile")
 @SecurityRequirement(name = "Authorization")
 @PreAuthorize("hasAuthority('USER')")
 public class FriendsController {
