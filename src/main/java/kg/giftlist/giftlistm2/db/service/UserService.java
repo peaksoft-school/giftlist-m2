@@ -1,15 +1,16 @@
 package kg.giftlist.giftlistm2.db.service;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
-import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
-import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
-import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
-import kg.giftlist.giftlistm2.controller.payload.UserChangePasswordRequest;
+import kg.giftlist.giftlistm2.controller.payload.*;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.enums.Role;
 import kg.giftlist.giftlistm2.exception.EmptyLoginException;
 import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
+import kg.giftlist.giftlistm2.exception.UserExistException;
 import kg.giftlist.giftlistm2.mapper.LoginMapper;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
@@ -74,14 +75,14 @@ public class UserService {
 
     public AuthResponse login(AuthRequest loginRequest) {
         User user;
-        User user2 = userRepository.findByEmail(loginRequest.getEmail());
+        User existUser = userRepository.findByEmail(loginRequest.getEmail());
         if (loginRequest.getEmail().isEmpty()) {
             throw new EmptyLoginException(ValidationType.EMPTY_EMAIL);
         }
         if (loginRequest.getPassword().isEmpty()) {
             throw new EmptyLoginException(ValidationType.EMPTY_PASSWORD);
         }
-        if (user2 != null && passwordEncoder.matches(loginRequest.getPassword(), user2.getPassword())) {
+        if (existUser != null && passwordEncoder.matches(loginRequest.getPassword(), existUser.getPassword())) {
             UsernamePasswordAuthenticationToken token =
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
@@ -100,6 +101,25 @@ public class UserService {
         request.setLastName(jsonObject.getJSONObject("principal").getString("familyName"));
         request.setEmail(jsonObject.getJSONObject("principal").getJSONObject("claims").getString("email"));
         return register(request);
+    }
+
+    public AuthResponse googleSignIn(String request) throws FirebaseAuthException {
+        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(request);
+        User existingUser = userRepository.findByEmail(firebaseToken.getEmail());
+        if (existingUser.getEmail().isEmpty()) {
+            User user = new User();
+            String[] name = firebaseToken.getName().split(" ");
+            user.setFirstName(name[0]);
+            user.setLastName(name[1]);
+            user.setPassword(passwordEncoder.encode(firebaseToken.getName()));
+            user.setEmail(firebaseToken.getEmail());
+            user.setRole(Role.USER);
+            userRepository.save(user);
+        } else {
+            throw new UserExistException("User with email " + firebaseToken.getEmail() + " is already registered!");
+        }
+        String token = jwtTokenUtil.generateToken(existingUser);
+        return loginMapper.loginView(token, ValidationType.SUCCESSFUL, existingUser);
     }
 
     public User mapToRegisterRequest(SignupRequest signupRequest) {

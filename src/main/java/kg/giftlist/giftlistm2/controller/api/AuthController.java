@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.controller.api;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
@@ -41,6 +42,11 @@ public class AuthController {
     @GetMapping("oauth2")
     public AuthResponse signupGoogle(Principal principal) {
         return userService.signupWithGoogle(principal);
+    }
+
+    @PostMapping("google")
+    public AuthResponse googleSignIn(String request) throws FirebaseAuthException {
+        return userService.googleSignIn(request);
     }
 
 }
