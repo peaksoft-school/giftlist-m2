@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
 import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
+import kg.giftlist.giftlistm2.controller.payload.GoogleRequest;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("google")
-    public AuthResponse googleSignIn(String request) throws FirebaseAuthException {
+    public AuthResponse googleSignIn(@RequestBody GoogleRequest request) throws FirebaseAuthException {
         return userService.googleSignIn(request);
     }
 

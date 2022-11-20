@@ -103,23 +103,25 @@ public class UserService {
         return register(request);
     }
 
-    public AuthResponse googleSignIn(String request) throws FirebaseAuthException {
-        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(request);
+    public AuthResponse googleSignIn(GoogleRequest request) throws FirebaseAuthException {
+        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(request.getToken());
         User existingUser = userRepository.findByEmail(firebaseToken.getEmail());
         if (existingUser.getEmail().isEmpty()) {
             User user = new User();
-            String[] name = firebaseToken.getName().split(" ");
-            user.setFirstName(name[0]);
-            user.setLastName(name[1]);
-            user.setPassword(passwordEncoder.encode(firebaseToken.getName()));
+//            String[] name = firebaseToken.getName().split(" ");
+//            user.setFirstName(name[0]);
+//            user.setLastName(name[1]);
+            user.setFirstName(firebaseToken.getName());
+            user.setPassword(firebaseToken.getName());
             user.setEmail(firebaseToken.getEmail());
             user.setRole(Role.USER);
             userRepository.save(user);
+            existingUser = user;
         } else {
             throw new UserExistException("User with email " + firebaseToken.getEmail() + " is already registered!");
         }
-        String token = jwtTokenUtil.generateToken(existingUser);
-        return loginMapper.loginView(token, ValidationType.SUCCESSFUL, existingUser);
+        String newToken = jwtTokenUtil.generateToken(existingUser);
+        return loginMapper.loginView(newToken, ValidationType.SUCCESSFUL, existingUser);
     }
 
     public User mapToRegisterRequest(SignupRequest signupRequest) {
