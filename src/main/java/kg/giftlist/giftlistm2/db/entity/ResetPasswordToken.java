@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -28,7 +29,7 @@ public class ResetPasswordToken {
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     private User user;
 
-    private Date expiryDate;
+    private LocalDateTime expirationTime;
 
 
 }
