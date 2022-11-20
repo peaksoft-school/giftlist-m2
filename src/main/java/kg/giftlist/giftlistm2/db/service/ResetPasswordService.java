@@ -11,7 +11,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+
+import static org.bouncycastle.cms.RecipientId.password;
 
 
 @Service
@@ -40,7 +44,7 @@ public class ResetPasswordService {
         userRepository.save(user1);
     }
 
-    public void sendEmail(Nail mail, String url) {
+    public void sendEmail(Mail mail, String url) {
         Properties props = new Properties():
         props.put("mail. smtp.auth", "true");
         props.put("mail. smtp. starttls.enable", "true");
@@ -51,7 +55,7 @@ public class ResetPasswordService {
         Hi
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("arzimatovanurper i@gmail"));
+            message.setFrom(new InternetAddress("arzimatovanurperi@gmail"));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail.getTo()));
             message.setsubject(message getsubject());
             message.setText(url);
