@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "passwor_reset_token")
@@ -20,8 +19,8 @@ public class ResetPasswordToken {
     private static final int EXPIRATION = 60 * 24;
 
     @Id
-    @GeneratedValue(generator = "password_gen", strategy = GenerationType.IDENTITY)
-//    @SequenceGenerator(name = "password_gen", sequenceName = "password_seq", allocationSize = 1)
+    @GeneratedValue(generator = "password_gen", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "password_gen", sequenceName = "password_seq", allocationSize = 1)
     private Long id;
 
     private String token;
@@ -30,6 +29,5 @@ public class ResetPasswordToken {
     private User user;
 
     private LocalDateTime expirationTime;
-
 
 }

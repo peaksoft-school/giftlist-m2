@@ -43,7 +43,7 @@ public class AuthController {
         return userService.signupWithGoogle(principal);
     }
 
-    @PostMapping("/forgot-password")
+    @PostMapping("forgot-password")
     @Operation(summary = "process forgot password", description = "User The user can get a link to gmail to reset the password")
     public String processForgotPassword(@RequestParam("email") String email, HttpServletRequest request) {
         return resetPasswordService.processForgotPassword(email, request);
@@ -55,7 +55,7 @@ public class AuthController {
         return resetPasswordService.get(token);
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping("reset-password")
     @Operation(summary = "process reset password", description = "The user can update password using token")
     public UserInfoResponse resetPassword(@RequestParam String token, @RequestParam String password, @RequestParam String confirmPassword) {
         return resetPasswordService.save(token, password, confirmPassword);
