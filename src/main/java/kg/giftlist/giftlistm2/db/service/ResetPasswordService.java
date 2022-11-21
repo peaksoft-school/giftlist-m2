@@ -72,7 +72,6 @@ public class ResetPasswordService {
         System.out.println(url + " " + resetToken.getToken());
         String URL = url + "reset-password?token=" + resetToken.getToken();
         mail.setModel(mailModel);
-        System.out.println(resetToken);
         resetPasswordTokenRepository.save(resetToken);
         emailService.sendEmail(mail, URL);
         return ValidationType.SUCCESSFUL;

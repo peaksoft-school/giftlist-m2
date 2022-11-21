@@ -32,9 +32,6 @@ public class EmailService {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail.getTo()));
             message.setSubject(message.getSubject());
             message.setText(url);
-            System.out.println(message.getSubject());
-            System.out.println(mail.getTo());
-
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
