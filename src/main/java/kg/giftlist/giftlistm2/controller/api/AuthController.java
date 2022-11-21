@@ -5,12 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
 import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
+import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
 import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
-import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.service.ResetPasswordService;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,20 +45,20 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     @Operation(summary = "process forgot password", description = "User The user can get a link to gmail to reset the password")
-    public void processForgotPassword(@RequestParam("email") String email, HttpServletRequest request) {
-        resetPasswordService.processForgotPassword(email,request);
+    public String processForgotPassword(@RequestParam("email") String email, HttpServletRequest request) {
+        return resetPasswordService.processForgotPassword(email, request);
     }
 
     @GetMapping
-    @Operation(summary = "process reset password",description = "The user can access to update the password")
-    public ResetPasswordToken get(@RequestParam String token){
+    @Operation(summary = "process reset password", description = "The user can access to update the password")
+    public ResetPasswordToken get(@RequestParam String token) {
         return resetPasswordService.get(token);
     }
 
     @PostMapping("/reset-password")
-    @Operation(summary = "process reset password",description = "The user can update password using token")
-    public User resetPassword(@RequestParam String token, @RequestParam String password, @RequestParam String confirmPassword){
-        return resetPasswordService.save(token,password,confirmPassword);
+    @Operation(summary = "process reset password", description = "The user can update password using token")
+    public UserInfoResponse resetPassword(@RequestParam String token, @RequestParam String password, @RequestParam String confirmPassword) {
+        return resetPasswordService.save(token, password, confirmPassword);
     }
 
-    }
+}

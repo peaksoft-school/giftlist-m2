@@ -13,15 +13,17 @@ import java.util.Properties;
 public class EmailService {
 
     public void sendEmail(Mail mail, String url) {
-        Properties props = new Properties();
-        props.put("mail. smtp.auth", "true");
-        props.put("mail. smtp. starttls.enable", "true");
-        props.put("mail. smtp.host", "smtp.gmail.com");
+        Properties props = System.getProperties();
+        props.setProperty("mail.transport.protocol", "smtp");
+        props.setProperty("mail.host", "localhost");
+        props.setProperty("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return super.getPasswordAuthentication();
+                return new PasswordAuthentication("temuchi500@gmail.com","vvottpyezfoubusd");
             }
         });
         try {
@@ -30,6 +32,9 @@ public class EmailService {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail.getTo()));
             message.setSubject(message.getSubject());
             message.setText(url);
+            System.out.println(message.getSubject());
+            System.out.println(mail.getTo());
+
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
