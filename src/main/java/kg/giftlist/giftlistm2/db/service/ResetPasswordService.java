@@ -1,12 +1,16 @@
 package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
+import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
 import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.ResetPasswordTokenRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
+import kg.giftlist.giftlistm2.enums.Role;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
+import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
+import kg.giftlist.giftlistm2.exception.UserNotFoundException;
 import kg.giftlist.giftlistm2.mapper.UserInfoViewMapper;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
@@ -32,16 +36,24 @@ public class ResetPasswordService {
     public final EmailService emailService;
     public final UserInfoViewMapper userInfoViewMapper;
 
-    public UserInfoResponse save(String token, String password, String confirmPassword) {
+    public AuthResponse save(String token, String password, String confirmPassword) {
         ResetPasswordToken resetToken = resetPasswordTokenRepository.findByToken(token);
         User user = resetToken.getUser();
         if (password.equals(confirmPassword)) {
             user.setPassword(password);
         } else {
-            throw new EmptyValueException("Password don't match");
+            throw new IncorrectLoginException("Password don't match");
         }
         updatePassword(user);
-        return userInfoViewMapper.viewUserInfo(user);
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setId(user.getId());
+        authResponse.setFirstName(user.getFirstName());
+        authResponse.setLastName(user.getLastName());
+        authResponse.setEmail(user.getEmail());
+        authResponse.setJwtToken(token);
+        authResponse.setMessage(ValidationType.SUCCESSFUL);
+        authResponse.setAuthorities(String.valueOf(user.getRole()));
+        return authResponse;
     }
 
     public void updatePassword(User user) {
@@ -54,7 +66,7 @@ public class ResetPasswordService {
     public String processForgotPassword(String email, HttpServletRequest request) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException("User with email" + email + "not found");
+            throw new UserNotFoundException("User with email" + email + "not found");
         }
         ResetPasswordToken resetToken = new ResetPasswordToken();
         resetToken.setUser(user);

@@ -57,7 +57,7 @@ public class AuthController {
 
     @PostMapping("reset-password")
     @Operation(summary = "process reset password", description = "The user can update password using token")
-    public UserInfoResponse resetPassword(@RequestParam String token, @RequestParam String password, @RequestParam String confirmPassword) {
+    public AuthResponse resetPassword(@RequestParam String token, @RequestParam String password, @RequestParam String confirmPassword) {
         return resetPasswordService.save(token, password, confirmPassword);
     }
 
