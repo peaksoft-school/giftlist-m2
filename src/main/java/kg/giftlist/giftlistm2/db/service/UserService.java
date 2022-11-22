@@ -32,12 +32,8 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import javax.transaction.Transactional;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -115,33 +111,28 @@ public class UserService {
         return register(request);
     }
 
-    public AuthResponse googleSignIn(String token) throws IOException, FirebaseAuthException {
+    public AuthResponse googleSignIn(String token) throws FirebaseAuthException {
         FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(token);
-        User existingUser = userRepository.findByEmail(firebaseToken.getEmail());
-//        if (!userRepository.existsByEmail(firebaseToken.getEmail())) {
+        String uid = firebaseToken.getUid();
+        if (!userRepository.getExistingEmail(firebaseToken.getEmail())) {
             User user = new User();
 //            String fullName = firebaseToken.getName();
 //            String[] parts = fullName.split("\\s+");
-//            String first = parts[0];
-//            String last = parts[1];
-//            user.setFirstName(first);
-//            user.setLastName(last);
-//            user.setFirstName(firebaseToken.getName());
+////            String first = parts[0];
+////            String last = parts[1];
+            user.setFirstName(firebaseToken.getName());
             String password = passwordEncoder.encode(firebaseToken.getEmail());
             user.setPassword(password);
             user.setEmail(firebaseToken.getEmail());
             user.setRole(Role.USER);
             userRepository.save(user);
-            existingUser = user;
-//            existingUser = user;
-//        String newToken = jwtTokenUtil.generateToken(existingUser);
-//        }
-        existingUser = userRepository.findByEmail(firebaseToken.getEmail());
-        String uid = firebaseToken.getUid();
-        String customToken = FirebaseAuth.getInstance().createCustomToken(uid);
-        UserRecord userRecord = FirebaseAuth.getInstance().getUser(uid);
-        System.out.println(userRecord.getDisplayName());
-        return loginMapper.loginView(customToken, ValidationType.SUCCESSFUL, user);
+            String customToken = FirebaseAuth.getInstance().createCustomToken(uid);
+            UserRecord userRecord = FirebaseAuth.getInstance().getUser(uid);
+            System.out.println(userRecord.getDisplayName());
+            return loginMapper.loginView(customToken, ValidationType.SUCCESSFUL, user);
+        } else {
+            throw new UserExistException("User with email " + firebaseToken.getEmail() + " is existing");
+        }
     }
 
     @Value("classpath:serviceAccountKey.json")
