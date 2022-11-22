@@ -37,9 +37,6 @@ public class FriendsService {
 
     public List<FriendResponse> getAllRequestToFriend() {
         User user = getAuthenticatedUser();
-        if (user.getRequestToFriends().isEmpty()) {
-            throw new UserNotFoundException("Not found your request friend");
-        }
         return view(userRepository.getAllRequestToFriend(user.getId()));
     }
 
