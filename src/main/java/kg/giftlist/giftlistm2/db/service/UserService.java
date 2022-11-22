@@ -1,8 +1,12 @@
 package kg.giftlist.giftlistm2.db.service;
 
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.auth.UserRecord;
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import kg.giftlist.giftlistm2.controller.payload.*;
 import kg.giftlist.giftlistm2.db.entity.User;
@@ -16,6 +20,9 @@ import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +32,12 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -103,25 +115,45 @@ public class UserService {
         return register(request);
     }
 
-    public AuthResponse googleSignIn(GoogleRequest request) throws FirebaseAuthException {
-        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(request.getToken());
+    public AuthResponse googleSignIn(String token) throws IOException, FirebaseAuthException {
+        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(token);
         User existingUser = userRepository.findByEmail(firebaseToken.getEmail());
-        if (existingUser.getEmail().isEmpty()) {
+//        if (!userRepository.existsByEmail(firebaseToken.getEmail())) {
             User user = new User();
-//            String[] name = firebaseToken.getName().split(" ");
-//            user.setFirstName(name[0]);
-//            user.setLastName(name[1]);
-            user.setFirstName(firebaseToken.getName());
-            user.setPassword(firebaseToken.getName());
+//            String fullName = firebaseToken.getName();
+//            String[] parts = fullName.split("\\s+");
+//            String first = parts[0];
+//            String last = parts[1];
+//            user.setFirstName(first);
+//            user.setLastName(last);
+//            user.setFirstName(firebaseToken.getName());
+            String password = passwordEncoder.encode(firebaseToken.getEmail());
+            user.setPassword(password);
             user.setEmail(firebaseToken.getEmail());
             user.setRole(Role.USER);
             userRepository.save(user);
             existingUser = user;
-        } else {
-            throw new UserExistException("User with email " + firebaseToken.getEmail() + " is already registered!");
-        }
-        String newToken = jwtTokenUtil.generateToken(existingUser);
-        return loginMapper.loginView(newToken, ValidationType.SUCCESSFUL, existingUser);
+//            existingUser = user;
+//        String newToken = jwtTokenUtil.generateToken(existingUser);
+//        }
+        existingUser = userRepository.findByEmail(firebaseToken.getEmail());
+        String uid = firebaseToken.getUid();
+        String customToken = FirebaseAuth.getInstance().createCustomToken(uid);
+        UserRecord userRecord = FirebaseAuth.getInstance().getUser(uid);
+        System.out.println(userRecord.getDisplayName());
+        return loginMapper.loginView(customToken, ValidationType.SUCCESSFUL, user);
+    }
+
+    @Value("classpath:serviceAccountKey.json")
+    Resource serviceAccount;
+
+    @Bean
+    FirebaseAuth firebaseAuth() throws IOException {
+        var options = FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
+                .build();
+        var firebaseApp = FirebaseApp.initializeApp(options);
+        return FirebaseAuth.getInstance(firebaseApp);
     }
 
     public User mapToRegisterRequest(SignupRequest signupRequest) {

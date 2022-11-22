@@ -11,6 +11,8 @@ import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -46,8 +48,8 @@ public class AuthController {
     }
 
     @PostMapping("google")
-    public AuthResponse googleSignIn(@RequestBody GoogleRequest request) throws FirebaseAuthException {
-        return userService.googleSignIn(request);
+    public AuthResponse googleSignIn(@RequestParam String token) throws FirebaseAuthException, IOException {
+        return userService.googleSignIn(token);
     }
 
 }
