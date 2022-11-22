@@ -2,20 +2,16 @@ package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
 import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
-import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
 import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.ResetPasswordTokenRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
-import kg.giftlist.giftlistm2.enums.Role;
-import kg.giftlist.giftlistm2.exception.EmptyValueException;
 import kg.giftlist.giftlistm2.exception.IncorrectLoginException;
 import kg.giftlist.giftlistm2.exception.UserNotFoundException;
 import kg.giftlist.giftlistm2.mapper.UserInfoViewMapper;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -87,19 +83,6 @@ public class ResetPasswordService {
         resetPasswordTokenRepository.save(resetToken);
         emailService.sendEmail(mail, URL);
         return ValidationType.SUCCESSFUL;
-    }
-
-    public ResetPasswordToken get(String token) {
-        ResetPasswordToken resetToken = resetPasswordTokenRepository.findByToken(token);
-        if (resetToken == null) {
-            System.out.println("token not found");
-            throw new EmptyValueException("token no found");
-        } else if (resetToken.getExpirationTime().isBefore(LocalDateTime.now())) {
-            System.out.println("token is expired");
-            throw new EmptyValueException("token is expired");
-        } else {
-            return resetToken;
-        }
     }
 
 }

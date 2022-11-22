@@ -5,8 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
 import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
-import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
-import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
 import kg.giftlist.giftlistm2.db.service.ResetPasswordService;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -47,12 +45,6 @@ public class AuthController {
     @Operation(summary = "process forgot password", description = "User The user can get a link to gmail to reset the password")
     public String processForgotPassword(@RequestParam("email") String email, HttpServletRequest request) {
         return resetPasswordService.processForgotPassword(email, request);
-    }
-
-    @GetMapping
-    @Operation(summary = "process reset password", description = "The user can access to update the password")
-    public ResetPasswordToken get(@RequestParam String token) {
-        return resetPasswordService.get(token);
     }
 
     @PostMapping("reset-password")
