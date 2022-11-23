@@ -69,6 +69,7 @@ public class UserService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword()));
         user = userRepository.findByEmail(token.getName());
         String token1 = (jwtTokenUtil.generateToken(user));
+        log.info("Successfully");
         return loginMapper.loginView(token1, ValidationType.SUCCESSFUL, user);
     }
 
