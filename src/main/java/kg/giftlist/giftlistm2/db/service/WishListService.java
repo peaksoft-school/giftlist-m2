@@ -283,6 +283,7 @@ public class WishListService {
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
+        log.info("User: " + authentication.getName());
         return userRepository.findByEmail(login);
     }
 

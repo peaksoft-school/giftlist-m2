@@ -37,10 +37,12 @@ public class CharityService {
     public String book(Long id) {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
+            log.error("There is no charity with id " + id);
             throw new EmptyValueException("There is no charity with id " + id);
         } else {
             Charity charity = charityRepository.findById(id).get();
             if (charity.isBlocked()) {
+                log.info("This charity was blocked due to it got a complain. Contact to administration of Giftlist");
                 throw new BadCredentialsException("This charity was blocked due to it got a complain. Contact to administration of Giftlist");
             } else {
                 if (charity.getCharityStatus().equals(CharityStatus.NOT_BOOKED)) {
@@ -53,8 +55,10 @@ public class CharityService {
                     charityRepository.save(charity);
                     charity.addNotification(notificationService.bookedCharity(user, new ArrayList<>(List.of(charity.getUser())), charity));
                     notificationRepository.saveAll(charity.getNotifications());
+                    log.info("You have successfully booked this charity");
                     return "You have successfully booked this charity";
                 } else {
+                    log.error("This charity is already booked");
                     throw new BadCredentialsException("This charity is already booked");
                 }
             }
@@ -64,6 +68,7 @@ public class CharityService {
     public String unBook(Long id) {
         User user = getAuthenticatedUser();
         if (bookingRepository.findById(id).isEmpty()) {
+            log.error("There is no charity with id " + id + " to remove from booking");
             throw new EmptyValueException("There is no charity with id " + id + " to remove from booking");
         }
         Booking booking = bookingRepository.findById(id).get();
@@ -71,8 +76,10 @@ public class CharityService {
             user.getBookings().remove(booking);
             bookingRepository.delete(booking);
             booking.getCharity().setCharityStatus(CharityStatus.NOT_BOOKED);
+            log.info("You have successfully unbooked this charity");
             return "You have successfully unbooked this charity";
         } else {
+            log.info("This charity is already unbooked");
             throw new BadCredentialsException("This charity is already unbooked");
         }
     }
@@ -80,20 +87,25 @@ public class CharityService {
     public String deleteCharity(Long id) {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
+            log.info("There is no any charity with id: "+id);
             throw new EmptyValueException("There is no any charity with id " + id);
         } else {
             Charity charity = charityRepository.findById(id).get();
             if (charity.isBlocked()) {
+                log.error("Your charity was blocked due to it got a complain. Contact to administration of Giftlist");
                 throw new BadCredentialsException("Your charity was blocked due to it got a complain. Contact to administration of Giftlist");
             } else {
                 if (user.getCharities().isEmpty()) {
+                    log.error("You have no any charity with id " + id);
                     throw new EmptyValueException("You have no any charity with id " + id);
                 }
                 if (user.getCharities().contains(charity)) {
                     user.getCharities().remove(charity);
                     charityRepository.deleteById(charity.getId());
+                    log.info("Charity successfully was deleted!");
                     return "Charity successfully was deleted!";
                 } else {
+                    log.error("You have no any charity with id " + id);
                     throw new EmptyValueException("You have no any charity with id " + id);
                 }
             }
@@ -103,12 +115,15 @@ public class CharityService {
     public CharityResponse getCharityById(Long id) {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
+            log.error("There is no any charity with id " + id);
             throw new EmptyValueException("There is no any charity with id " + id);
         }
         Charity charity = charityRepository.findById(id).get();
         if (user.getCharities().contains(charity)) {
+            log.info("get charity by charity id: "+charity.getId());
             return mapToResponse(charity);
         } else {
+            log.error("You have no any charity with id " + id);
             throw new EmptyValueException("You have no any charity with id " + id);
         }
     }
@@ -135,23 +150,26 @@ public class CharityService {
         charity.setBlocked(false);
         charity.setUser(user);
         if (request.getCondition().isEmpty()) {
+            log.error("Please, choose a condition from list");
             throw new EmptyValueException("Please, choose a condition from list");
         } else {
             charity.setCondition(Condition.valueOf(request.getCondition()));
         }
         if (request.getCategoryId() == null) {
-            log.info("Please, show a category of the gift");
+            log.error("Please, show a category of the gift");
             throw new EmptyValueException("Please, show a category of the gift");
         } else {
             charity.setCategory(category);
         }
         if (request.getSubcategoryId() == null) {
+            log.error("Please, show a subcategory of the gift");
             throw new EmptyValueException("Please, show a subcategory of the gift");
         } else {
             charity.setSubcategory(subcategory);
         }
         charity.setImage(request.getImage());
         if (request.getDescription().isEmpty()) {
+            log.error("Please, at least describe your gift shortly");
             throw new EmptyValueException("Please, at least describe your gift shortly");
         } else {
             charity.setDescription(request.getDescription());
@@ -159,6 +177,7 @@ public class CharityService {
         charity.setCreatedAt(LocalDate.now());
         charity.setCharityStatus(CharityStatus.NOT_BOOKED);
         charityRepository.save(charity);
+
         return mapToResponse(charity);
     }
 
@@ -295,6 +314,7 @@ public class CharityService {
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
+        log.info("User: " + authentication.getName());
         return userRepository.findByEmail(login);
     }
 

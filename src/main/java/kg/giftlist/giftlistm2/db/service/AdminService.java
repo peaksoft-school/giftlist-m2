@@ -36,6 +36,7 @@ public class AdminService {
         for (User i : users) {
             userList.add(mapToAdminPageUser(i));
         }
+        log.info("Get all users");
         return userList;
     }
 
@@ -130,6 +131,7 @@ public class AdminService {
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
+        log.info("Admin: " + authentication.getName());
         return userRepository.findByEmail(login);
     }
 
