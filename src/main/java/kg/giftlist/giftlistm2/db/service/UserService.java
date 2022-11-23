@@ -61,7 +61,6 @@ public class UserService {
             log.error("password not match");
             throw new IncorrectLoginException("Passwords do not match");
         }
-
         user.setRole(Role.USER);
         userRepository.save(user);
         UsernamePasswordAuthenticationToken token =
@@ -69,7 +68,6 @@ public class UserService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword()));
         user = userRepository.findByEmail(token.getName());
         String token1 = (jwtTokenUtil.generateToken(user));
-        log.info("Successfully");
         return loginMapper.loginView(token1, ValidationType.SUCCESSFUL, user);
     }
 

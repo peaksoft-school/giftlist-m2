@@ -21,5 +21,4 @@
         <appender-ref ref="LogzioLogbackAppender"/>
         <appender-ref ref="Console"/>
     </root>
-
 </configuration>
