@@ -125,6 +125,18 @@
             <artifactId>javax.mail</artifactId>
             <version>1.5.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.logz.logback</groupId>
+            <artifactId>logzio-logback-appender</artifactId>
+            <version>1.0.22</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.logz.log4j2</groupId>
+            <artifactId>logzio-log4j2-appender</artifactId>
+            <version>1.0.11</version>
+        </dependency>
     </dependencies>
 
     <build>
