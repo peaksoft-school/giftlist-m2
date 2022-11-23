@@ -61,6 +61,7 @@ public class UserService {
             log.error("password not match");
             throw new IncorrectLoginException("Passwords do not match");
         }
+
         user.setRole(Role.USER);
         userRepository.save(user);
         UsernamePasswordAuthenticationToken token =
