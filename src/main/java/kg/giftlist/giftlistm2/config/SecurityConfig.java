@@ -58,12 +58,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .and()
-                .csrf().disable()
-                .httpBasic();
                 .oauth2ResourceServer().jwt()
                 .and()
                 .and()
-                .cors().and().csrf().disable();
+                .httpBasic()
+                .and().csrf().disable();
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
