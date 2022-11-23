@@ -1,6 +1,5 @@
 package kg.giftlist.giftlistm2.controller.api;
 
-import com.google.firebase.auth.FirebaseAuthException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
@@ -20,6 +19,7 @@ import java.security.Principal;
 public class AuthController {
 
     private final UserService userService;
+    private final ResetPasswordService resetPasswordService;
 
     @GetMapping("test")
     public String test(Principal principal) {
@@ -47,6 +47,18 @@ public class AuthController {
     @PostMapping("google")
     public AuthResponse googleSignIn(@RequestParam String token) throws FirebaseAuthException {
         return userService.googleSignIn(token);
+    }
+
+    @PostMapping("forgot-password")
+    @Operation(summary = "process forgot password", description = "User The user can get a link to gmail to reset the password")
+    public String processForgotPassword(@RequestParam("email") String email, HttpServletRequest request) {
+        return resetPasswordService.processForgotPassword(email, request);
+    }
+
+    @PostMapping("reset-password")
+    @Operation(summary = "process reset password", description = "The user can update password using token")
+    public AuthResponse resetPassword(@RequestParam String token, @RequestParam String password, @RequestParam String confirmPassword) {
+        return resetPasswordService.save(token, password, confirmPassword);
     }
 
 }

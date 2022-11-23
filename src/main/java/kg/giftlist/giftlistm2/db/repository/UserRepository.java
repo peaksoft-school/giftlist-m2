@@ -29,4 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select h from User u join u.wishLists h where u.id=?1")
     List<WishList> getAllUserWishList(Long userId);
 
+    @Query("select u from User u where u.role = 'USER' ")
+    List<User> getAll();
+
 }
