@@ -35,21 +35,26 @@ public class ComplaintService {
     public String createWishlistComplaint(Long id, ComplaintRequest request) {
         User user = getAuthenticatedUser();
         if (wishListRepository.findById(id).isEmpty()) {
+            log.error("There is no any wish list with id " + id);
             throw new EmptyValueException("There is no any wish list with id " + id);
         } else {
             WishList wishList = wishListRepository.findById(id).get();
             if (user.getWishLists().contains(wishList)) {
+                log.error("You can not complain to your own posts!");
                 throw new BadCredentialsException("You can not complain to your own posts!");
             }
             if (request.getComplaints().isEmpty()) {
+                log.error("The field must not be empty!");
                 throw new EmptyValueException("The field must not be empty!");
             }
             if (wishList.isBlocked()) {
+                log.error("This wish list was already blocked");
                 throw new BadCredentialsException("This wish list was already blocked");
             }
             List<Complaints> complaintsList = complaintRepository.getAllWishlistComplaints();
             for (Complaints allComplaints : complaintsList) {
                 if (allComplaints.getUser().getId().equals(user.getId()) && allComplaints.getWishList().getId().equals(wishList.getId())) {
+                    log.error("You have already complained this post!");
                     throw new BadCredentialsException("You have already complained this post!");
                 }
             }
@@ -61,6 +66,8 @@ public class ComplaintService {
             User admin = userRepository.findByEmail("admin@gmail.com");
             complaints.addNotification(notificationService.sendWishlistComplaintNotification(user, new ArrayList<>(List.of(admin)), complaints));
             notificationRepository.saveAll(complaints.getNotifications());
+            log.info("Thank you for letting us know!\n" +
+                    "Your feedback helps us make the GIFT LIST community a safe environment for everyone.");
             return "Thank you for letting us know!\n" +
                     "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
         }
@@ -69,21 +76,26 @@ public class ComplaintService {
     public String createCharityComplaint(Long id, ComplaintRequest request) {
         User user = getAuthenticatedUser();
         if (charityRepository.findById(id).isEmpty()) {
+            log.error("There is no any charity with id " + id);
             throw new EmptyValueException("There is no any charity with id " + id);
         } else {
             Charity charity = charityRepository.findById(id).get();
             if (user.getCharities().contains(charity)) {
+                log.error("You can not complain to your own posts!");
                 throw new BadCredentialsException("You can not complain to your own posts!");
             }
             if (request.getComplaints().isEmpty()) {
+                log.error("The field must not be empty!");
                 throw new EmptyValueException("The field must not be empty!");
             }
             if (charity.isBlocked()) {
+                log.error("This charity was already blocked");
                 throw new BadCredentialsException("This charity was already blocked");
             }
             List<Complaints> complaintsList = complaintRepository.getAllCharityComplaints();
             for (Complaints allComplaints : complaintsList) {
                 if (allComplaints.getUser().getId().equals(user.getId()) && allComplaints.getCharity().getId().equals(charity.getId())) {
+                    log.error("You have already complained this post!");
                     throw new BadCredentialsException("You have already complained this post!");
                 }
             }
@@ -95,6 +107,8 @@ public class ComplaintService {
             User admin = userRepository.findByEmail("admin@gmail.com");
             complaints.addNotification(notificationService.sendCharityComplaintNotification(user, new ArrayList<>(List.of(admin)), complaints));
             notificationRepository.saveAll(complaints.getNotifications());
+            log.info("Thank you for letting us know!\n" +
+                    "Your feedback helps us make the GIFT LIST community a safe environment for everyone.");
             return "Thank you for letting us know!\n" +
                     "Your feedback helps us make the GIFT LIST community a safe environment for everyone.";
         }
@@ -102,46 +116,48 @@ public class ComplaintService {
 
     public WishlistComplaintResponse getWishlistComplaintById(Long id) {
         if (complaintRepository.findById(id).isEmpty()) {
+            log.error("There is no any complained wish list with id " + id);
             throw new EmptyValueException("There is no any complained wish list with id " + id);
         } else {
             Complaints complaints = complaintRepository.findById(id).get();
+            log.info("Get wish list from the complaint list");
             return wishlistMapToResponse(complaints);
         }
     }
 
     public CharityComplaintResponse getCharityComplaintById(Long id) {
         if (complaintRepository.findById(id).isEmpty()) {
+            log.error("There is no any complained charity with id " + id);
             throw new EmptyValueException("There is no any complained charity with id " + id);
         } else {
             Complaints complaints = complaintRepository.findById(id).get();
+            log.info("Get charity from the complaint list");
             return charityMapToResponse(complaints);
         }
     }
 
     public List<WishlistComplaintResponse> getAllWishListComplaints() {
-        if (complaintRepository.findAll().isEmpty()) {
-            throw new EmptyValueException("There is no any complained wish list");
-        } else {
             List<Complaints> complaints = complaintRepository.getAllWishlistComplaints();
+            log.info("Get all wish list from the complaint list");
             return wishlistView(complaints);
         }
-    }
+
 
     public List<CharityComplaintResponse> getAllCharityComplaints() {
-        if (complaintRepository.findAll().isEmpty()) {
-            throw new EmptyValueException("There is no any complained charity");
-        }
         List<Complaints> complaints = complaintRepository.getAllCharityComplaints();
+        log.info("Get all charity from the complaint list");
         return charityView(complaints);
     }
 
     public String deleteComplaint(Long id) {
         if (complaintRepository.findById(id).isEmpty()) {
+            log.error("There is no any complaint with id " + id);
             throw new EmptyValueException("There is no any complaint with id " + id);
         }
         Complaints complaints = complaintRepository.findById(id).get();
         log.info("complaint" + complaints.getComplaintsType());
         complaintRepository.deleteById(complaints.getId());
+        log.info("Complaint successfully was deleted!");
         return "Complaint successfully was deleted!";
     }
 

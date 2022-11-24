@@ -37,6 +37,7 @@ public class WishListService {
         Holiday holiday = holidayRepository.findById(request.getHolidayId()).get();
         WishList wishList = new WishList();
         if (request.getGiftName() == null) {
+            log.error("Wish list name must not be empty!");
             throw new EmptyValueException("Wish list name must not be empty!");
         } else {
             wishList.setGiftName(request.getGiftName());
@@ -53,6 +54,7 @@ public class WishListService {
         List<User> friendList = userRepository.getAllFriendByUserId(user.getId());
         wishList.addNotification(notificationService.wishListNotification(user, friendList, wishList));
         notificationRepository.saveAll(wishList.getNotifications());
+        log.info("Successfully created wish list");
         return mapToResponse(wishList);
     }
 
@@ -61,9 +63,11 @@ public class WishListService {
         WishList wishList = wishListRepository.findById(id).orElseThrow(
                 () -> new UserNotFoundException("WishList not found with id: " + id));
         if (user.getWishLists().contains(wishList)) {
+            log.error("You have this wishList");
             throw new WishListExistException("You have this wishList");
         }
         if (wishList.isBlocked()) {
+            log.error("This wish list was blocked due to it got a complain. Contact to administration of Giftlist");
             throw new BadCredentialsException("This wish list was blocked due to it got a complain. Contact to administration of Giftlist");
         } else {
             WishListRequest wishListRequest = new WishListRequest();
@@ -73,6 +77,7 @@ public class WishListService {
             wishListRequest.setHolidayDate(wishListRequest.getHolidayDate());
             wishListRequest.setImage(wishList.getImage());
             wishListRequest.setHolidayId(wishList.getHolidays().getId());
+            log.info("Successfully added wish list");
             return create(wishListRequest);
         }
     }
@@ -80,15 +85,18 @@ public class WishListService {
     public WishListResponse update(Long id, WishListRequest request) {
         User user = getAuthenticatedUser();
         if (wishListRepository.findById(id).isEmpty()) {
+            log.error("There is no any wish list with id " + id);
             throw new EmptyValueException("There is no any wish list with id " + id);
         } else {
             WishList wishList = wishListRepository.findById(id).get();
             if (wishList.isBlocked()) {
+                log.error("This wish list was blocked due to it got a complain. Contact to administration of Giftlist");
                 throw new BadCredentialsException("This wish list was blocked due to it got a complain. Contact to administration of Giftlist");
             } else {
                 if (user.getWishLists().contains(wishList)) {
                     Holiday holiday = holidayRepository.findById(request.getHolidayId()).get();
                     if (request.getGiftName().isEmpty()) {
+                        log.error("Wish list name must not be empty!");
                         throw new EmptyValueException("Wish list name must not be empty!");
                     }
                     wishList.setGiftName(request.getGiftName());
@@ -104,8 +112,10 @@ public class WishListService {
                         wishList.setWishListStatus(WishListStatus.NOT_BOOKED);
                     }
                     wishListRepository.save(wishList);
+                    log.info("Successfully modified");
                     return mapToResponse(wishList);
                 } else {
+                    log.error("You have no any wish list with id " + id);
                     throw new EmptyValueException("You have no any wish list with id " + id);
                 }
             }
@@ -115,21 +125,26 @@ public class WishListService {
     public String delete(Long id) {
         User user = getAuthenticatedUser();
         if (wishListRepository.findById(id).isEmpty()) {
+            log.error("There is no any wish list with id " + id);
             throw new EmptyValueException("There is no any wish list with id " + id);
         } else {
             WishList wishList = wishListRepository.findById(id).get();
             if (wishList.isBlocked()) {
+                log.error("This wish list was blocked due to it got a complain. Contact to administration of Giftlist");
                 throw new BadCredentialsException("This wish list was blocked due to it got a complain. Contact to administration of Giftlist");
             } else {
                 if (user.getWishLists().isEmpty()) {
+                    log.error("You have no any wish list with id " + id);
                     throw new EmptyValueException("You have no any wish list with id " + id);
                 }
                 if (user.getWishLists().contains(wishList)) {
                     log.info("wishList" + wishList.getGiftName());
                     user.getWishLists().remove(wishList);
                     wishListRepository.delete(wishList);
+                    log.info("Wish list successfully was deleted!");
                     return "Wish list successfully was deleted!";
                 } else {
+                    log.error("You have no any wish list with id " + id);
                     throw new EmptyValueException("You have no any wish list with id " + id);
                 }
             }
@@ -139,28 +154,30 @@ public class WishListService {
     public WishListResponse getWishListById(Long id) {
         User user = getAuthenticatedUser();
         if (wishListRepository.findById(id).isEmpty()) {
+            log.error("There is no any wish list with id " + id);
             throw new EmptyValueException("There is no any wish list with id " + id);
         }
         WishList wishList = wishListRepository.findById(id).get();
         if (user.getWishLists().contains(wishList)) {
+            log.info("Get wish list with id: "+id);
             return mapToResponse(wishList);
         } else {
+            log.error("You have no any wish list with id " + id);
             throw new EmptyValueException("You have no any wish list with id " + id);
         }
     }
 
     public List<WishListResponse> getAllWishLists() {
         User user = getAuthenticatedUser();
-        if (user.getWishLists().isEmpty()) {
-            throw new EmptyValueException("There are no any wish lists");
-        }
         List<WishList> wishLists = wishListRepository.getWishByUserId(user.getId());
+        log.info("Get all wish list");
         return view(wishLists);
     }
 
     public String book(Long id) {
         User user = getAuthenticatedUser();
         if (wishListRepository.findById(id).isEmpty()) {
+            log.error("There is no wishList with id " + id);
             throw new EmptyValueException("There is no wishList with id " + id);
         }
         WishList wishList = wishListRepository.findById(id).get();
@@ -172,8 +189,10 @@ public class WishListService {
             bookingRepository.save(booking1);
             wishList.setWishListStatus(WishListStatus.BOOKED);
             wishListRepository.save(wishList);
+            log.info( "You have successfully booked this wishList");
             return "You have successfully booked this wishList";
         } else {
+            log.error("This wishList is already booked");
             throw new BadCredentialsException("This wishList is already booked");
         }
     }
@@ -181,6 +200,7 @@ public class WishListService {
     public String unBook(Long id) {
         User user = getAuthenticatedUser();
         if (bookingRepository.findById(id).isEmpty()) {
+            log.error("There is no wish list with id " + id);
             throw new EmptyValueException("There is no wish list with id " + id);
         } else {
             Booking booking = bookingRepository.findById(id).get();
@@ -188,6 +208,7 @@ public class WishListService {
                 user.getBookings().remove(booking);
                 bookingRepository.delete(booking);
                 booking.getWishList().setWishListStatus(WishListStatus.NOT_BOOKED);
+                log.info("You have successfully unbooked this wish list");
                 return "You have successfully unbooked this wish list";
             } else {
                 throw new BadCredentialsException("This wish list is already unbooked");
@@ -198,31 +219,34 @@ public class WishListService {
     public WishListResponse getWishlistByAdmin(Long id) {
         if (wishListRepository.existsById(id)) {
             WishList wishList = wishListRepository.findById(id).get();
+            log.info("Get wish list with id: "+id);
             return mapToResponse(wishList);
         } else {
+            log.error("There is no any wish list with id " + id);
             throw new EmptyValueException("There is no any wish list with id " + id);
         }
     }
 
     public List<WishListResponse> getAllWishlistsByAdmin() {
-        if (wishListRepository.findAll().isEmpty()) {
-            throw new EmptyValueException("There is no any wish list");
-        } else {
             List<WishList> wishLists = wishListRepository.findAll();
+            log.info("Get all wish list");
             return view(wishLists);
         }
-    }
+
 
     public String blockWishlistByAdmin(Long id) {
         if (wishListRepository.findById(id).isEmpty()) {
+            log.error("There is no any wish list with id " + id);
             throw new EmptyValueException("There is no any wish list with id " + id);
         } else {
             WishList wishList = wishListRepository.findById(id).get();
             if (wishList.isBlocked()) {
+                log.error("You have already blocked the wish list with id " + id);
                 throw new BadCredentialsException("You have already blocked the wish list with id " + id);
             } else {
                 wishList.setBlocked(true);
                 wishListRepository.save(wishList);
+                log.info("You have blocked the wish list with id " + id);
                 return "You have blocked the wish list with id " + id;
             }
         }
@@ -230,14 +254,17 @@ public class WishListService {
 
     public String unBlockWishlistByAdmin(Long id) {
         if (wishListRepository.findById(id).isEmpty()) {
+            log.error("There is no any wish list with id " + id);
             throw new EmptyValueException("There is no any wish list with id " + id);
         } else {
             WishList wishList = wishListRepository.findById(id).get();
             if (!wishList.isBlocked()) {
+                log.error("You have already unblocked the wish list with id " + id);
                 throw new BadCredentialsException("You have already unblocked the wish list with id " + id);
             } else {
                 wishList.setBlocked(false);
                 wishListRepository.save(wishList);
+                log.info("You have unblocked the wish list with id " + id);
                 return "You have unblocked the wish list with id " + id;
             }
         }
@@ -277,6 +304,7 @@ public class WishListService {
         List<WishList> sortedWishes = new ArrayList<>(allFriendWishes);
         allWishes.removeAll(allFriendWishes);
         sortedWishes.addAll(allWishes);
+        log.info("Get wishes for feed");
         return view(sortedWishes);
     }
 

@@ -36,27 +36,32 @@ public class HolidayService {
         User user = getAuthenticatedUser();
         holiday.setUser(user);
         repository.save(holiday);
+        log.info("Successfully created holiday");
         return holidayMapToResponse.viewHoliday(holiday);
     }
 
     public HolidayResponse update(Long id, HolidayRequest holidayRequest) {
         Holiday holiday = repository.findById(id).get();
         holidayMapToRequest.update(holiday, holidayRequest);
+        log.info("Successfully modified");
         return holidayMapToResponse.viewHoliday(repository.save(holiday));
     }
 
     public HolidayResponse findById(Long id) {
         Holiday holiday = repository.findById(id).get();
+        log.info("Get holiday with id: "+id);
         return holidayMapToResponse.viewHoliday(holiday);
     }
 
     public String deleteById(Long id) {
         Holiday holiday = repository.findById(id).get();
         repository.deleteById(holiday.getId());
+        log.info("Holiday successfully deleted!");
         return "Holiday successfully deleted!";
     }
 
     public List<HolidayResponse> getHolidays() {
+        log.info("Get all holiday");
         return holidayMapToResponse.view(repository.findAll());
     }
 

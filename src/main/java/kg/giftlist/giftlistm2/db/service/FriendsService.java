@@ -101,8 +101,8 @@ public class FriendsService {
             userRepository.save(friend);
             friend.addNotification(notificationService.acceptSendNotification(user,new ArrayList<>(List.of(friend))));
             notificationRepository.saveAll(friend.getNotifications());
-            log.info("Successfully accept as a friend, user id: "+friend.getId());
         }
+            log.info("Successfully accept as a friend, user id: "+friend.getId());
         return friendMappers.response(friend, holidayRepository.getAllUserHolidays(friendId).size(),
                 userRepository.getAllUserWishList(friendId).size(), ValidationType.ACCEPTED);
     }

@@ -29,30 +29,23 @@ public class NotificationService {
     public List<NotificationResponse> getAllNotification() {
         User user = getAuthenticatedUser();
         List<Notification> notifications = notificationRepository.getAllNotificationByUserId(user.getId());
-        if (notifications.isEmpty()) {
-            log.error("Not found notification");
-            throw new NotificationNotFoundException("Not found notification");
-        }
         notifications.stream().forEach(x -> x.setRead(true));
         notificationRepository.saveAll(notifications);
+        log.info("Get all notifications");
         return view(notifications);
     }
 
     public List<NotificationResponse> getAllIsReadNotification() {
         User user = getAuthenticatedUser();
         List<Notification> notifications = notificationRepository.getAllIsReadNotification(user.getId());
-        if (notifications.isEmpty()) {
-            throw new NotificationNotFoundException("Read notification not found");
-        }
+        log.info("Get all is read notifications");
         return view(notifications);
     }
 
     public List<NotificationResponse> getAllUnReadNotification() {
         User user = getAuthenticatedUser();
         List<Notification> notifications = notificationRepository.getAllUnReadNotification(user.getId());
-        if (notifications.isEmpty()) {
-            throw new NotificationNotFoundException("Read notification not found");
-        }
+        log.info("Get all un read notifications");
         return view(notifications);
     }
 
@@ -64,6 +57,7 @@ public class NotificationService {
         }
         notification.setRead(true);
         notificationRepository.save(notification);
+        log.info("Get notification with id: "+id);
         return notificationMapper.notificationResponse(notification);
     }
 
@@ -82,6 +76,7 @@ public class NotificationService {
         notification.setReceivers(receivers);
         notification.setNotificationStatus(NotificationStatus.REQUEST_TO_FRIEND);
         log.info("Notification status: " + NotificationStatus.REQUEST_TO_FRIEND);
+        log.info("Successfully send notification");
         return notification;
     }
 
@@ -92,6 +87,7 @@ public class NotificationService {
         notification.setReceivers(receivers);
         notification.setNotificationStatus(NotificationStatus.ACCEPT_YOUR_REQUEST);
         log.info("Notification status: " + NotificationStatus.ACCEPT_YOUR_REQUEST);
+        log.info("Successfully send notification");
         return notification;
     }
 
@@ -103,6 +99,8 @@ public class NotificationService {
         notification.setGiftId(charity.getId());
         notification.setGiftName(charity.getGiftName());
         notification.setNotificationStatus(NotificationStatus.BOOKED);
+        log.info("Notification status: " + NotificationStatus.BOOKED);
+        log.info("Successfully send notification");
         return notification;
     }
 
@@ -114,6 +112,8 @@ public class NotificationService {
         notification.setGiftId(complaints.getCharity().getId());
         notification.setGiftName(complaints.getCharity().getGiftName());
         notification.setNotificationStatus(NotificationStatus.HAS_COMPLAINED);
+        log.info("Notification status: " + NotificationStatus.HAS_COMPLAINED);
+        log.info("Successfully send notification");
         return notification;
     }
 
@@ -125,6 +125,8 @@ public class NotificationService {
         notification.setGiftId(complaints.getWishList().getId());
         notification.setGiftName(complaints.getWishList().getGiftName());
         notification.setNotificationStatus(NotificationStatus.HAS_COMPLAINED);
+        log.info("Notification status: " + NotificationStatus.HAS_COMPLAINED);
+        log.info("Successfully send notification");
         return notification;
     }
 
@@ -137,6 +139,8 @@ public class NotificationService {
         notification.setGiftId(wishList.getId());
         notification.setGiftName(wishList.getGiftName());
         notification.setNotificationStatus(NotificationStatus.ADDED_WISHED_GIFT);
+        log.info("Notification status: " + NotificationStatus.ADDED_WISHED_GIFT);
+        log.info("Successfully send notification");
         return notification;
     }
 

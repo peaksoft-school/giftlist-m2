@@ -27,6 +27,7 @@ public class UserInfoService {
     @Transactional
     public UserInfoResponse update(Long userInfoId, UserInfoRequest userInfoRequest) {
         if (userRepository.findById(userInfoId).isEmpty()) {
+            log.error("There is no any user with id " + userInfoId);
             throw new EmptyValueException("There is no any user with id " + userInfoId);
         }
         User user = getAuthenticatedUser();
