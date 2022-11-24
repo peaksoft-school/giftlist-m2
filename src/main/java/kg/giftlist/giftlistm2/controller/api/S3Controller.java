@@ -1,18 +1,17 @@
-package kg.giftlist.giftlistm2.controller;
+package kg.giftlist.giftlistm2.controller.api;
 
-import kg.giftlist.giftlistm2.service.AmazonS3Service;
-import org.springframework.beans.factory.annotation.Autowired;
+import kg.giftlist.giftlistm2.service.S3Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/files")
-public class AmazonS3Controller {
-    @Autowired
-    private AmazonS3Service amazonS3ClientService;
+@RequiredArgsConstructor
+public class S3Controller {
+    private final S3Service amazonS3ClientService;
 
     @PostMapping
     public Map<String, String> uploadFile(@RequestPart(value = "file") MultipartFile file)
