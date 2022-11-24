@@ -57,7 +57,7 @@ public class NotificationService {
         }
         notification.setRead(true);
         notificationRepository.save(notification);
-        log.info("Get notification with id: "+id);
+        log.info("Get notification with id: " + id);
         return notificationMapper.notificationResponse(notification);
     }
 

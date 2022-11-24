@@ -137,10 +137,10 @@ public class ComplaintService {
     }
 
     public List<WishlistComplaintResponse> getAllWishListComplaints() {
-            List<Complaints> complaints = complaintRepository.getAllWishlistComplaints();
-            log.info("Get all wish list from the complaint list");
-            return wishlistView(complaints);
-        }
+        List<Complaints> complaints = complaintRepository.getAllWishlistComplaints();
+        log.info("Get all wish list from the complaint list");
+        return wishlistView(complaints);
+    }
 
 
     public List<CharityComplaintResponse> getAllCharityComplaints() {

@@ -53,15 +53,15 @@ public class FriendsService {
 
     public FriendProfileResponse getFriend(Long friendId) {
         userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User with this id: "+ friendId+" does not exist"));
-        log.info("Get a friend is profile, friend id: "+friendId);
+                () -> new UserNotFoundException("User with this id: " + friendId + " does not exist"));
+        log.info("Get a friend is profile, friend id: " + friendId);
         return friendMappers.friendResponse(userRepository.getFriendById(friendId));
     }
 
     public FriendResponse requestToFriend(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User with this id: "+ friendId+" does not exist"));
+                () -> new UserNotFoundException("User with this id: " + friendId + " does not exist"));
         if (friend == user) {
             log.error("You can not send a request to yourself ");
             throw new UserExistException("You can not send a request to yourself");
@@ -76,9 +76,9 @@ public class FriendsService {
         }
         friend.sendRequestToFriend(user);
         userRepository.save(friend);
-        friend.addNotification(notificationService.sendNotification(user,new ArrayList<>(List.of(friend))));
+        friend.addNotification(notificationService.sendNotification(user, new ArrayList<>(List.of(friend))));
         notificationRepository.saveAll(friend.getNotifications());
-        log.info("Request to friend successfully send, friend id: "+friend.getId());
+        log.info("Request to friend successfully send, friend id: " + friend.getId());
         return friendMappers.response(friend, holidayRepository.getAllUserHolidays(friendId).size(),
                 userRepository.getAllUserWishList(friendId).size(), ValidationType.REQUEST_SUCCESSFULLY_SENT);
     }
@@ -86,7 +86,7 @@ public class FriendsService {
     public FriendResponse acceptToFriend(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User with this id: "+ friendId+" does not exist"));
+                () -> new UserNotFoundException("User with this id: " + friendId + " does not exist"));
         if (user == friend) {
             log.error("You can't add yourself as a friend");
             throw new UserExistException("You can't add yourself as a friend");
@@ -99,10 +99,10 @@ public class FriendsService {
             friend.addUserToFriend(user);
             user.getRequestToFriends().remove(friend);
             userRepository.save(friend);
-            friend.addNotification(notificationService.acceptSendNotification(user,new ArrayList<>(List.of(friend))));
+            friend.addNotification(notificationService.acceptSendNotification(user, new ArrayList<>(List.of(friend))));
             notificationRepository.saveAll(friend.getNotifications());
         }
-            log.info("Successfully accept as a friend, user id: "+friend.getId());
+        log.info("Successfully accept as a friend, user id: " + friend.getId());
         return friendMappers.response(friend, holidayRepository.getAllUserHolidays(friendId).size(),
                 userRepository.getAllUserWishList(friendId).size(), ValidationType.ACCEPTED);
     }
@@ -110,14 +110,14 @@ public class FriendsService {
     public String declineFriendRequest(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User with this id: "+ friendId+" does not exist"));
+                () -> new UserNotFoundException("User with this id: " + friendId + " does not exist"));
         if (!(user.getRequestToFriends().contains(friend))) {
             log.error("Тo friend requests found from user with id: " + friendId);
             throw new UserNotFoundException("Тo friend requests found from user with id: " + friendId);
         } else {
             user.getRequestToFriends().remove(friend);
             userRepository.save(user);
-            log.info("Friend request successfully denied,friend id "+friendId);
+            log.info("Friend request successfully denied,friend id " + friendId);
             return "Friend request successfully denied";
         }
     }
@@ -125,7 +125,7 @@ public class FriendsService {
     public String deleteFriend(Long friendId) {
         User user = getAuthenticatedUser();
         User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User with this id: "+ friendId+" does not exist"));
+                () -> new UserNotFoundException("User with this id: " + friendId + " does not exist"));
         if (!(user.getFriends().contains(friend))) {
             log.error("You have not friend with id: " + friendId);
             throw new UserNotFoundException("You have not friend with id: " + friendId);

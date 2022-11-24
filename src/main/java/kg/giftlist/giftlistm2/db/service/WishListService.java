@@ -2,7 +2,10 @@ package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.WishListRequest;
 import kg.giftlist.giftlistm2.controller.payload.WishListResponse;
-import kg.giftlist.giftlistm2.db.entity.*;
+import kg.giftlist.giftlistm2.db.entity.Booking;
+import kg.giftlist.giftlistm2.db.entity.Holiday;
+import kg.giftlist.giftlistm2.db.entity.User;
+import kg.giftlist.giftlistm2.db.entity.WishList;
 import kg.giftlist.giftlistm2.db.repository.*;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
 import kg.giftlist.giftlistm2.exception.BadCredentialsException;
@@ -159,7 +162,7 @@ public class WishListService {
         }
         WishList wishList = wishListRepository.findById(id).get();
         if (user.getWishLists().contains(wishList)) {
-            log.info("Get wish list with id: "+id);
+            log.info("Get wish list with id: " + id);
             return mapToResponse(wishList);
         } else {
             log.error("You have no any wish list with id " + id);
@@ -189,7 +192,7 @@ public class WishListService {
             bookingRepository.save(booking1);
             wishList.setWishListStatus(WishListStatus.BOOKED);
             wishListRepository.save(wishList);
-            log.info( "You have successfully booked this wishList");
+            log.info("You have successfully booked this wishList");
             return "You have successfully booked this wishList";
         } else {
             log.error("This wishList is already booked");
@@ -219,7 +222,7 @@ public class WishListService {
     public WishListResponse getWishlistByAdmin(Long id) {
         if (wishListRepository.existsById(id)) {
             WishList wishList = wishListRepository.findById(id).get();
-            log.info("Get wish list with id: "+id);
+            log.info("Get wish list with id: " + id);
             return mapToResponse(wishList);
         } else {
             log.error("There is no any wish list with id " + id);
@@ -228,10 +231,10 @@ public class WishListService {
     }
 
     public List<WishListResponse> getAllWishlistsByAdmin() {
-            List<WishList> wishLists = wishListRepository.findAll();
-            log.info("Get all wish list");
-            return view(wishLists);
-        }
+        List<WishList> wishLists = wishListRepository.findAll();
+        log.info("Get all wish list");
+        return view(wishLists);
+    }
 
 
     public String blockWishlistByAdmin(Long id) {

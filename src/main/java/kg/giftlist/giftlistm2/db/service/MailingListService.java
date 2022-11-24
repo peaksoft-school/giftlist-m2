@@ -53,7 +53,7 @@ public class MailingListService {
     public MailingListResponse getMailingListById(Long id) {
         MailingList mailingList = mailingListRepository.findById(id).orElseThrow(() ->
                 new EmptyValueException("Mailing list is empty"));
-        log.info("Get mailing with id: "+id);
+        log.info("Get mailing with id: " + id);
         return mailingListMapper.mapToResponse(mailingList);
     }
 

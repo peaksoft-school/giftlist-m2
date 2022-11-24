@@ -49,7 +49,7 @@ public class HolidayService {
 
     public HolidayResponse findById(Long id) {
         Holiday holiday = repository.findById(id).get();
-        log.info("Get holiday with id: "+id);
+        log.info("Get holiday with id: " + id);
         return holidayMapToResponse.viewHoliday(holiday);
     }
 

@@ -50,7 +50,6 @@ public class AdminService {
         return new SimpleResponse("BLOCK", "user with id: " + id + " blocked");
     }
 
-
     @Transactional
     public SimpleResponse unBlockUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->

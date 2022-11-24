@@ -60,9 +60,9 @@ public class BookingService {
 
     public BookingResponse getBookingById(Long id) {
         User user = getAuthenticatedUser();
-        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException("Not found booking with book id: "+id));
+        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException("Not found booking with book id: " + id));
         if (user.getBookings().contains(booking)) {
-            log.info("get a book with id: "+booking.getId());
+            log.info("get a book with id: " + booking.getId());
             return bookingMapper.bookingResponse(booking);
         } else {
             log.error("Booking not found");
