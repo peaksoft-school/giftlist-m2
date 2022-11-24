@@ -5,10 +5,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
 import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.SignupRequest;
+import kg.giftlist.giftlistm2.db.service.ResetPasswordService;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @RestController
@@ -19,6 +21,7 @@ import java.security.Principal;
 public class AuthController {
 
     private final UserService userService;
+    private final ResetPasswordService resetPasswordService;
 
     @Operation(summary = "Login", description = "Only registered users can login")
     @PostMapping("signin")
@@ -36,6 +39,18 @@ public class AuthController {
     @GetMapping("oauth2")
     public AuthResponse signupGoogle(Principal principal) {
         return userService.signupWithGoogle(principal);
+    }
+
+    @PostMapping("forgot-password")
+    @Operation(summary = "process forgot password", description = "User The user can get a link to gmail to reset the password")
+    public String processForgotPassword(@RequestParam("email") String email, HttpServletRequest request) {
+        return resetPasswordService.processForgotPassword(email, request);
+    }
+
+    @PostMapping("reset-password")
+    @Operation(summary = "process reset password", description = "The user can update password using token")
+    public AuthResponse resetPassword(@RequestParam String token, @RequestParam String password, @RequestParam String confirmPassword) {
+        return resetPasswordService.save(token, password, confirmPassword);
     }
 
 }

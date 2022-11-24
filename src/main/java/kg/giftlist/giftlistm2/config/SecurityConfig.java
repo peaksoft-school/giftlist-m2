@@ -49,14 +49,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http.cors().and()
                 .authorizeRequests()
                 .antMatchers("/api/public/**", "/").permitAll()
                 .antMatchers("/files").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .anyRequest().authenticated()
                 .and()
-                .oauth2Login();
+                .oauth2Login()
+                .and()
+                .csrf().disable()
+                .httpBasic();
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
