@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -26,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenFilter jwtTokenFilter;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userService, JwtTokenFilter jwtTokenFilter) {
+    public SecurityConfig(UserDetailsService userService, JwtTokenFilter jwtTokenFilter) throws IOException {
         this.userService = userService;
         this.jwtTokenFilter = jwtTokenFilter;
     }
@@ -56,8 +58,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .and()
-                .csrf().disable()
-                .httpBasic();
+                .oauth2ResourceServer().jwt()
+                .and()
+                .and()
+                .httpBasic()
+                .and().csrf().disable();
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

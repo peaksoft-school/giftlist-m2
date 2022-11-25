@@ -129,9 +129,6 @@ public class CharityService {
 
     public List<CharityResponse> getAllCharities() {
         User user = getAuthenticatedUser();
-        if (user.getCharities().isEmpty()) {
-            throw new EmptyValueException("There are no any charities");
-        }
         List<Charity> charities = charityRepository.getCharityByUserId(user.getId());
         return view(charities);
     }

@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.controller.api;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.AuthRequest;
@@ -23,6 +24,11 @@ public class AuthController {
     private final UserService userService;
     private final ResetPasswordService resetPasswordService;
 
+    @GetMapping("test")
+    public String test(Principal principal) {
+        return principal.getName();
+    }
+
     @Operation(summary = "Login", description = "Only registered users can login")
     @PostMapping("signin")
     public AuthResponse login(@RequestBody AuthRequest loginRequest) {
@@ -35,10 +41,9 @@ public class AuthController {
         return userService.register(request);
     }
 
-    @Operation(summary = "Registration with google", description = "User can be registered with google")
-    @GetMapping("oauth2")
-    public AuthResponse signupGoogle(Principal principal) {
-        return userService.signupWithGoogle(principal);
+    @PostMapping("google")
+    public AuthResponse googleSignIn(@RequestParam String token) throws FirebaseAuthException {
+        return userService.authWithGoogle(token);
     }
 
     @PostMapping("forgot-password")

@@ -4,6 +4,7 @@ import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.entity.WishList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,6 +13,9 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
+
+    @Query("select case when count(u)>0 then true else false end from User u where u.email like :email")
+    boolean getExistingEmail(@Param(value = "email") String email);
 
     @Query("select f from User u join u.friends f where u.id=?1 ")
     List<User> getAllFriendByUserId(Long id);
