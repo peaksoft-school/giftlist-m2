@@ -40,20 +40,20 @@ public class MailingListService {
                 this.javaMailSender.send(simpleMailMessage);
             }
         }
+        log.info("Mailing list successful send");
         return mailingListMapper.mapToResponse(mailingListRepository.save(mailingListMapper.mapToEntity(request)));
     }
 
     public List<MailingListResponse> getAllMailingList() {
         List<MailingList> mailingList = mailingListRepository.findAll();
-        if (mailingList.isEmpty()) {
-            throw new EmptyValueException("Mailing lists are empty");
-        }
+        log.info("Get all Mailing list");
         return view(mailingList);
     }
 
     public MailingListResponse getMailingListById(Long id) {
         MailingList mailingList = mailingListRepository.findById(id).orElseThrow(() ->
                 new EmptyValueException("Mailing list is empty"));
+        log.info("Get mailing with id: " + id);
         return mailingListMapper.mapToResponse(mailingList);
     }
 

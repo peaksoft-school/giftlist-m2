@@ -36,6 +36,7 @@ public class AdminService {
         for (User i : users) {
             userList.add(mapToAdminPageUser(i));
         }
+        log.info("Get all users");
         return userList;
     }
 
@@ -48,7 +49,6 @@ public class AdminService {
         log.info("Successfully blocked user with id: {}", user.getId());
         return new SimpleResponse("BLOCK", "user with id: " + id + " blocked");
     }
-
 
     @Transactional
     public SimpleResponse unBlockUser(Long id) {
@@ -130,6 +130,7 @@ public class AdminService {
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
+        log.info("Admin: " + authentication.getName());
         return userRepository.findByEmail(login);
     }
 

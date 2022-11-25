@@ -9,6 +9,7 @@ import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.mapper.HolidayMapToRequest;
 import kg.giftlist.giftlistm2.mapper.HolidayMapToResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class HolidayService {
 
     private final HolidayRepository repository;
@@ -34,33 +36,39 @@ public class HolidayService {
         User user = getAuthenticatedUser();
         holiday.setUser(user);
         repository.save(holiday);
+        log.info("Successfully created holiday");
         return holidayMapToResponse.viewHoliday(holiday);
     }
 
     public HolidayResponse update(Long id, HolidayRequest holidayRequest) {
         Holiday holiday = repository.findById(id).get();
         holidayMapToRequest.update(holiday, holidayRequest);
+        log.info("Successfully modified");
         return holidayMapToResponse.viewHoliday(repository.save(holiday));
     }
 
     public HolidayResponse findById(Long id) {
         Holiday holiday = repository.findById(id).get();
+        log.info("Get holiday with id: " + id);
         return holidayMapToResponse.viewHoliday(holiday);
     }
 
     public String deleteById(Long id) {
         Holiday holiday = repository.findById(id).get();
         repository.deleteById(holiday.getId());
+        log.info("Holiday successfully deleted!");
         return "Holiday successfully deleted!";
     }
 
     public List<HolidayResponse> getHolidays() {
+        log.info("Get all holiday");
         return holidayMapToResponse.view(repository.findAll());
     }
 
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
+        log.info("User: " + authentication.getName());
         return userRepository.findByEmail(login);
     }
 

@@ -52,12 +52,15 @@ public class UserService {
         boolean notRegistered = search.isEmpty();
         User user = mapToRegisterRequest(signupRequest);
         if (signupRequest.getFirstName().isEmpty() || signupRequest.getLastName().isEmpty()) {
+            log.error(ValidationType.EMPTY_FIELD);
             throw new EmptyLoginException(ValidationType.EMPTY_FIELD);
         }
         if (!notRegistered) {
+            log.error(ValidationType.EXIST_EMAIL);
             throw new IncorrectLoginException(ValidationType.EXIST_EMAIL);
         }
         if (signupRequest.getEmail().isEmpty()) {
+            log.error(ValidationType.EMPTY_EMAIL);
             throw new EmptyLoginException(ValidationType.EMPTY_EMAIL);
         }
         if (signupRequest.getPassword() == null) {
@@ -76,6 +79,7 @@ public class UserService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword()));
         user = userRepository.findByEmail(token.getName());
         String token1 = (jwtTokenUtil.generateToken(user));
+        log.info("Registration was successfully");
         return loginMapper.loginView(token1, ValidationType.SUCCESSFUL, user);
     }
 
@@ -83,9 +87,11 @@ public class UserService {
         User user;
         User existUser = userRepository.findByEmail(loginRequest.getEmail());
         if (loginRequest.getEmail().isEmpty()) {
+            log.error(ValidationType.EMPTY_EMAIL);
             throw new EmptyLoginException(ValidationType.EMPTY_EMAIL);
         }
         if (loginRequest.getPassword().isEmpty()) {
+            log.error(ValidationType.EMPTY_PASSWORD);
             throw new EmptyLoginException(ValidationType.EMPTY_PASSWORD);
         }
         if (existUser != null && passwordEncoder.matches(loginRequest.getPassword(), existUser.getPassword())) {
@@ -94,8 +100,10 @@ public class UserService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
             user = userRepository.findByEmail(token.getName());
             String token1 = (jwtTokenUtil.generateToken(user));
+            log.info("Login was successful");
             return loginMapper.loginView(token1, ValidationType.SUCCESSFUL, user);
         } else {
+            log.error(ValidationType.LOGIN_FAILED + " or " + ValidationType.NOT_REGISTERED);
             throw new IncorrectLoginException(ValidationType.LOGIN_FAILED + " or " + ValidationType.NOT_REGISTERED);
         }
     }
@@ -161,6 +169,7 @@ public class UserService {
             authResponse.setLastName(user.getLastName());
             authResponse.setEmail(user.getEmail());
             authResponse.setJwtToken(jwtTokenUtil.generateToken(user));
+            log.info("Password successfully changed");
             return authResponse;
         }
 
@@ -169,6 +178,7 @@ public class UserService {
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
+        log.info("User: " + authentication.getName());
         return userRepository.findByEmail(login);
     }
 
