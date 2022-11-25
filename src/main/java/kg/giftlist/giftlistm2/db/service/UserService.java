@@ -19,7 +19,6 @@ import kg.giftlist.giftlistm2.mapper.LoginMapper;
 import kg.giftlist.giftlistm2.validation.ValidationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
@@ -33,7 +32,6 @@ import org.webjars.NotFoundException;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.Optional;
 
 @Service
@@ -102,24 +100,11 @@ public class UserService {
         }
     }
 
-    public AuthResponse signupWithGoogle(Principal principal) {
-        JSONObject jsonObject = new JSONObject(principal);
-        SignupRequest request = new SignupRequest();
-        request.setFirstName(jsonObject.getJSONObject("principal").getString("givenName"));
-        request.setLastName(jsonObject.getJSONObject("principal").getString("familyName"));
-        request.setEmail(jsonObject.getJSONObject("principal").getJSONObject("claims").getString("email"));
-        return register(request);
-    }
-
-    public AuthResponse googleSignIn(String token) throws FirebaseAuthException {
+    public AuthResponse authWithGoogle(String token) throws FirebaseAuthException {
         FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(token);
         String uid = firebaseToken.getUid();
         if (!userRepository.getExistingEmail(firebaseToken.getEmail())) {
             User user = new User();
-//            String fullName = firebaseToken.getName();
-//            String[] parts = fullName.split("\\s+");
-////            String first = parts[0];
-////            String last = parts[1];
             user.setFirstName(firebaseToken.getName());
             String password = passwordEncoder.encode(firebaseToken.getEmail());
             user.setPassword(password);

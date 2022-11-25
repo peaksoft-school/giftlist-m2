@@ -41,15 +41,9 @@ public class AuthController {
         return userService.register(request);
     }
 
-    @Operation(summary = "Registration with google", description = "User can be registered with google")
-    @GetMapping("oauth2")
-    public AuthResponse signupGoogle(Principal principal) {
-        return userService.signupWithGoogle(principal);
-    }
-
     @PostMapping("google")
     public AuthResponse googleSignIn(@RequestParam String token) throws FirebaseAuthException {
-        return userService.googleSignIn(token);
+        return userService.authWithGoogle(token);
     }
 
     @PostMapping("forgot-password")
