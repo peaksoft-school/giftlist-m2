@@ -27,6 +27,7 @@ public class UserInfoService {
     @Transactional
     public UserInfoResponse update(Long userInfoId, UserInfoRequest userInfoRequest) {
         if (userRepository.findById(userInfoId).isEmpty()) {
+            log.error("There is no any user with id " + userInfoId);
             throw new EmptyValueException("There is no any user with id " + userInfoId);
         }
         User user = getAuthenticatedUser();
@@ -61,6 +62,7 @@ public class UserInfoService {
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
+        log.info("User: " + authentication.getName());
         return userRepository.findByEmail(login);
     }
 

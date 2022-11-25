@@ -38,6 +38,7 @@ public class ResetPasswordService {
         if (password.equals(confirmPassword)) {
             user.setPassword(password);
         } else {
+            log.error("Password don't match");
             throw new IncorrectLoginException("Password don't match");
         }
         updatePassword(user);
@@ -49,6 +50,7 @@ public class ResetPasswordService {
         authResponse.setJwtToken(token);
         authResponse.setMessage(ValidationType.SUCCESSFUL);
         authResponse.setAuthorities(String.valueOf(user.getRole()));
+        log.info("New password successfully saved");
         return authResponse;
     }
 
@@ -82,6 +84,7 @@ public class ResetPasswordService {
         mail.setModel(mailModel);
         resetPasswordTokenRepository.save(resetToken);
         emailService.sendEmail(mail, URL);
+        log.info("Successfully send link to change password");
         return ValidationType.SUCCESSFUL;
     }
 

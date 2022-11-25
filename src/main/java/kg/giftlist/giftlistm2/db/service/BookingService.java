@@ -38,10 +38,7 @@ public class BookingService {
     public List<BookingResponse> getAllCharityBookings() {
         User user = getAuthenticatedUser();
         List<Booking> booking = bookingRepository.getAllCharityBooking(user.getId());
-        if (booking.isEmpty()) {
-            log.error("Booking not found");
-            throw new BookingNotFoundException("Bookings not found");
-        }
+        log.info("Get all booked charities");
         return viewCharity(booking);
     }
 
@@ -56,20 +53,19 @@ public class BookingService {
     public List<BookingWishListResponse> getAllWishListBookings() {
         User user = getAuthenticatedUser();
         List<Booking> booking = bookingRepository.getAllWishListBooking(user.getId());
-        if (booking.isEmpty()) {
-            log.error("Booking not found");
-            throw new BookingNotFoundException("Bookings not found");
-        }
+        log.info("Get all booked gifts");
         return viewWishList(booking);
 
     }
 
     public BookingResponse getBookingById(Long id) {
         User user = getAuthenticatedUser();
-        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException("Not found"));
+        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException("Not found booking with book id: " + id));
         if (user.getBookings().contains(booking)) {
+            log.info("get a book with id: " + booking.getId());
             return bookingMapper.bookingResponse(booking);
         } else {
+            log.error("Booking not found");
             throw new BookingNotFoundException("Booking not found in user id: " + user.getId());
         }
     }
@@ -77,6 +73,7 @@ public class BookingService {
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
+        log.info("User: " + authentication.getName());
         return userRepository.findByEmail(login);
     }
 
