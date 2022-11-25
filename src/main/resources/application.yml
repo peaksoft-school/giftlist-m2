@@ -1,0 +1,19 @@
+cloud:
+  aws:
+    credentials:
+      access-key: AKIA2HDIMUN776Z3S45T
+        secret-key: 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
+          region:
+            static:ap-south-1
+            stack:
+              auto:false
+
+            application:
+              bucket:
+                name:giftlist.m2
+
+
+              spring:<1 key>
+
+              server:
+                port:9090
