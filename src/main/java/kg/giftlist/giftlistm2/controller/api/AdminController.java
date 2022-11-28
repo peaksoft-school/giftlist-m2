@@ -3,9 +3,12 @@ package kg.giftlist.giftlistm2.controller.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.AdminPageUserGetAllResponse;
+import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
 import kg.giftlist.giftlistm2.controller.payload.CommonUserProfileResponse;
 import kg.giftlist.giftlistm2.controller.payload.SimpleResponse;
 import kg.giftlist.giftlistm2.db.service.AdminService;
+import kg.giftlist.giftlistm2.db.service.CharityService;
+import kg.giftlist.giftlistm2.enums.CharityStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
+    private final CharityService charityService;
 
     @Operation(summary = "Get all users", description = "Get all users ")
     @GetMapping("users")
@@ -44,6 +48,17 @@ public class AdminController {
     @PutMapping("/unblock-user/{userId}")
     public SimpleResponse unBlock(@PathVariable("userId") Long id) {
         return adminService.unBlockUser(id);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @Operation(summary = "Search gifts by filter", description = "Admin and User can search gifts by filter")
+    @GetMapping("/filter")
+    public List<CharityResponse> filter(
+            @RequestParam(required = false, defaultValue = "all") String search,
+            @RequestParam(required = false) CharityStatus status,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long subCategoryId) {
+        return charityService.filterGiftForAdmin(search, status, categoryId, subCategoryId);
     }
 
 }

@@ -32,6 +32,8 @@ import org.webjars.NotFoundException;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -173,6 +175,18 @@ public class UserService {
             return authResponse;
         }
 
+    }
+
+    public List<UserResponse> findUnblockUserByName(String name) {
+        return view(userRepository.searchUnblockUsersByFirstNameAndLastName(name.toUpperCase()));
+    }
+
+    private List<UserResponse> view(List<User> users) {
+        List<UserResponse> responses = new ArrayList<>();
+        for (User user : users) {
+            responses.add(new UserResponse(user));
+        }
+        return responses;
     }
 
     public User getAuthenticatedUser() {
