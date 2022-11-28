@@ -321,6 +321,10 @@ public class CharityService {
         return responses;
     }
 
+    public List<CharityResponse> filterGiftForAdmin(String search, CharityStatus status, Long categoryId, Long subCategoryId) {
+        return view(charityRepository.filterGiftForAdmin(search, status, categoryId, subCategoryId));
+    }
+
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();

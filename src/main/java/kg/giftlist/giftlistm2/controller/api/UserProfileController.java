@@ -2,10 +2,7 @@ package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
-import kg.giftlist.giftlistm2.controller.payload.UserChangePasswordRequest;
-import kg.giftlist.giftlistm2.controller.payload.UserInfoRequest;
-import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
+import kg.giftlist.giftlistm2.controller.payload.*;
 import kg.giftlist.giftlistm2.db.service.UserInfoService;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/profile")
@@ -53,6 +51,12 @@ public class UserProfileController {
             request.getSession().invalidate();
         }
         return "redirect:/";
+    }
+
+    @Operation(summary = "Search users", description = "User can search by first name and last name")
+    @GetMapping("/{name}")
+    public List<UserResponse> findUser(@PathVariable String name) {
+        return userService.findUnblockUserByName(name);
     }
 
 }
