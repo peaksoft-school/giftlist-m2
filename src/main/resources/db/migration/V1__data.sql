@@ -1,25 +1,25 @@
-create sequence
-    booking_seq start 1 increment 1;
-create sequence
-    category_seq start 1 increment 1;
-create sequence
-    charity_seq start 1 increment 1;
-create sequence
-    complaints_seq start 1 increment 1;
-create sequence
-    holiday_seq start 1 increment 1;
-create sequence
-    mailing_list_seq start 1 increment 1;
-create sequence
-    notification_seq start 1 increment 1;
-create sequence
-    password_seq start 1 increment 1;
-create sequence
-    subcategory_seq start 1 increment 1;
-create sequence
-    user_seq start 3 increment 1;
-create sequence
-    wish_list_seq start 1 increment 1;
+-- create sequence
+--     booking_seq start 1 increment 1;
+-- create sequence
+--     category_seq start 1 increment 1;
+-- create sequence
+--     charity_seq start 1 increment 1;
+-- create sequence
+--     complaints_seq start 1 increment 1;
+-- create sequence
+--     holiday_seq start 1 increment 1;
+-- create sequence
+--     mailing_list_seq start 1 increment 1;
+-- create sequence
+--     notification_seq start 1 increment 1;
+-- create sequence
+--     password_seq start 1 increment 1;
+-- create sequence
+--     subcategory_seq start 1 increment 1;
+-- create sequence
+--     user_seq start 3 increment 1;
+-- create sequence
+--     wish_list_seq start 1 increment 1;
 
 create table booking
 (
@@ -187,6 +187,7 @@ create table wish_list
     user_id          int8,
     primary key (id)
 );
+
 alter table if exists categories_charities
     add constraint UK_om21idpskvm0hpg813hpguw7y unique (charities_id);
 alter table if exists holiday_wish_lists
@@ -257,3 +258,4 @@ alter table if exists wish_list
     add constraint FK7sgnitief3tl27vrj30auqet foreign key (holiday_id) references holiday;
 alter table if exists wish_list
     add constraint FKit8ap20bpapw291y78egje6f3 foreign key (user_id) references users;
+
