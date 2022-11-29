@@ -1,25 +1,45 @@
--- create sequence
---     booking_seq start 1 increment 1;
--- create sequence
---     category_seq start 1 increment 1;
--- create sequence
---     charity_seq start 1 increment 1;
--- create sequence
---     complaints_seq start 1 increment 1;
--- create sequence
---     holiday_seq start 1 increment 1;
--- create sequence
---     mailing_list_seq start 1 increment 1;
--- create sequence
---     notification_seq start 1 increment 1;
--- create sequence
---     password_seq start 1 increment 1;
--- create sequence
---     subcategory_seq start 1 increment 1;
--- create sequence
---     user_seq start 3 increment 1;
--- create sequence
---     wish_list_seq start 1 increment 1;
+drop table if exists booking cascade;
+drop table if exists categories cascade;
+drop table if exists categories_charities cascade;
+drop table if exists charity cascade;
+drop table if exists clothing_size cascade;
+drop table if exists complaints cascade;
+drop table if exists friends cascade;
+drop table if exists holiday cascade;
+drop table if exists holiday_wish_lists cascade;
+drop table if exists mailing_list cascade;
+drop table if exists notification cascade;
+drop table if exists notification_receivers cascade;
+drop table if exists passwor_reset_token cascade;
+drop table if exists shoe_size cascade;
+drop table if exists subcategories cascade;
+drop table if exists subcategories_charities cascade;
+drop table if exists users cascade;
+drop table if exists users_request_to_friends cascade;
+drop table if exists wish_list cascade;
+
+drop sequence if exists booking_seq;
+drop sequence if exists category_seq;
+drop sequence if exists charity_seq;
+drop sequence if exists complaints_seq;
+drop sequence if exists holiday_seq;
+drop sequence if exists mailing_list_seq;
+drop sequence if exists notification_seq;
+drop sequence if exists password_seq;
+drop sequence if exists subcategory_seq;
+drop sequence if exists user_seq;
+drop sequence if exists wish_list_seq;
+create sequence booking_seq start 1 increment 1;
+create sequence category_seq start 1 increment 1;
+create sequence charity_seq start 1 increment 1;
+create sequence complaints_seq start 1 increment 1;
+create sequence holiday_seq start 1 increment 1;
+create sequence mailing_list_seq start 1 increment 1;
+create sequence notification_seq start 1 increment 1;
+create sequence password_seq start 1 increment 1;
+create sequence subcategory_seq start 1 increment 1;
+create sequence user_seq start 6 increment 1;
+create sequence wish_list_seq start 1 increment 1;
 
 create table booking
 (
@@ -258,4 +278,3 @@ alter table if exists wish_list
     add constraint FK7sgnitief3tl27vrj30auqet foreign key (holiday_id) references holiday;
 alter table if exists wish_list
     add constraint FKit8ap20bpapw291y78egje6f3 foreign key (user_id) references users;
-
