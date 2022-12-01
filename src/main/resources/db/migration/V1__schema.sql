@@ -102,7 +102,7 @@ create table holiday
 (
     id         int8 not null,
     image      varchar(255),
-    local_date date,
+    created_at date,
     name       varchar(255),
     user_id    int8,
     primary key (id)
@@ -197,7 +197,7 @@ create table wish_list
     created          date,
     description      varchar(10000),
     gift_name        varchar(255),
-    holyday_date     date,
+    holiday_date     date,
     image            varchar(255),
     is_block         boolean,
     is_blocked       boolean not null,

@@ -35,8 +35,7 @@ public class WishList {
 
     private String link;
 
-    @Column(name = "holyday_date")
-    @JsonFormat(pattern = "yyyy.MM.dd")
+    @Column(name = "holiday_date")
     private LocalDate holidayDate;
 
     @Size(max = 10000)

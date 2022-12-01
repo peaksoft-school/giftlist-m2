@@ -18,7 +18,7 @@ public class HolidayMapToResponse {
         response.setId(holiday.getId());
         response.setName(holiday.getName());
         response.setImage(holiday.getImage());
-        response.setLocalDate(holiday.getLocalDate());
+        response.setLocalDate(holiday.getCreatedAt());
         return response;
     }
 

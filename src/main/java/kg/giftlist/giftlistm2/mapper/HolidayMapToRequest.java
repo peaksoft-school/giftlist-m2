@@ -13,7 +13,7 @@ public class HolidayMapToRequest {
         }
         Holiday holiday = new Holiday();
         holiday.setName(holidayRequest.getName());
-        holiday.setLocalDate(holidayRequest.getLocalDate());
+        holiday.setCreatedAt(holidayRequest.getLocalDate());
         holiday.setImage(holidayRequest.getImage());
         return holiday;
     }
@@ -21,6 +21,6 @@ public class HolidayMapToRequest {
     public void update(Holiday holiday, HolidayRequest holidayRequest) {
         holiday.setImage(holidayRequest.getImage());
         holiday.setName(holidayRequest.getName());
-        holiday.setLocalDate(holidayRequest.getLocalDate());
+        holiday.setCreatedAt(holidayRequest.getLocalDate());
     }
 }
