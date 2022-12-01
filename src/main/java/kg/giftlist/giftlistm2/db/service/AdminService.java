@@ -46,6 +46,7 @@ public class AdminService {
                 new NotFoundException(
                         String.format("user with id: %s not found", id)));
         user.setIsBlock(true);
+        userRepository.save(user);
         log.info("Successfully blocked user with id: {}", user.getId());
         return new SimpleResponse("BLOCK", "user with id: " + id + " blocked");
     }
@@ -56,6 +57,7 @@ public class AdminService {
                 new NotFoundException(
                         String.format("user with id: %s not found", id)));
         user.setIsBlock(false);
+        userRepository.save(user);
         log.info("Successfully unblocked user with id: {}", user.getId());
         return new SimpleResponse("UNBLOCK", "user with id:" + id + " unblocked");
     }
@@ -71,7 +73,6 @@ public class AdminService {
         adminUserGetAllResponse.setLastName(user.getLastName());
         adminUserGetAllResponse.setImage(user.getImage());
         adminUserGetAllResponse.setIsBlock(user.getIsBlock());
-
         return adminUserGetAllResponse;
     }
 
@@ -110,7 +111,6 @@ public class AdminService {
         }
         commonUserProfileResponse.setWishes(wishListService.view(sortWishes));
         commonUserProfileResponse.setHolidays(holidayMapToResponse.view(user.getHolidays()));
-
         List<Charity> gifts = user.getCharities();
         List<Charity> sortGifts = new ArrayList<>();
         for (Charity charity : gifts) {

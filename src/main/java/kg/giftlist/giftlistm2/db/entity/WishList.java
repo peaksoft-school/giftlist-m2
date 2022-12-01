@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.giftlist.giftlistm2.enums.WishListStatus;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,7 @@ public class WishList {
 
     private String link;
 
-    @Column(name = "holyday_date")
+    @Column(name = "holiday_date")
     private LocalDate holidayDate;
 
     @Size(max = 10000)
@@ -43,6 +44,7 @@ public class WishList {
     private String image;
 
     @CreatedDate
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate created;
 
     private Boolean isBlock;

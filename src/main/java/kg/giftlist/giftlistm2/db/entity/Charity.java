@@ -1,5 +1,6 @@
 package kg.giftlist.giftlistm2.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.giftlist.giftlistm2.enums.CharityStatus;
 import kg.giftlist.giftlistm2.enums.Condition;
@@ -52,6 +53,7 @@ public class Charity {
     private Category category;
 
     @CreatedDate
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate createdAt;
 
     @OneToOne(mappedBy = "charity", cascade = CascadeType.ALL)
