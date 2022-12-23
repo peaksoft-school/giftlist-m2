@@ -119,7 +119,7 @@ public class CharityService {
         }
         Charity charity = charityRepository.findById(id).get();
         if (user.getCharities().contains(charity)) {
-            log.info("get charity by charity id: " + charity.getId());
+            log.info("get charity by charity id : " + charity.getId());
             return mapToResponse(charity);
         } else {
             log.error("You have no any charity with id " + id);
