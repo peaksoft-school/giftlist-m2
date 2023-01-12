@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("api/notifications")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Notification API", description = "User can get all notifications, get all un and is read notifications, get notification by id and delete all notification")
-public class NotificationController {
+public class NotificationApi {
 
     private final NotificationService notificationService;
 
