@@ -19,7 +19,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @SecurityRequirement(name = "Authorization")
 @Tag(name = "Friend API", description = "The user can send a request, accept a request, unfriend, list all friends and all friend requests, and can see a friend's profile")
-public class FriendsController {
+public class FriendApi {
 
     private final FriendsService friendsService;
 
