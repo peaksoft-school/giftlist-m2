@@ -20,7 +20,7 @@ import java.util.List;
 @PreAuthorize("hasAuthority('ADMIN')")
 @SecurityRequirement(name = "Authorization")
 @Tag(name = "Complaint API", description = "User can complain posts to admin, admin can delete a complain by id, block or unblock the post by id, get posts")
-public class ComplaintController {
+public class ComplaintApi {
 
     private final ComplaintService complaintService;
 
