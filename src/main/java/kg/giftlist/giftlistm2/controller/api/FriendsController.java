@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/friends")
-@CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Friend API", description = "The user can send a request, accept a request, unfriend, list all friends and all friend requests, and can see a friend's profile")
-@SecurityRequirement(name = "Authorization")
+@RequestMapping("api/friends")
 @PreAuthorize("hasAuthority('USER')")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@SecurityRequirement(name = "Authorization")
+@Tag(name = "Friend API", description = "The user can send a request, accept a request, unfriend, list all friends and all friend requests, and can see a friend's profile")
 public class FriendsController {
 
     private final FriendsService friendsService;
 
     @Operation(summary = "Get friend ", description = "User can see friend's profile")
-    @GetMapping("/{friendId}")
+    @GetMapping("{friendId}")
     public FriendProfileResponse getFriendProfile(@PathVariable Long friendId) {
         return friendsService.getFriend(friendId);
     }
