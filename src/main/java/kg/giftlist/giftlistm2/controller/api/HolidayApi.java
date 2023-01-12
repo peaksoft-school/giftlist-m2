@@ -19,7 +19,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @SecurityRequirement(name = "Authorization")
 @Tag(name = "Holiday API", description = "User with role \"User\"  can create, update or delete holidays")
-public class HolidayController {
+public class HolidayApi {
 
     private final HolidayService service;
 
