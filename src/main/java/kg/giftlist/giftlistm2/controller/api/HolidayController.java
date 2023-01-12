@@ -14,11 +14,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/holiday")
+@RequestMapping("api/holidays")
 @PreAuthorize("hasAuthority('USER')")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "Holiday API", description = "User with role \"User\"  can create, update or delete holidays")
 @SecurityRequirement(name = "Authorization")
+@Tag(name = "Holiday API", description = "User with role \"User\"  can create, update or delete holidays")
 public class HolidayController {
 
     private final HolidayService service;
