@@ -19,7 +19,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @SecurityRequirement(name = "Authorization")
 @Tag(name = "WishList API", description = "Wishlist endpoints")
-public class WishListController {
+public class WishListApi {
 
     private final WishListService wishListService;
 
