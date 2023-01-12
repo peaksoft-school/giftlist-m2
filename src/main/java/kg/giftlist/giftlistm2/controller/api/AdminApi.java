@@ -18,7 +18,7 @@ import java.util.List;
 @PreAuthorize("hasAnyAuthority('ADMIN')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Admin API", description = "User with role 'Admin'  can block, unblock and get users")
-public class AdminController {
+public class AdminApi {
 
     private final AdminService adminService;
 
