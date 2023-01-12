@@ -3,7 +3,8 @@ package kg.giftlist.giftlistm2.controller.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.giftlist.giftlistm2.controller.payload.*;
+import kg.giftlist.giftlistm2.controller.payload.CharityRequest;
+import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
 import kg.giftlist.giftlistm2.db.service.CharityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,12 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/charities")
-@CrossOrigin
-@Tag(name = "Charity API", description = "User can get charity by id, get all charities, create, update, book, unbook or delete charity," +
-        "admin can block or unblock a charity, get a charity by id or get all charities")
-@SecurityRequirement(name = "Authorization")
 @RequiredArgsConstructor
+@RequestMapping("api/charities")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@SecurityRequirement(name = "Authorization")
+@Tag(name = "Charity API", description = "Charity endpoints")
 public class CharityController {
 
     private final CharityService charityService;
