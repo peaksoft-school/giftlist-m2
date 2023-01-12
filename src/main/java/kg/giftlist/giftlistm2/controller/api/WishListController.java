@@ -13,97 +13,92 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/wishlists")
-@CrossOrigin
-@Tag(name = "WishList API", description = "User can get wish list by id, get all wish lists, create, update, book, unbook or delete wish list, " +
-        "admin can block or unblock a wish list, get a wish list by id or get all wish lists")
-@SecurityRequirement(name = "Authorization")
 @RequiredArgsConstructor
+@RequestMapping("api/wishlists")
+@PreAuthorize("hasAuthority('ADMIN')")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@SecurityRequirement(name = "Authorization")
+@Tag(name = "WishList API", description = "Wishlist endpoints")
 public class WishListController {
 
     private final WishListService wishListService;
 
     @Operation(summary = "Get wish list", description = "Getting a wish list by id")
-    @GetMapping("{id}")
     @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("{id}")
     public WishListResponse getWishListById(@PathVariable Long id) {
         return wishListService.getWishListById(id);
     }
 
     @Operation(summary = "Get all wish lists", description = "Getting all wish lists")
-    @GetMapping
     @PreAuthorize("hasAuthority('USER')")
+    @GetMapping
     public List<WishListResponse> getAllWishLists() {
         return wishListService.getAllWishLists();
     }
 
     @Operation(summary = "Add wish list", description = "Adding a wish list by id")
-    @PostMapping("add/{id}")
     @PreAuthorize("hasAuthority('USER')")
+    @PostMapping("add/{id}")
     public WishListResponse addWishList(@PathVariable Long id) {
         return wishListService.addWishList(id);
     }
 
     @Operation(summary = "Creat new wish list", description = "Creating wish list")
-    @PostMapping
     @PreAuthorize("hasAuthority('USER')")
+    @PostMapping
     public WishListResponse creatWishList(@RequestBody WishListRequest request) {
         return wishListService.create(request);
     }
 
     @Operation(summary = "Update a wish list", description = "Updating a wish list by id")
-    @PutMapping("{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public WishListResponse updateWishList(@PathVariable Long id,
-                                           @RequestBody WishListRequest request) {
+    @PutMapping("{id}")
+    public WishListResponse updateWishList(@PathVariable Long id, @RequestBody WishListRequest request) {
         return wishListService.update(id, request);
     }
 
     @Operation(summary = "Wish list booking", description = "Booking a wish list")
-    @PostMapping("book/{id}")
     @PreAuthorize("hasAuthority('USER')")
+    @PostMapping("book/{id}")
     public String booking(@PathVariable Long id) {
         return wishListService.book(id);
     }
 
-    @Operation(summary = "Wish list unbooking", description = "Unbooking a wish list(deleting a book by id which contains wish list)")
-    @DeleteMapping("unbook/{id}")
+    @Operation(summary = "Wish list unbook", description = "Unbooking a wish list(deleting a book by id which contains wish list)")
     @PreAuthorize("hasAuthority('USER')")
+    @DeleteMapping("unbook/{id}")
     public String unBook(@PathVariable Long id) {
         return wishListService.unBook(id);
     }
 
     @Operation(summary = "Delete wish list", description = "Deleting a wish list by id")
-    @DeleteMapping("{id}")
     @PreAuthorize("hasAuthority('USER')")
+    @DeleteMapping("{id}")
     public String deleteWishList(@PathVariable Long id) {
         return wishListService.delete(id);
     }
 
     @Operation(summary = "Admin gets a wish list", description = "Admin can get a wish list by id")
     @GetMapping("admin/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public WishListResponse getWishlistByAdmin(@PathVariable Long id) {
         return wishListService.getWishlistByAdmin(id);
     }
 
     @Operation(summary = "Admin gets all wish lists", description = "Admin can get all wish lists")
     @GetMapping("admin")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<WishListResponse> getAllWishlistsByAdmin() {
         return wishListService.getAllWishlistsByAdmin();
     }
 
     @Operation(summary = "Block wish list", description = "Admin can block a wish list by id")
     @PostMapping("block/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public String blockWishlist(@PathVariable Long id) {
         return wishListService.blockWishlistByAdmin(id);
     }
 
     @Operation(summary = "Unblock wish list", description = "Admin can unblock a wish list by id")
     @PostMapping("unblock/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public String unBlockWishlist(@PathVariable Long id) {
         return wishListService.unBlockWishlistByAdmin(id);
     }
