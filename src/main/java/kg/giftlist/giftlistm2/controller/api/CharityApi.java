@@ -18,7 +18,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @SecurityRequirement(name = "Authorization")
 @Tag(name = "Charity API", description = "Charity endpoints")
-public class CharityController {
+public class CharityApi {
 
     private final CharityService charityService;
 
