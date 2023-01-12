@@ -1,4 +1,4 @@
-package kg.giftlist.giftlistm2.controller.payload;
+package kg.giftlist.giftlistm2.controller.payload.request;
 
 import kg.giftlist.giftlistm2.db.entity.ClothingSize;
 import kg.giftlist.giftlistm2.db.entity.ShoeSize;

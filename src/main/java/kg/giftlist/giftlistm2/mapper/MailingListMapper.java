@@ -1,6 +1,6 @@
 package kg.giftlist.giftlistm2.mapper;
 
-import kg.giftlist.giftlistm2.controller.payload.MailingListRequest;
+import kg.giftlist.giftlistm2.controller.payload.request.MailingListRequest;
 import kg.giftlist.giftlistm2.controller.payload.MailingListResponse;
 import kg.giftlist.giftlistm2.db.entity.MailingList;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;

@@ -3,7 +3,7 @@ package kg.giftlist.giftlistm2.controller.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.giftlist.giftlistm2.controller.payload.CharityRequest;
+import kg.giftlist.giftlistm2.controller.payload.request.CharityRequest;
 import kg.giftlist.giftlistm2.controller.payload.CharityResponse;
 import kg.giftlist.giftlistm2.db.service.CharityService;
 import lombok.RequiredArgsConstructor;

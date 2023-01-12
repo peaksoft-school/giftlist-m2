@@ -1,4 +1,4 @@
-package kg.giftlist.giftlistm2.controller.payload;
+package kg.giftlist.giftlistm2.controller.payload.request;
 
 import lombok.Getter;
 import lombok.Setter;
