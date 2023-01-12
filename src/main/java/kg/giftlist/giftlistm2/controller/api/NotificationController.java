@@ -1,22 +1,19 @@
 package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.NotificationResponse;
 import kg.giftlist.giftlistm2.db.service.NotificationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/notifications")
-@CrossOrigin
 @RequiredArgsConstructor
+@RequestMapping("api/notifications")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Notification API", description = "User can get all notifications, get all un and is read notifications, get notification by id and delete all notification")
-@SecurityRequirement(name = "Authorization")
 public class NotificationController {
 
     private final NotificationService notificationService;
