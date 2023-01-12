@@ -10,8 +10,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@SecurityScheme(name = "Authorization", description = "Paste here your JWT-token",
-        scheme = "Bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = "Authorization",
+        description = "Paste here your JWT-token",
+        scheme = "Bearer",
+        type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class SwaggerConfig {
 
     @Bean
