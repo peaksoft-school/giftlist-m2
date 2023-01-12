@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,11 +22,6 @@ public class AuthController {
 
     private final UserService userService;
     private final ResetPasswordService resetPasswordService;
-
-    @GetMapping("test")
-    public String test(Principal principal) {
-        return principal.getName();
-    }
 
     @Operation(summary = "Login", description = "Only registered users can login")
     @PostMapping("signin")
@@ -41,19 +35,20 @@ public class AuthController {
         return userService.register(request);
     }
 
+    @Operation(summary = "Auth with google", description = "Authentication with google")
     @PostMapping("google")
     public AuthResponse googleSignIn(@RequestParam String token) throws FirebaseAuthException {
         return userService.authWithGoogle(token);
     }
 
-    @PostMapping("forgot-password")
     @Operation(summary = "process forgot password", description = "User The user can get a link to gmail to reset the password")
+    @PostMapping("forgot-password")
     public String processForgotPassword(@RequestParam("email") String email, HttpServletRequest request) {
         return resetPasswordService.processForgotPassword(email, request);
     }
 
-    @PostMapping("reset-password")
     @Operation(summary = "process reset password", description = "The user can update password using token")
+    @PostMapping("reset-password")
     public AuthResponse resetPassword(@RequestParam String token, @RequestParam String password, @RequestParam String confirmPassword) {
         return resetPasswordService.save(token, password, confirmPassword);
     }
