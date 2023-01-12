@@ -1,8 +1,8 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.CharityComplaintResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.CharityComplaintResponse;
 import kg.giftlist.giftlistm2.controller.payload.request.ComplaintRequest;
-import kg.giftlist.giftlistm2.controller.payload.WishlistComplaintResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.WishlistComplaintResponse;
 import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.entity.Complaints;
 import kg.giftlist.giftlistm2.db.entity.User;

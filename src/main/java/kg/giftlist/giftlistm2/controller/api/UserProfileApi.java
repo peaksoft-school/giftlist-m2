@@ -2,10 +2,10 @@ package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.request.UserChangePasswordRequest;
 import kg.giftlist.giftlistm2.controller.payload.request.UserInfoRequest;
-import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.UserInfoResponse;
 import kg.giftlist.giftlistm2.db.service.UserInfoService;
 import kg.giftlist.giftlistm2.db.service.UserService;
 import lombok.RequiredArgsConstructor;

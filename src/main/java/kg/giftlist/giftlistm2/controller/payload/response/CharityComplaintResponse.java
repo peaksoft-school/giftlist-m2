@@ -1,4 +1,4 @@
-package kg.giftlist.giftlistm2.controller.payload;
+package kg.giftlist.giftlistm2.controller.payload.response;
 
 import kg.giftlist.giftlistm2.enums.CharityStatus;
 import kg.giftlist.giftlistm2.enums.Condition;

@@ -1,18 +1,18 @@
-package kg.giftlist.giftlistm2.controller.payload;
+package kg.giftlist.giftlistm2.controller.payload.response;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AuthResponse {
+public class FriendResponse {
 
     private Long id;
     private String firstName;
     private String lastName;
     private String email;
-    private String authorities;
-    private String jwtToken;
+    private int wishListCount;
+    private int holidayCount;
     private String message;
 
 }

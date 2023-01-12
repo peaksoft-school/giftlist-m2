@@ -2,7 +2,7 @@ package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.giftlist.giftlistm2.controller.payload.NotificationResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.NotificationResponse;
 import kg.giftlist.giftlistm2.db.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

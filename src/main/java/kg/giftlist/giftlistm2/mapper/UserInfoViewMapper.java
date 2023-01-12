@@ -1,6 +1,6 @@
 package kg.giftlist.giftlistm2.mapper;
 
-import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.UserInfoResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

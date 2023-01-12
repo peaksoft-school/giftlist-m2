@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.request.WishListRequest;
-import kg.giftlist.giftlistm2.controller.payload.WishListResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.WishListResponse;
 import kg.giftlist.giftlistm2.db.entity.Booking;
 import kg.giftlist.giftlistm2.db.entity.Holiday;
 import kg.giftlist.giftlistm2.db.entity.User;

@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.FriendProfileResponse;
-import kg.giftlist.giftlistm2.controller.payload.FriendResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.FriendProfileResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.FriendResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;

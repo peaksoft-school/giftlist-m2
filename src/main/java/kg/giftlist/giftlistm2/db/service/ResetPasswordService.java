@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
-import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.AuthResponse;
 import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.ResetPasswordTokenRepository;

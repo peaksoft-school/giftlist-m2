@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.request.UserInfoRequest;
-import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.UserInfoResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;

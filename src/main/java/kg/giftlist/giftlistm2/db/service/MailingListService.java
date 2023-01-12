@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.controller.payload.request.MailingListRequest;
-import kg.giftlist.giftlistm2.controller.payload.MailingListResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.MailingListResponse;
 import kg.giftlist.giftlistm2.db.entity.MailingList;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.MailingListRepository;

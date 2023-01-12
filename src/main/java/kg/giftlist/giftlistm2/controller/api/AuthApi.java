@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.request.AuthRequest;
-import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.AuthResponse;
 import kg.giftlist.giftlistm2.controller.payload.request.SignupRequest;
 import kg.giftlist.giftlistm2.db.service.ResetPasswordService;
 import kg.giftlist.giftlistm2.db.service.UserService;

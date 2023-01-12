@@ -1,4 +1,4 @@
-package kg.giftlist.giftlistm2.controller.payload;
+package kg.giftlist.giftlistm2.controller.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import kg.giftlist.giftlistm2.db.entity.ClothingSize;
@@ -11,8 +11,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class UserInfoResponse {
+public class CommonUserProfileResponse {
 
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -25,5 +26,9 @@ public class UserInfoResponse {
     private List<ShoeSize> shoeSize;
     private String hobby;
     private String importantNote;
+    private List<WishListResponse> wishes;
+    private List<HolidayResponse> holidays;
+    private List<CharityResponse> charities;
+    private Boolean isBlock;
 
 }

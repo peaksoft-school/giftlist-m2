@@ -1,6 +1,6 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.NotificationResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.NotificationResponse;
 import kg.giftlist.giftlistm2.db.entity.*;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;

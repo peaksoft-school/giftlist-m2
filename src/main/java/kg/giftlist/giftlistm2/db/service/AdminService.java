@@ -1,8 +1,8 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.AdminPageUserGetAllResponse;
-import kg.giftlist.giftlistm2.controller.payload.CommonUserProfileResponse;
-import kg.giftlist.giftlistm2.controller.payload.SimpleResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.AdminPageUserGetAllResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.CommonUserProfileResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.SimpleResponse;
 import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.entity.WishList;

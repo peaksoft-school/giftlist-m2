@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.giftlist.giftlistm2.controller.payload.request.MailingListRequest;
-import kg.giftlist.giftlistm2.controller.payload.MailingListResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.MailingListResponse;
 import kg.giftlist.giftlistm2.db.service.MailingListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

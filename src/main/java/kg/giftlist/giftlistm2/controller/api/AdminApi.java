@@ -2,9 +2,9 @@ package kg.giftlist.giftlistm2.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.giftlist.giftlistm2.controller.payload.AdminPageUserGetAllResponse;
-import kg.giftlist.giftlistm2.controller.payload.CommonUserProfileResponse;
-import kg.giftlist.giftlistm2.controller.payload.SimpleResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.AdminPageUserGetAllResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.CommonUserProfileResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.SimpleResponse;
 import kg.giftlist.giftlistm2.db.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
