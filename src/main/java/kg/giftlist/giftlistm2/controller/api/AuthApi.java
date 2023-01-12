@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("api/public")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Auth API", description = "Any user can do authentication")
-public class AuthController {
+public class AuthApi {
 
     private final UserService userService;
     private final ResetPasswordService resetPasswordService;
