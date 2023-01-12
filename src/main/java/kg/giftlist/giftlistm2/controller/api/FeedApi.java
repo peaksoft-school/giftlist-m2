@@ -16,7 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @PreAuthorize("hasAnyAuthority('USER')")
 @Tag(name = "Feed API", description = "Users with role  \"User\" can see feed")
-public class FeedController {
+public class FeedApi {
 
     private final WishListService wishListService;
 
