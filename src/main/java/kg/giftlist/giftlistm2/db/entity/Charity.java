@@ -15,12 +15,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "charity")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "charity")
 public class Charity {
 
     @Id
@@ -64,13 +64,13 @@ public class Charity {
     @Enumerated(EnumType.STRING)
     private CharityStatus charityStatus;
 
-    @OneToMany(mappedBy = "charity",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "charity", cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
 
     @OneToMany(mappedBy = "charity", cascade = CascadeType.ALL)
-    private List <Complaints> complaints;
+    private List<Complaints> complaints;
 
-    public void addNotification(Notification notification){
+    public void addNotification(Notification notification) {
         notifications.add(notification);
     }
 
