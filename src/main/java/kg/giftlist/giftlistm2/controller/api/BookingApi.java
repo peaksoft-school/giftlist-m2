@@ -19,7 +19,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @SecurityRequirement(name = "Authorization")
 @Tag(name = "Booking API", description = "User can get all wish list, get all charity in the book and get book by book id")
-public class BookingController {
+public class BookingApi {
 
     private final BookingService bookingService;
 
