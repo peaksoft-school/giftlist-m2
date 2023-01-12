@@ -14,9 +14,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin
 @RequestMapping("api/admin")
 @PreAuthorize("hasAnyAuthority('ADMIN')")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Admin API", description = "User with role 'Admin'  can block, unblock and get users")
 public class AdminController {
 
@@ -29,19 +29,19 @@ public class AdminController {
     }
 
     @Operation(summary = "Get user profile ", description = "Find user profile by user id ")
-    @GetMapping("/user/{userId}")
+    @GetMapping("user/{userId}")
     public CommonUserProfileResponse getUserProfile(@PathVariable Long userId) {
         return adminService.getCommonFriendProfile(userId);
     }
 
     @Operation(summary = "Block User", description = "Block user by id")
-    @PutMapping("/block-user/{userId}")
+    @PutMapping("block-user/{userId}")
     public SimpleResponse block(@PathVariable("userId") Long id) {
         return adminService.blockUser(id);
     }
 
     @Operation(summary = "Unblock User", description = "Unblock user by id")
-    @PutMapping("/unblock-user/{userId}")
+    @PutMapping("unblock-user/{userId}")
     public SimpleResponse unBlock(@PathVariable("userId") Long id) {
         return adminService.unBlockUser(id);
     }
