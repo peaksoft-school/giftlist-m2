@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @PreAuthorize("hasAnyAuthority('USER')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "User API", description = "Users with role  \"User\" can view profile, change password, update profile")
-public class UserProfileController {
+public class UserProfileApi {
 
     private final UserInfoService userInfoService;
     private final UserService userService;
