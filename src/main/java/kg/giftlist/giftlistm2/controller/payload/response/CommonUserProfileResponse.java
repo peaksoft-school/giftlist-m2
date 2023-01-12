@@ -19,8 +19,10 @@ public class CommonUserProfileResponse {
     private String email;
     private String image;
     private String city;
+
     @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate dateOfBirth;
+
     private String phoneNumber;
     private List<ClothingSize> clothingSize;
     private List<ShoeSize> shoeSize;
