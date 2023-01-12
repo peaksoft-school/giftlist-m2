@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/booking")
-@CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Booking Api", description = "User can get all wish list, get all charity in the book and get book by book id")
-@SecurityRequirement(name = "Authorization")
+@RequestMapping("api/booking")
 @PreAuthorize("hasAuthority('USER')")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@SecurityRequirement(name = "Authorization")
+@Tag(name = "Booking API", description = "User can get all wish list, get all charity in the book and get book by book id")
 public class BookingController {
 
     private final BookingService bookingService;
