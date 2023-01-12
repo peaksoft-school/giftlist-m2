@@ -19,7 +19,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @SecurityRequirement(name = "Authorization")
 @Tag(name = "Mailing list Api", description = "The Admin can send mailing list to users")
-public class MailingListController {
+public class MailingListApi {
 
     private final MailingListService mailingListService;
 
