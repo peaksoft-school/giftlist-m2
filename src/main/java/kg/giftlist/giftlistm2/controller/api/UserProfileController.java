@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("api/profile")
 @RequiredArgsConstructor
-@CrossOrigin
+@RequestMapping("api/profile")
 @PreAuthorize("hasAnyAuthority('USER')")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "User API", description = "Users with role  \"User\" can view profile, change password, update profile")
 public class UserProfileController {
 
@@ -28,25 +28,25 @@ public class UserProfileController {
     private final UserService userService;
 
     @Operation(summary = "Update user profile information ", description = "User can update profile information")
-    @PatchMapping("/{id}")
+    @PatchMapping("{id}")
     public UserInfoResponse updateUserProfile(@PathVariable Long id, @RequestBody UserInfoRequest userInfoRequest) {
         return userInfoService.update(id, userInfoRequest);
     }
 
     @Operation(summary = "Get user profile ", description = "Find by id user profile")
-    @GetMapping("/me")
+    @GetMapping("me")
     public UserInfoResponse getUserProfile() {
         return userInfoService.findById();
     }
 
     @Operation(summary = "Change password ", description = "User can change password")
-    @PostMapping("/password-change")
+    @PostMapping("password-change")
     public AuthResponse changePassword(@RequestBody UserChangePasswordRequest request) {
         return userService.changeUserPassword(request);
     }
 
     @Operation(summary = "Logout", description = "User can logout")
-    @GetMapping("/logout")
+    @GetMapping("logout")
     public String logout(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
