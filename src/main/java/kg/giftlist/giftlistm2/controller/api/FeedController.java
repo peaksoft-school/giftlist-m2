@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/feed")
 @RequiredArgsConstructor
-@CrossOrigin
+@RequestMapping("api/feed")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @PreAuthorize("hasAnyAuthority('USER')")
 @Tag(name = "Feed API", description = "Users with role  \"User\" can see feed")
 public class FeedController {
