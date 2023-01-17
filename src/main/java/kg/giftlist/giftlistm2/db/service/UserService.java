@@ -37,10 +37,13 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class UserService {
+
+    @Value("classpath:serviceAccountKey.json")
+    Resource serviceAccount;
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -130,9 +133,6 @@ public class UserService {
             throw new UserExistException("User with email " + firebaseToken.getEmail() + " is existing");
         }
     }
-
-    @Value("classpath:serviceAccountKey.json")
-    Resource serviceAccount;
 
     @Bean
     FirebaseAuth firebaseAuth() throws IOException {
