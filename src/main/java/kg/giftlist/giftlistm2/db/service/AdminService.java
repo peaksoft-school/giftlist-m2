@@ -20,8 +20,8 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 @Log4j2
+@Service
 @AllArgsConstructor
 public class AdminService {
 
@@ -43,8 +43,7 @@ public class AdminService {
     @Transactional
     public SimpleResponse blockUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(
-                        String.format("user with id: %s not found", id)));
+                new NotFoundException(String.format("user with id: %s not found", id)));
         user.setIsBlock(true);
         log.info("Successfully blocked user with id: {}", user.getId());
         return new SimpleResponse("BLOCK", "user with id: " + id + " blocked");
@@ -53,8 +52,7 @@ public class AdminService {
     @Transactional
     public SimpleResponse unBlockUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(
-                        String.format("user with id: %s not found", id)));
+                new NotFoundException(String.format("user with id: %s not found", id)));
         user.setIsBlock(false);
         log.info("Successfully unblocked user with id: {}", user.getId());
         return new SimpleResponse("UNBLOCK", "user with id:" + id + " unblocked");
@@ -76,7 +74,6 @@ public class AdminService {
     }
 
     public CommonUserProfileResponse getCommonFriendProfile(Long userId) {
-
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException("User with id:" + userId + " not found"));
         return viewCommonFriendProfile(user);
