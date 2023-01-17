@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.response.CharityComplaintResponse;
 import kg.giftlist.giftlistm2.controller.payload.request.ComplaintRequest;
+import kg.giftlist.giftlistm2.controller.payload.response.CharityComplaintResponse;
 import kg.giftlist.giftlistm2.controller.payload.response.WishlistComplaintResponse;
 import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.entity.Complaints;
@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ComplaintService {
 
     private final UserRepository userRepository;
@@ -141,7 +141,6 @@ public class ComplaintService {
         log.info("Get all wish list from the complaint list");
         return wishlistView(complaints);
     }
-
 
     public List<CharityComplaintResponse> getAllCharityComplaints() {
         List<Complaints> complaints = complaintRepository.getAllCharityComplaints();
