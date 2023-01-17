@@ -1,6 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
+import kg.giftlist.giftlistm2.controller.payload.request.Mail;
 import kg.giftlist.giftlistm2.controller.payload.response.AuthResponse;
 import kg.giftlist.giftlistm2.db.entity.ResetPasswordToken;
 import kg.giftlist.giftlistm2.db.entity.User;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +57,7 @@ public class ResetPasswordService {
     }
 
     public void updatePassword(User user) {
-        User user1 = userRepository.findById(user.getId()).get();
+        User user1 = userRepository.findById(user.getId()).orElseThrow(NoSuchElementException::new);
         user1.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user1);
 

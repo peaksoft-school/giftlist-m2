@@ -1,4 +1,4 @@
-package kg.giftlist.giftlistm2.db.service;
+package kg.giftlist.giftlistm2.controller.payload.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +12,6 @@ public class Mail {
     private String from;
     private String to;
     private String subject;
-    private Map<String,Object> model;
+    private Map<String, Object> model;
 
 }
