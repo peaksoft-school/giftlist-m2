@@ -21,11 +21,12 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
-@Service
-@RequiredArgsConstructor
 @Slf4j
+@Service
 @Transactional
+@RequiredArgsConstructor
 public class WishListService {
 
     private final UserRepository userRepository;
@@ -37,7 +38,7 @@ public class WishListService {
 
     public WishListResponse create(WishListRequest request) {
         User user = getAuthenticatedUser();
-        Holiday holiday = holidayRepository.findById(request.getHolidayId()).get();
+        Holiday holiday = holidayRepository.findById(request.getHolidayId()).orElseThrow(NoSuchElementException::new);
         WishList wishList = new WishList();
         if (request.getGiftName() == null) {
             log.error("Wish list name must not be empty!");
@@ -63,8 +64,8 @@ public class WishListService {
 
     public WishListResponse addWishList(Long id) {
         User user = getAuthenticatedUser();
-        WishList wishList = wishListRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException("WishList not found with id: " + id));
+        WishList wishList = wishListRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("WishList not found with id: " + id));
         if (user.getWishLists().contains(wishList)) {
             log.error("You have this wishList");
             throw new WishListExistException("You have this wishList");
@@ -97,7 +98,7 @@ public class WishListService {
                 throw new BadCredentialsException("This wish list was blocked due to it got a complain. Contact to administration of Giftlist");
             } else {
                 if (user.getWishLists().contains(wishList)) {
-                    Holiday holiday = holidayRepository.findById(request.getHolidayId()).get();
+                    Holiday holiday = holidayRepository.findById(request.getHolidayId()).orElseThrow(NoSuchElementException::new);
                     if (request.getGiftName().isEmpty()) {
                         log.error("Wish list name must not be empty!");
                         throw new EmptyValueException("Wish list name must not be empty!");
@@ -221,7 +222,7 @@ public class WishListService {
 
     public WishListResponse getWishlistByAdmin(Long id) {
         if (wishListRepository.existsById(id)) {
-            WishList wishList = wishListRepository.findById(id).get();
+            WishList wishList = wishListRepository.findById(id).orElseThrow(NoSuchElementException::new);
             log.info("Get wish list with id: " + id);
             return mapToResponse(wishList);
         } else {
@@ -235,7 +236,6 @@ public class WishListService {
         log.info("Get all wish list");
         return view(wishLists);
     }
-
 
     public String blockWishlistByAdmin(Long id) {
         if (wishListRepository.findById(id).isEmpty()) {
