@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
-@Service
 @Log4j2
+@Service
 @RequiredArgsConstructor
 public class UserInfoService {
 
@@ -67,10 +67,8 @@ public class UserInfoService {
     }
 
     public User findByUserInfoId(Long userInfoId) {
-        return userRepository.findById(userInfoId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("userInfo with id = %s does not exists", userInfoId)
-                ));
+        return userRepository.findById(userInfoId).orElseThrow(() ->
+                new NotFoundException(String.format("userInfo with id = %s does not exists", userInfoId)));
     }
 
 }
