@@ -10,10 +10,10 @@ import java.util.List;
 @Repository
 public interface CharityRepository extends JpaRepository<Charity, Long> {
 
-    @Query("select ch from Charity ch join User u on ch.user.id=u.id where u.id=?1")
+    @Query("SELECT ch FROM Charity ch JOIN User u ON ch.user.id=u.id WHERE u.id=?1")
     List<Charity> getCharityByUserId(Long id);
 
-    @Query("select ch from User u join u.charities ch where ch.isBlocked=false and u.id=?1")
+    @Query("SELECT ch FROM User u JOIN u.charities ch WHERE ch.isBlocked=false AND u.id=?1")
     List<Charity> getCharities(Long userId);
 
 }
