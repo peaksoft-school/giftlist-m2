@@ -17,9 +17,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class NotificationService {
 
     private final UserRepository userRepository;
@@ -29,7 +29,7 @@ public class NotificationService {
     public List<NotificationResponse> getAllNotification() {
         User user = getAuthenticatedUser();
         List<Notification> notifications = notificationRepository.getAllNotificationByUserId(user.getId());
-        notifications.stream().forEach(x -> x.setRead(true));
+        notifications.forEach(x -> x.setRead(true));
         notificationRepository.saveAll(notifications);
         log.info("Get all notifications");
         return view(notifications);
@@ -129,7 +129,6 @@ public class NotificationService {
         log.info("Successfully send notification");
         return notification;
     }
-
 
     public Notification wishListNotification(User user, List<User> receivers, WishList wishList) {
         Notification notification = new Notification();
