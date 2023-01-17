@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -136,8 +137,8 @@ public class CharityService {
     public CharityResponse createCharity(CharityRequest request) {
         User user = getAuthenticatedUser();
         Charity charity = new Charity();
-        Category category = categoryRepository.findById(request.getCategoryId()).get();
-        Subcategory subcategory = subcategoryRepository.findById(request.getSubcategoryId()).get();
+        Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(NoSuchElementException::new);
+        Subcategory subcategory = subcategoryRepository.findById(request.getSubcategoryId()).orElseThrow(NoSuchElementException::new);
         if (request.getGiftName().isEmpty()) {
             throw new EmptyValueException("Gift name must not be empty!");
         } else {
@@ -188,8 +189,8 @@ public class CharityService {
                 throw new BadCredentialsException("Your charity was blocked due to it got a complain. Contact to administration of Giftlist");
             } else {
                 if (user.getCharities().contains(charity)) {
-                    Category category = categoryRepository.findById(request.getCategoryId()).get();
-                    Subcategory subcategory = subcategoryRepository.findById(request.getSubcategoryId()).get();
+                    Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(NoSuchElementException::new);
+                    Subcategory subcategory = subcategoryRepository.findById(request.getSubcategoryId()).orElseThrow(NoSuchElementException::new);
                     if (request.getGiftName().isEmpty()) {
                         log.error("Gift name must not be empty!");
                         throw new EmptyValueException("Gift name must not be empty!");
@@ -241,7 +242,7 @@ public class CharityService {
 
     public CharityResponse getCharityByAdmin(Long id) {
         if (charityRepository.existsById(id)) {
-            Charity charity = charityRepository.findById(id).get();
+            Charity charity = charityRepository.findById(id).orElseThrow(NoSuchElementException::new);
             log.info("Get charity with id: " + charity.getId());
             return mapToResponse(charity);
         } else {
