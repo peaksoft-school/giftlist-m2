@@ -19,10 +19,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
 @Slf4j
+@Service
 @Transactional
+@RequiredArgsConstructor
 public class CharityService {
 
     private final CharityRepository charityRepository;
