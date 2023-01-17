@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class BookingService {
 
     private final UserRepository userRepository;
@@ -60,7 +60,8 @@ public class BookingService {
 
     public BookingResponse getBookingById(Long id) {
         User user = getAuthenticatedUser();
-        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException("Not found booking with book id: " + id));
+        Booking booking = bookingRepository.findById(id).orElseThrow(() ->
+                new BookingNotFoundException("Not found booking with book id: " + id));
         if (user.getBookings().contains(booking)) {
             log.info("get a book with id: " + booking.getId());
             return bookingMapper.bookingResponse(booking);
