@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ResetPasswordService {
 
     private final UserRepository userRepository;
@@ -60,7 +60,6 @@ public class ResetPasswordService {
         User user1 = userRepository.findById(user.getId()).orElseThrow(NoSuchElementException::new);
         user1.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user1);
-
     }
 
     public String processForgotPassword(String email, HttpServletRequest request) {
