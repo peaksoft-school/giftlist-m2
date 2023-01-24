@@ -41,8 +41,6 @@ values (1,'XXS'),
        (7,'XL'),
        (8,'XXXL');
 
-
-
 insert into shoe_size(id, size )
 values (1,20),
        (2,21),
