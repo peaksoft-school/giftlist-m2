@@ -24,4 +24,5 @@ public class UserInfoViewMapper {
         userInfoResponse.setImportantNote(user.getImportantToKnow());
         return userInfoResponse;
     }
+
 }
