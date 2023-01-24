@@ -1,25 +1,25 @@
 package kg.giftlist.giftlistm2.db.repository;
 
-import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.entity.WishList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
 public interface WishListRepository extends JpaRepository<WishList, Long> {
 
-    @Query("select w from WishList w join User u on w.user.id=u.id where u.id=?1")
+    @Query("SELECT w FROM WishList w JOIN User u ON w.user.id=u.id WHERE u.id=?1")
     List<WishList> getWishByUserId(Long id);
 
-    @Query("select w from User u join u.friends f join f.wishLists w where w.isBlock=false and u.id=?1 order by w.created DESC")
+    @Query("SELECT w FROM User u JOIN u.friends f JOIN f.wishLists w WHERE w.isBlock=false AND u.id=?1 ORDER BY w.created DESC")
     List<WishList> getAllFriendWishes(Long userId);
 
-    @Query("select aw from WishList aw where aw.isBlock=false order by aw.created DESC")
+    @Query("SELECT aw FROM WishList aw WHERE aw.isBlock=false ORDER BY aw.created DESC")
     List<WishList> getAllWishes();
 
-    @Query("select w from User u join u.wishLists w where w.isBlocked=false and u.id=?1")
+    @Query("SELECT w FROM User u JOIN u.wishLists w WHERE w.isBlocked=false AND u.id=?1")
     List<WishList> getWishLists(Long userId);
 
 }

@@ -14,22 +14,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-    @Query("select case when count(u)>0 then true else false end from User u where u.email like :email")
+    @Query("SELECT case WHEN COUNT(u)>0 then true else false end FROM User u WHERE u.email LIKE:email")
     boolean getExistingEmail(@Param(value = "email") String email);
 
-    @Query("select f from User u join u.friends f where u.id=?1 ")
+    @Query("SELECT f FROM User u JOIN u.friends f WHERE u.id=?1 ")
     List<User> getAllFriendByUserId(Long id);
 
-    @Query("select f from User u join u.friends f where  f.id=?1")
+    @Query("SELECT f FROM User u JOIN u.friends f WHERE  f.id=?1")
     User getFriendById(Long id);
 
-    @Query("select f from User u join u.requestToFriends f where u.id=?1")
+    @Query("SELECT f FROM User u JOIN u.requestToFriends f WHERE u.id=?1")
     List<User> getAllRequestToFriend(Long id);
 
-    @Query("select h from User u join u.wishLists h where u.id=?1")
+    @Query("SELECT h FROM User u JOIN u.wishLists h WHERE u.id=?1")
     List<WishList> getAllUserWishList(Long userId);
 
-    @Query("select u from User u where u.role = 'USER' ")
+    @Query("SELECT u FROM User u WHERE u.role = 'USER' ")
     List<User> getAll();
 
 }

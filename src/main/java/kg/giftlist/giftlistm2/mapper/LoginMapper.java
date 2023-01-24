@@ -1,11 +1,14 @@
 package kg.giftlist.giftlistm2.mapper;
 
-import kg.giftlist.giftlistm2.controller.payload.AuthResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.AuthResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.enums.Role;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class LoginMapper {

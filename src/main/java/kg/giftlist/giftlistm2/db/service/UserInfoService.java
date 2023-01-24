@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.UserInfoRequest;
-import kg.giftlist.giftlistm2.controller.payload.UserInfoResponse;
+import kg.giftlist.giftlistm2.controller.payload.request.UserInfoRequest;
+import kg.giftlist.giftlistm2.controller.payload.response.UserInfoResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.exception.EmptyValueException;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
-@Service
 @Log4j2
+@Service
 @RequiredArgsConstructor
 public class UserInfoService {
 
@@ -67,10 +67,8 @@ public class UserInfoService {
     }
 
     public User findByUserInfoId(Long userInfoId) {
-        return userRepository.findById(userInfoId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("userInfo with id = %s does not exists", userInfoId)
-                ));
+        return userRepository.findById(userInfoId).orElseThrow(() ->
+                new NotFoundException(String.format("userInfo with id = %s does not exists", userInfoId)));
     }
 
 }

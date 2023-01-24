@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.FriendProfileResponse;
-import kg.giftlist.giftlistm2.controller.payload.FriendResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.FriendProfileResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.FriendResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.HolidayRepository;
 import kg.giftlist.giftlistm2.db.repository.NotificationRepository;
@@ -19,9 +19,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class FriendsService {
 
     private final UserRepository userRepository;
@@ -52,16 +52,16 @@ public class FriendsService {
     }
 
     public FriendProfileResponse getFriend(Long friendId) {
-        userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User with this id: " + friendId + " does not exist"));
+        userRepository.findById(friendId).orElseThrow(() ->
+                new UserNotFoundException("User with this id: " + friendId + " does not exist"));
         log.info("Get a friend is profile, friend id: " + friendId);
         return friendMappers.friendResponse(userRepository.getFriendById(friendId));
     }
 
     public FriendResponse requestToFriend(Long friendId) {
         User user = getAuthenticatedUser();
-        User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User with this id: " + friendId + " does not exist"));
+        User friend = userRepository.findById(friendId).orElseThrow(() ->
+                new UserNotFoundException("User with this id: " + friendId + " does not exist"));
         if (friend == user) {
             log.error("You can not send a request to yourself ");
             throw new UserExistException("You can not send a request to yourself");
@@ -85,8 +85,8 @@ public class FriendsService {
 
     public FriendResponse acceptToFriend(Long friendId) {
         User user = getAuthenticatedUser();
-        User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User with this id: " + friendId + " does not exist"));
+        User friend = userRepository.findById(friendId).orElseThrow(() ->
+                new UserNotFoundException("User with this id: " + friendId + " does not exist"));
         if (user == friend) {
             log.error("You can't add yourself as a friend");
             throw new UserExistException("You can't add yourself as a friend");
@@ -109,8 +109,8 @@ public class FriendsService {
 
     public String declineFriendRequest(Long friendId) {
         User user = getAuthenticatedUser();
-        User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User with this id: " + friendId + " does not exist"));
+        User friend = userRepository.findById(friendId).orElseThrow(() ->
+                new UserNotFoundException("User with this id: " + friendId + " does not exist"));
         if (!(user.getRequestToFriends().contains(friend))) {
             log.error("Тo friend requests found from user with id: " + friendId);
             throw new UserNotFoundException("Тo friend requests found from user with id: " + friendId);
@@ -124,8 +124,8 @@ public class FriendsService {
 
     public String deleteFriend(Long friendId) {
         User user = getAuthenticatedUser();
-        User friend = userRepository.findById(friendId).orElseThrow(
-                () -> new UserNotFoundException("User with this id: " + friendId + " does not exist"));
+        User friend = userRepository.findById(friendId).orElseThrow(() ->
+                new UserNotFoundException("User with this id: " + friendId + " does not exist"));
         if (!(user.getFriends().contains(friend))) {
             log.error("You have not friend with id: " + friendId);
             throw new UserNotFoundException("You have not friend with id: " + friendId);

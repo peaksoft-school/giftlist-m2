@@ -1,6 +1,6 @@
 package kg.giftlist.giftlistm2.mapper;
 
-import kg.giftlist.giftlistm2.controller.payload.HolidayRequest;
+import kg.giftlist.giftlistm2.controller.payload.request.HolidayRequest;
 import kg.giftlist.giftlistm2.db.entity.Holiday;
 import org.springframework.stereotype.Component;
 
@@ -23,4 +23,5 @@ public class HolidayMapToRequest {
         holiday.setName(holidayRequest.getName());
         holiday.setLocalDate(holidayRequest.getLocalDate());
     }
+
 }

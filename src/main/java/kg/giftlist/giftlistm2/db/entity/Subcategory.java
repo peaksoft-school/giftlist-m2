@@ -9,12 +9,12 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "subcategories")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "subcategories")
 public class Subcategory {
 
     @Id

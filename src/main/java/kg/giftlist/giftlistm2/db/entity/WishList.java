@@ -14,12 +14,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "wish_list")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "wish_list")
 public class WishList {
 
     @Id
@@ -34,7 +34,7 @@ public class WishList {
 
     private String link;
 
-    @Column(name = "holyday_date")
+    @Column(name = "holiday_date")
     private LocalDate holidayDate;
 
     @Size(max = 10000)

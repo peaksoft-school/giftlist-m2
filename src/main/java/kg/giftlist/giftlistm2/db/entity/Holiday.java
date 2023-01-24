@@ -11,12 +11,12 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-@Table(name = "holiday")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "holiday")
 public class Holiday {
 
     @Id
@@ -25,7 +25,7 @@ public class Holiday {
     private Long id;
 
     private String name;
-     
+
     @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate localDate;
 

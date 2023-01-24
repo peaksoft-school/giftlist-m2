@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface ShoeRepository extends JpaRepository<ShoeSize, Long> {
 
-    @Query("select s from ShoeSize s where s.size=38")
+    @Query("SELECT s FROM ShoeSize s WHERE s.size=38")
     List<ShoeSize> getDefaultSize();
 
 }

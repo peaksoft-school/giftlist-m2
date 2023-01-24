@@ -8,12 +8,12 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "passwor_reset_token")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "password_reset_token")
 public class ResetPasswordToken {
 
     private static final int EXPIRATION = 60 * 24;

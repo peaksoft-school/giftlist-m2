@@ -1,6 +1,6 @@
 package kg.giftlist.giftlistm2.mapper;
 
-import kg.giftlist.giftlistm2.controller.payload.NotificationResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.NotificationResponse;
 import kg.giftlist.giftlistm2.db.entity.Notification;
 import kg.giftlist.giftlistm2.exception.UserNotFoundException;
 import org.springframework.stereotype.Component;

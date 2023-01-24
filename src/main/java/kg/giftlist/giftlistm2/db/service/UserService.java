@@ -8,7 +8,10 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenUtil;
-import kg.giftlist.giftlistm2.controller.payload.*;
+import kg.giftlist.giftlistm2.controller.payload.request.AuthRequest;
+import kg.giftlist.giftlistm2.controller.payload.request.SignupRequest;
+import kg.giftlist.giftlistm2.controller.payload.request.UserChangePasswordRequest;
+import kg.giftlist.giftlistm2.controller.payload.response.AuthResponse;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.UserRepository;
 import kg.giftlist.giftlistm2.enums.Role;
@@ -34,10 +37,13 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class UserService {
+
+    @Value("classpath:serviceAccountKey.json")
+    Resource serviceAccount;
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -127,9 +133,6 @@ public class UserService {
             throw new UserExistException("User with email " + firebaseToken.getEmail() + " is existing");
         }
     }
-
-    @Value("classpath:serviceAccountKey.json")
-    Resource serviceAccount;
 
     @Bean
     FirebaseAuth firebaseAuth() throws IOException {

@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.mapper;
 
-import kg.giftlist.giftlistm2.controller.payload.FriendProfileResponse;
-import kg.giftlist.giftlistm2.controller.payload.FriendResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.FriendProfileResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.FriendResponse;
 import kg.giftlist.giftlistm2.db.entity.Charity;
 import kg.giftlist.giftlistm2.db.entity.Holiday;
 import kg.giftlist.giftlistm2.db.entity.User;

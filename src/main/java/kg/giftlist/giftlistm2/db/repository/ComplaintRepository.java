@@ -10,10 +10,10 @@ import java.util.List;
 @Repository
 public interface ComplaintRepository extends JpaRepository<Complaints, Long> {
 
-    @Query("select c from Complaints c where c.wishList is not null")
+    @Query("SELECT c FROM Complaints c WHERE c.wishList IS NOT NULL")
     List<Complaints> getAllWishlistComplaints();
 
-    @Query("select c from Complaints c where c.charity is not null")
+    @Query("SELECT c FROM Complaints c WHERE c.charity IS NOT NULL")
     List<Complaints> getAllCharityComplaints();
 
 }

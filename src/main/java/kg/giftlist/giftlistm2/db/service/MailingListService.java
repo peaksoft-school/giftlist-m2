@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.MailingListRequest;
-import kg.giftlist.giftlistm2.controller.payload.MailingListResponse;
+import kg.giftlist.giftlistm2.controller.payload.request.MailingListRequest;
+import kg.giftlist.giftlistm2.controller.payload.response.MailingListResponse;
 import kg.giftlist.giftlistm2.db.entity.MailingList;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.MailingListRepository;
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class MailingListService {
 
     private final JavaMailSender javaMailSender;

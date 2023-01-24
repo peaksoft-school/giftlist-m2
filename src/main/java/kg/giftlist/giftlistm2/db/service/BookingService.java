@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.db.service;
 
-import kg.giftlist.giftlistm2.controller.payload.BookingResponse;
-import kg.giftlist.giftlistm2.controller.payload.BookingWishListResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.BookingResponse;
+import kg.giftlist.giftlistm2.controller.payload.response.BookingWishListResponse;
 import kg.giftlist.giftlistm2.db.entity.Booking;
 import kg.giftlist.giftlistm2.db.entity.User;
 import kg.giftlist.giftlistm2.db.repository.BookingRepository;
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class BookingService {
 
     private final UserRepository userRepository;
@@ -60,7 +60,8 @@ public class BookingService {
 
     public BookingResponse getBookingById(Long id) {
         User user = getAuthenticatedUser();
-        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException("Not found booking with book id: " + id));
+        Booking booking = bookingRepository.findById(id).orElseThrow(() ->
+                new BookingNotFoundException("Not found booking with book id: " + id));
         if (user.getBookings().contains(booking)) {
             log.info("get a book with id: " + booking.getId());
             return bookingMapper.bookingResponse(booking);

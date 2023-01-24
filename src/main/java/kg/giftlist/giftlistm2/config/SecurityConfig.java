@@ -1,7 +1,7 @@
 package kg.giftlist.giftlistm2.config;
 
 import kg.giftlist.giftlistm2.config.jwt.JwtTokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,24 +14,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.io.IOException;
-
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        prePostEnabled = true,
-        securedEnabled = true,
-        jsr250Enabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userService;
     private final JwtTokenFilter jwtTokenFilter;
-
-    @Autowired
-    public SecurityConfig(UserDetailsService userService, JwtTokenFilter jwtTokenFilter) throws IOException {
-        this.userService = userService;
-        this.jwtTokenFilter = jwtTokenFilter;
-    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
