@@ -23,4 +23,5 @@ public class HolidayMapToRequest {
         holiday.setName(holidayRequest.getName());
         holiday.setLocalDate(holidayRequest.getLocalDate());
     }
+
 }
