@@ -16,17 +16,16 @@ public class UserInfoEditMapper {
     private final ShoeRepository shoeRepository;
 
     public void update(User user, UserInfoRequest userInfoRequest) {
-        List<ShoeSize> shoeSize =shoeRepository.getDefaultSize();
+        List<ShoeSize> shoeSize = shoeRepository.getDefaultSize();
         user.setCity(userInfoRequest.getCity());
         user.setDateOfBirth(userInfoRequest.getDateOfBirth());
         user.setPhoneNumber(userInfoRequest.getPhoneNumber());
         user.setClothingSize(userInfoRequest.getClothingSize());
-        if (userInfoRequest.getShoeSize()== null){
+        if (userInfoRequest.getShoeSize() == null) {
             user.setShoeSize(shoeSize);
-            shoeSize.stream().forEach(a->a.setUser(user));
-        }
-        else user.setShoeSize(userInfoRequest.getShoeSize());
-        shoeSize.stream().forEach(a->a.setUser(user));
+            shoeSize.forEach(a -> a.setUser(user));
+        } else user.setShoeSize(userInfoRequest.getShoeSize());
+        shoeSize.forEach(a -> a.setUser(user));
         user.setHobbies(userInfoRequest.getHobby());
     }
 
